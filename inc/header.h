@@ -34,5 +34,7 @@ void mx_strdel(char **str);
 char *mx_strjoin_two( char *s1,  char *s2);
 char *mx_strjoin( char *s1,  char *s2);
 char *mx_strcat(char *restrict s1, const char *restrict s2);
+void mx_parcing(char *input);
+void mx_strdel(char **str);
 
 #endif

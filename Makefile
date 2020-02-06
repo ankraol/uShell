@@ -14,6 +14,8 @@ FILES = main \
 	mx_strjoin_two \
 	mx_strjoin \
 	mx_strcat \
+	mx_parcing \
+	mx_strdel \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
@@ -25,7 +27,7 @@ ROOT_O = $(addsuffix ".o", $(FILES))
 
 CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
 
-all: install
+all: install clean
 
 install:
 	@cp $(SRC) .
