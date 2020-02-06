@@ -3,6 +3,17 @@ NAME = ush
 HEADER = header.h \
 
 FILES = main \
+	example \
+	mx_strsplit \
+	mx_count_words \
+	mx_strnew \
+	mx_strlen \
+	mx_read_env \
+	mx_del_strarr \
+	mx_strdel \
+	mx_strjoin_two \
+	mx_strjoin \
+	mx_strcat \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
@@ -30,6 +41,7 @@ uninstall: clean
 
 clean:
 	@rm -rf $(ROOT_O)
+	@rm -rf $(ROOT_C)
 	@rm -rf $(HEADER)
 	@rm -rf obj
 

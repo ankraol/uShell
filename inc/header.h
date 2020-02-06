@@ -5,6 +5,13 @@
 #include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <malloc/malloc.h>
+
+
 
 typedef struct s_tree {
 	struct s_tree *parent;
@@ -15,5 +22,17 @@ typedef struct s_tree {
 } t_tree;
 
 int main(void);
+int mx_count_words(const char *str, char c);
+char *mx_strnew(const int size);
+char **mx_strsplit(const char *s, char c);
+int mx_strlen(const char *s);
+
+char *mx_read_env(char *file);
+void mx_del_strarr(char ***arr);
+void mx_strdel(char **str);
+
+char *mx_strjoin_two( char *s1,  char *s2);
+char *mx_strjoin( char *s1,  char *s2);
+char *mx_strcat(char *restrict s1, const char *restrict s2);
 
 #endif
