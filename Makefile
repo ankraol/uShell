@@ -3,6 +3,8 @@ NAME = ush
 HEADER = header.h \
 
 FILES = main \
+	mx_parcing \
+	mx_strdel \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
@@ -14,7 +16,7 @@ ROOT_O = $(addsuffix ".o", $(FILES))
 
 CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
 
-all: install
+all: install clean
 
 install:
 	@cp $(SRC) .
@@ -30,6 +32,7 @@ uninstall: clean
 
 clean:
 	@rm -rf $(ROOT_O)
+	@rm -rf $(ROOT_C)
 	@rm -rf $(HEADER)
 	@rm -rf obj
 

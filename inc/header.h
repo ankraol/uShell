@@ -15,5 +15,7 @@ typedef struct s_tree {
 } t_tree;
 
 int main(void);
+void mx_parcing(char *input);
+void mx_strdel(char **str);
 
 #endif
