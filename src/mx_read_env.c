@@ -40,16 +40,3 @@ char *mx_read_env(char *file) {
     return last_path;
 
 }
-
-
-
-
-
-
-// int i = 0;
-// while(environ[i])
-//   printf("%s\n", environ[i++]);
-
-// printf("\n");
-// printf("%s\n", environ[13]);
-//}

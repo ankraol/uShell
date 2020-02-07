@@ -6,13 +6,15 @@ int mx_ush_execute(char **argv) {
     pid_t wpid;
     char *path = mx_read_env(argv[0]);
     int status;
+    int file_pipes[2];
 
+    pipe(file_pipes);
     pid = fork();
-
     if (pid == 0) {
-         if (execvp(path, argv) == -1)
+        dup2(file_pipes[1], 1);
+        if (execvp(path, argv) == -1)
             perror("lsh");
-        exit(EXIT_FAILURE);
+        //exit(EXIT_FAILURE);
     }
     else
     {
@@ -23,6 +25,50 @@ int mx_ush_execute(char **argv) {
     return 1;
 
 }
+
+int mx_ush_pipe_execute() {
+    pid_t pid;
+    pid_t wpid;
+    //char *path = mx_read_env(argv[0]);
+    char *argv[] = { "/bin/ls", "-l", 0 };
+    char *argv_2[] = { "/bin/grep", "M", 0 };
+    int status;
+    int fd[2];
+
+    pipe(fd);
+    pid = fork();
+    if (pid == 0) {
+        dup2(fd[1], 1);
+        close(fd[1]);
+        close(fd[0]);
+        if (execvp("ls", argv) == -1)
+            perror("lsh");
+        //exit(EXIT_FAILURE);
+    }
+    else
+    {
+        pid=fork();
+        if (pid == 0) {
+            dup2(fd[0], 0);
+            close(fd[1]);
+            close(fd[0]);
+            if (execvp("grep", argv_2) == -1)
+                perror("lsh");
+
+        }
+        else {
+            close(fd[1]);
+            close(fd[0]);  
+        wpid = waitpid(pid, &status, WUNTRACED);
+        while (WIFEXITED(status) && WIFSIGNALED(status))
+            wpid = waitpid(pid, &status, WUNTRACED);
+        }
+    }
+    return 1;
+
+}
+
+
 
 
 
@@ -64,9 +110,9 @@ void lsh_loop(void) {
 
 
 int main() {
-  lsh_loop();
-    //printf("%s", mx_read_env("ls"));
-    //return EXIT_SUCCESS;
+    //lsh_loop();
+    mx_ush_pipe_execute(); 
+    
 }
 
 
