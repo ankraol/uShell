@@ -29,9 +29,11 @@ char **mx_strsplit(const char *s, char c);
 int mx_strlen(const char *s);
 char *mx_read_env(char *file);
 void mx_del_strarr(char ***arr);
+
 char *mx_strjoin_two( char *s1,  char *s2);
 char *mx_strjoin( char *s1,  char *s2);
 char *mx_strcat(char *restrict s1, const char *restrict s2);
+
 t_tree *mx_parcing(char *input);
 void mx_strdel(char **str);
 
