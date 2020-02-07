@@ -12,6 +12,7 @@ char **mx_strsplit(const char *s, char c) {
         return NULL;
     }
     int word = mx_count_words(s, c);
+    // printf("split\n");
     
     first = s;
     arr = (char **)malloc(sizeof (char *) * word + 1);

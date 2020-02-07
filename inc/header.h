@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <malloc/malloc.h>
 
 
@@ -26,15 +27,12 @@ int mx_count_words(const char *str, char c);
 char *mx_strnew(const int size);
 char **mx_strsplit(const char *s, char c);
 int mx_strlen(const char *s);
-
 char *mx_read_env(char *file);
 void mx_del_strarr(char ***arr);
-void mx_strdel(char **str);
-
 char *mx_strjoin_two( char *s1,  char *s2);
 char *mx_strjoin( char *s1,  char *s2);
 char *mx_strcat(char *restrict s1, const char *restrict s2);
-void mx_parcing(char *input);
+t_tree *mx_parcing(char *input);
 void mx_strdel(char **str);
 
 #endif

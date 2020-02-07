@@ -8,19 +8,27 @@ int mx_ush_execute(char **argv) {
     int status;
 
     pid = fork();
+    // printf("--%s\n ", path);
 
     if (pid == 0) {
          if (execvp(path, argv) == -1)
             perror("lsh");
-        exit(EXIT_FAILURE);
+        exit(1);
     }
     else
     {
-        wpid = waitpid(pid, &status, WUNTRACED);
-        while (WIFEXITED(status) && WIFSIGNALED(status))
-            wpid = waitpid(pid, &status, WUNTRACED);
+         wpid = waitpid(pid, &status, WUNTRACED);
+        // if (wpid == -1)
+        if (status != 0)
+            return 1;
+            // printf("%d\n", status);
+        // while (WIFEXITED(status) && WIFSIGNALED(status)) {
+            // if (WIFEXITED(status) == 0)
+                // printf("error");
+            //  wpid = waitpid(pid, &status, WUNTRACED);
+        // }
     }
-    return 1;
+    return 0;
 
 }
 
@@ -48,25 +56,52 @@ char *mx_read_line() {
 void lsh_loop(void) {
     char *line;
     char **args;
-    int status = 1;
+    int status = 2;
+    t_tree *work = NULL;
+    t_tree *p = NULL;
 
-    while (status) {
+    while (1) {
         printf("super_shell: ");
         line = mx_read_line();
-        args = mx_strsplit(line, ' ');
-        if (args != NULL) {
+        work = mx_parcing(line);
+        p = work;
+        for (; (*p).right_child; p = (*p).right_child);
+        if ((*p).parent) {
+            p = (*p).parent;
+            args = mx_strsplit((*(*p).right_child).command, ' ');
             status = mx_ush_execute(args);
+            free(args);
+            for (; p != NULL; p = (*p).parent) {
+                if ((*p).operant[1] == '|') {
+                    if (status == 1) {
+                        args = mx_strsplit((*(*p).left_child).command, ' ');
+                        status = mx_ush_execute(args);
+                        free(args);
+                    }
+                }
+                else if ((*p).operant[1] == '&') {
+                    if (status == 0) {
+                        args = mx_strsplit((*(*p).left_child).command, ' ');
+                        status = mx_ush_execute(args);
+                        free(args);
+                    }
+                }
+            }
+        }
+        else
+        {
+            args = mx_strsplit((*p).command, ' ');
+            status = mx_ush_execute(args);
+            free(args);
         }
         free(line);
-        free(args);
+        // free(args);
     }
 }
 
 
 int main() {
   lsh_loop();
-    //printf("%s", mx_read_env("ls"));
-    //return EXIT_SUCCESS;
 }
 
 
