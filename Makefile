@@ -15,6 +15,7 @@ FILES = example \
 	mx_strcat \
 	mx_parcing \
 	mx_execute_func \
+	mx_redirection \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
