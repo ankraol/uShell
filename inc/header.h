@@ -36,6 +36,10 @@ char *mx_strcat(char *restrict s1, const char *restrict s2);
 
 t_tree *mx_parcing(char *input);
 void mx_strdel(char **str);
+<<<<<<< HEAD
 char *mx_itoa(int number);
+=======
+void mx_redirection(char *command);
+>>>>>>> 91f073c47397ad27986c917b75e2198ec4f871fd
 
 #endif

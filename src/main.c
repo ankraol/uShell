@@ -50,7 +50,7 @@ char *mx_read_line() {
 
 void lsh_loop(void) {
     char *line;
-    char **args;
+    // char **args;
     int status = 2;
     t_tree *work = NULL;
     t_tree *p = NULL;
@@ -63,31 +63,35 @@ void lsh_loop(void) {
         for (; (*p).right_child; p = (*p).right_child);
         if ((*p).parent) {
             p = (*p).parent;
-            args = mx_strsplit((*(*p).right_child).command, ' ');
-            status = mx_ush_execute(args);
-            free(args);
+            mx_redirection((*(*p).right_child).command);
+            // args = mx_strsplit((*(*p).right_child).command, ' ');
+            // status = mx_ush_execute(args);
+            // free(args);
             for (; p != NULL; p = (*p).parent) {
                 if ((*p).operant[1] == '|') {
                     if (status == 1) {
-                        args = mx_strsplit((*(*p).left_child).command, ' ');
-                        status = mx_ush_execute(args);
-                        free(args);
+                        mx_redirection((*(*p).left_child).command);
+                        // args = mx_strsplit((*(*p).left_child).command, ' ');
+                        // status = mx_ush_execute(args);
+                        // free(args);
                     }
                 }
                 else if ((*p).operant[1] == '&') {
                     if (status == 0) {
-                        args = mx_strsplit((*(*p).left_child).command, ' ');
-                        status = mx_ush_execute(args);
-                        free(args);
+                        mx_redirection((*(*p).left_child).command);
+                        // args = mx_strsplit((*(*p).left_child).command, ' ');
+                        // status = mx_ush_execute(args);
+                        // free(args);
                     }
                 }
             }
         }
         else
         {
-            args = mx_strsplit((*p).command, ' ');
-            status = mx_ush_execute(args);
-            free(args);
+            mx_redirection((*p).command);
+            // args = mx_strsplit((*p).command, ' ');
+            // status = mx_ush_execute(args);
+            // free(args);
         }
         free(line);
         // free(args);

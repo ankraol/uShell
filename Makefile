@@ -16,6 +16,7 @@ FILES = example \
 	mx_parcing \
 	mx_itoa \
 	mx_pipe_suca \
+	mx_redirection \
 	#mx_execute_func
 
 INC_H = $(addprefix "inc/", $(HEADER))
