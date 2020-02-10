@@ -17,10 +17,10 @@ static char *command_cut(char *command, int s, int f) {
     int q = 0;
 
     for (; i < f; i++) {
-        if (command[i] != ' ') {
+        // if (command[i] != ' ') {
             extract[q] = command[i];
             q++;
-        }
+        // }
     }
     extract[q] = '\0';
     return extract;
@@ -28,12 +28,15 @@ static char *command_cut(char *command, int s, int f) {
 
 static char **pipe_check(char *command) {
     int size = pipes_count(command);
-    printf("%d\n", size);
-    char **tasks = (char **)malloc(sizeof(char *) * (size + 2));
+    // printf("%d\n", size);
+    char **tasks = NULL;
     int start = 0;
     int q = 0;
     int i = 0;
 
+    if (size == 0)
+        return NULL;
+    tasks = (char **)malloc(sizeof(char *) * (size + 2));
     for (; command[i] != '\0'; i++) {
         if (command[i] == '|') {
             tasks[q] = command_cut(command, start, i);
@@ -42,16 +45,25 @@ static char **pipe_check(char *command) {
             q++;
         }
     }
-    printf("%d\n", start);
-    printf("%d\n", i);
     tasks[q] = command_cut(command, start, i);
     tasks[q + 1] = NULL;
     return tasks;
 }
 
-void mx_redirection(char *command) {
+int mx_redirection(char *command) {
     char **tasks = pipe_check(command);
+    int status = 2;
 
-    for (int i = 0; tasks[i] != NULL; i++) {
-    }
+    // for (int i = 0; tasks[i] != NULL; i++) {
+        if (tasks) {
+            // status = 
+            printf("ENNNNNNDDDDD");
+
+            mx_pipe_rec(tasks, 0, 0);
+            printf("ENNNNNNDDDDD");
+
+            status = 0;
+        }
+    // }
+        return status;
 }

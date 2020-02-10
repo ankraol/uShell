@@ -36,6 +36,8 @@ char *mx_strcat(char *restrict s1, const char *restrict s2);
 
 t_tree *mx_parcing(char *input);
 void mx_strdel(char **str);
-void mx_redirection(char *command);
+int mx_redirection(char *command);
+void mx_pipe_rec(char **argv, int pos, int in_fd);
+int mx_ush_execute(char *argv);
 
 #endif

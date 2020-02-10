@@ -2,7 +2,8 @@ NAME = ush
 
 HEADER = header.h \
 
-FILES = example \
+FILES = main \
+	example \
 	mx_strsplit \
 	mx_count_words \
 	mx_strnew \
@@ -14,8 +15,9 @@ FILES = example \
 	mx_strjoin \
 	mx_strcat \
 	mx_parcing \
-	mx_execute_func \
+	mx_pipe_rec \
 	mx_redirection \
+	mx_ush_execute \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

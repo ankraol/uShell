@@ -1,4 +1,4 @@
- #include "header.h"
+//  #include "header.h"
 
 
 int mx_ush_execute(char **argv) {
@@ -65,43 +65,43 @@ int mx_ush_execute(char **argv) {
 //}
 
 
-static void redirect(int oldfd, int newfd) {
-    if (oldfd != newfd) {
-        dup2(oldfd, newfd);
-        close(oldfd);
-    }
-}
+// static void redirect(int oldfd, int newfd) {
+//     if (oldfd != newfd) {
+//         dup2(oldfd, newfd);
+//         close(oldfd);
+//     }
+// }
 
 
-void mx_pipe_rec(char ***argv, int pos, int in_fd) {
-    char **prog = NULL;
-    pid_t pid;
+// void mx_pipe_rec(char ***argv, int pos, int in_fd) {
+//     char **prog = NULL;
+//     pid_t pid;
 
-    if (argv[pos+1] == NULL) {
-        redirect(in_fd, 0);
-        prog = mx_strsplit(*argv[pos], '/');
-        if (execvp(prog[1], argv[pos]) == -1)
-            perror("lsh");
-    }
-    else {
-        int fd[2];
-        pipe(fd);
-        pid = fork();
-        if (pid == 0) {
-            close(fd[0]);
-            redirect(in_fd, 0);  /* read from in_fd */
-            redirect(fd[1], 1); /* write to fd[1] */
-            prog = mx_strsplit(*argv[pos], '/');
-            if (execvp(prog[1], argv[pos]) == -1)
-                perror("lsh");
-        }
-        else {
-            close(fd[1]);
-            close(in_fd); /* unused */
-            mx_pipe_rec(argv, pos + 1, fd[0]);
-        }
-    }
-}
+//     if (argv[pos+1] == NULL) {
+//         redirect(in_fd, 0);
+//         prog = mx_strsplit(*argv[pos], '/');
+//         if (execvp(prog[1], argv[pos]) == -1)
+//             perror("lsh");
+//     }
+//     else {
+//         int fd[2];
+//         pipe(fd);
+//         pid = fork();
+//         if (pid == 0) {
+//             close(fd[0]);
+//             redirect(in_fd, 0);  /* read from in_fd */
+//             redirect(fd[1], 1); /* write to fd[1] */
+//             prog = mx_strsplit(*argv[pos], '/');
+//             if (execvp(prog[1], argv[pos]) == -1)
+//                 perror("lsh");
+//         }
+//         else {
+//             close(fd[1]);
+//             close(in_fd); /* unused */
+//             mx_pipe_rec(argv, pos + 1, fd[0]);
+//         }
+//     }
+// }
 
 
 char *mx_read_line() {
