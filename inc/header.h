@@ -54,7 +54,7 @@ int mx_ush_execute(char *argv);
 
 char *mx_itoa(int number);
 
-void mx_fd_change(t_path *reddir, char *command, int in_fd);
+void mx_fd_change(t_reddir *command, int pos, int in_fd);
 void mx_command_cut(char *command, int s, int f, t_reddir *tasks);
 char *mx_file_to_str(const char *file);
 
