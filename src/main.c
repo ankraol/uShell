@@ -26,7 +26,7 @@ void lsh_loop(void) {
     t_tree *p = NULL;
 
     while (1) {
-        printf("super_shell: ");
+        printf("u$h> ");
         line = mx_read_line();
         work = mx_parcing(line);
         p = work;
@@ -34,12 +34,14 @@ void lsh_loop(void) {
         if ((*p).parent) {
             p = (*p).parent;
             status = mx_redirection((*(*p).right_child).command);
+            // printf("\n\nSTATUS = %d\n\n\n", status);
             // if (status == 2)
                 // status = mx_ush_execute((*(*p).right_child).command);
             for (; p != NULL; p = (*p).parent) {
                 if ((*p).operant[1] == '|') {
                     if (status == 1) {
                         status = mx_redirection((*(*p).left_child).command);
+                        // printf("\n\nSTATUS = %d\n\n\n", status);
                         // if (status == 2)
                             // status = mx_ush_execute((*(*p).left_child).command);
                     }
@@ -47,6 +49,7 @@ void lsh_loop(void) {
                 else if ((*p).operant[1] == '&') {
                     if (status == 0) {
                         status = mx_redirection((*(*p).left_child).command);
+                        // printf("\n\nSTATUS = %d\n\n\n", status);
                         // if (status == 2)
                             // status = mx_ush_execute((*(*p).left_child).command);
                     }
@@ -56,6 +59,7 @@ void lsh_loop(void) {
         else
         {
             status = mx_redirection((*p).command);
+            // printf("\n\nSTATUS = %d\n\n\n", status);
             // if (status == 2)
                 // status = mx_ush_execute((*p).command);
         }

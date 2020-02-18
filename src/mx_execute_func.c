@@ -14,7 +14,7 @@ int mx_ush_execute(char **argv) {
         dup2(file_pipes[1], 1);
         if (execvp(path, argv) == -1)
             perror("lsh");
-        //exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
     else
     {

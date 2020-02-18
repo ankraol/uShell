@@ -16,8 +16,12 @@ FILES = main \
 	mx_strcat \
 	mx_parcing \
 	mx_pipe_rec \
-	mx_redirection \
 	mx_ush_execute \
+	mx_itoa \
+	mx_redirection \
+	mx_fd_change \
+	mx_command_cut \
+	mx_file_to_str \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

@@ -22,6 +22,18 @@ typedef struct s_tree {
 	char *operant;
 } t_tree;
 
+typedef struct s_path {
+    char *file;
+    char op;
+    struct s_path *next;
+} t_path;
+
+typedef struct s_reddir {
+    char op;
+    char *task;
+    t_path *path;
+} t_reddir;
+
 int main(void);
 int mx_count_words(const char *str, char c);
 char *mx_strnew(const int size);
@@ -37,7 +49,13 @@ char *mx_strcat(char *restrict s1, const char *restrict s2);
 t_tree *mx_parcing(char *input);
 void mx_strdel(char **str);
 int mx_redirection(char *command);
-void mx_pipe_rec(char **argv, int pos, int in_fd);
+int mx_pipe_rec(t_reddir *command, int pos, int in_fd);
 int mx_ush_execute(char *argv);
+
+char *mx_itoa(int number);
+
+void mx_fd_change(t_path *reddir, char *command, int in_fd);
+void mx_command_cut(char *command, int s, int f, t_reddir *tasks);
+char *mx_file_to_str(const char *file);
 
 #endif

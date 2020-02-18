@@ -72,10 +72,6 @@ t_tree *mx_parcing(char *input) {
             for (; input[i] == '&'; i--);
             size = i;
         }
-        // else if(input[i] == '|' && input[i] != '|' && trig == 1) {
-        //     parent = work;
-
-        // }
     }
     (*work).operant = NULL;
     (*work).command = command_cut(input, -1, size);
