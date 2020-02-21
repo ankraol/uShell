@@ -22,6 +22,7 @@ FILES = main \
 	mx_fd_change \
 	mx_command_cut \
 	mx_file_to_str \
+	mx_printstr \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

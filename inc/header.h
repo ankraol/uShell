@@ -11,6 +11,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <malloc/malloc.h>
+#include <termios.h>
 
 
 
@@ -58,5 +59,6 @@ char *mx_itoa(int number);
 void mx_fd_change(t_reddir *command, int pos, int in_fd);
 void mx_command_cut(char *command, int s, int f, t_reddir *tasks);
 char *mx_file_to_str(const char *file);
+void mx_printstr(const char *s);
 
 #endif
