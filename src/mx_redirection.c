@@ -11,34 +11,34 @@ static int dir_count(char *command) {
     return count;
 }
 
-static void path_sort(t_reddir *tasks) {
-    t_path *p = NULL;
-    t_path *head = NULL;
-    t_path *prev = NULL;
+// static void path_sort(t_reddir *tasks) {
+//     t_path *p = NULL;
+//     t_path *head = NULL;
+//     t_path *prev = NULL;
 
-    for (int i = 0; tasks[i - 1].op != '-'; i++) {
-        if (tasks[i].path->next) {
-            p = tasks[i].path->next;
-            prev = tasks[i].path->next;
-            head = tasks[i].path->next;
-            for (; p->next; p = p->next);
-            for (; prev->next != p; prev = prev->next);
-            while(p != prev) {
-                if (p->op == '<') {
-                    for(; head->op == '<'; head = head->next);
-                    for(prev = tasks[i].path->next; prev->next != p
-                    && prev != p; prev = prev->next);
-                    if (p->next)
-                        (*prev).next = (*p).next;
-                    (*p).next = head;
-                    head = p;
-                }
-                p = prev;
-                for (prev = tasks[i].path->next; prev->next != p && prev != p; prev = prev->next);
-            }
-        }
-    }
-}
+//     for (int i = 0; tasks[i - 1].op != '-'; i++) {
+//         if (tasks[i].path->next) {
+//             p = tasks[i].path->next;
+//             prev = tasks[i].path->next;
+//             head = tasks[i].path->next;
+//             for (; p->next; p = p->next);
+//             for (; prev->next != p; prev = prev->next);
+//             while(p != prev) {
+//                 if (p->op == '<') {
+//                     for(; head->op == '<'; head = head->next);
+//                     for(prev = tasks[i].path->next; prev->next != p
+//                     && prev != p; prev = prev->next);
+//                     if (p->next)
+//                         (*prev).next = (*p).next;
+//                     (*p).next = head;
+//                     head = p;
+//                 }
+//                 p = prev;
+//                 for (prev = tasks[i].path->next; prev->next != p && prev != p; prev = prev->next);
+//             }
+//         }
+//     }
+// }
 
 static t_reddir *pipe_check(char *command) {
     int size = dir_count(command);
