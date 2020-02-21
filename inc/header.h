@@ -31,7 +31,8 @@ typedef struct s_path {
 typedef struct s_reddir {
     char op;
     char *task;
-    t_path *path;
+    t_path *input;
+    t_path *output;
 } t_reddir;
 
 int main(void);

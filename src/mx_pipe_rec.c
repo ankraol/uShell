@@ -14,7 +14,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd) {
     pid_t pid;
 
     if (command[pos].op == '-') {
-        if (command[pos].path->next)
+        if (command[pos].output)
             mx_fd_change(command, pos, in_fd);
         else {
             pid = fork();
@@ -32,7 +32,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd) {
         }
     }
     else if (command[pos].op == '|'){
-        if (command[pos].path->next)
+        if (command[pos].output)
             mx_fd_change(command, pos, in_fd);
         int fd[2];
         pipe(fd);

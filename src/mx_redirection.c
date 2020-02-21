@@ -11,35 +11,6 @@ static int dir_count(char *command) {
     return count;
 }
 
-static void path_sort(t_reddir *tasks) {
-    t_path *p = NULL;
-    t_path *head = NULL;
-    t_path *prev = NULL;
-
-    for (int i = 0; tasks[i - 1].op != '-'; i++) {
-        if (tasks[i].path->next) {
-            p = tasks[i].path->next;
-            prev = tasks[i].path->next;
-            head = tasks[i].path->next;
-            for (; p->next; p = p->next);
-            for (; prev->next != p; prev = prev->next);
-            while(p != prev) {
-                if (p->op == '<') {
-                    for(; head->op == '<'; head = head->next);
-                    for(prev = tasks[i].path->next; prev->next != p
-                    && prev != p; prev = prev->next);
-                    if (p->next)
-                        (*prev).next = (*p).next;
-                    (*p).next = head;
-                    head = p;
-                }
-                p = prev;
-                for (prev = tasks[i].path->next; prev->next != p && prev != p; prev = prev->next);
-            }
-        }
-    }
-}
-
 static t_reddir *pipe_check(char *command) {
     int size = dir_count(command);
     t_reddir *tasks = (t_reddir *)malloc(sizeof(t_reddir) * (size + 2));
@@ -49,7 +20,8 @@ static t_reddir *pipe_check(char *command) {
 
     for (; command[i] != '\0'; i++) {
         if (command[i] == '|') {
-            tasks[q].path = NULL;
+            tasks[q].input = NULL;
+            tasks[q].output = NULL;
             mx_command_cut(command, start, i, &tasks[q]);
             tasks[q].op = command[i];
             i++;
@@ -57,7 +29,8 @@ static t_reddir *pipe_check(char *command) {
             q++;
         }
     }
-    tasks[q].path = NULL;
+    tasks[q].input = NULL;
+    tasks[q].output = NULL;
     mx_command_cut(command, start, i, &tasks[q]);
     tasks[q].op = '-';
     return tasks;
@@ -67,11 +40,10 @@ static t_reddir *pipe_check(char *command) {
 
 int mx_redirection(char *command) {
     t_reddir *tasks = pipe_check(command);
+    // t_path *p = NULL;
     int status = 2;
 
-    // path_sort(tasks);
-
-    if (tasks[0].op == '|') {
+    if (tasks[0].op == '|' || tasks[0].output) {
         status = mx_pipe_rec(tasks, 0, 0);
     }
     else {
