@@ -40,7 +40,7 @@ install:
 	@cp $(SRC) .
 	@cp $(INC_H) .
 	@clang $(CFLAGS) -c $(ROOT_C)
-	@clang $(CFLAGS) $(ROOT_O) -o $(NAME)
+	@clang $(CFLAGS) -ltermcap $(ROOT_O) -o $(NAME)
 	@mkdir -p obj
 	@cp $(ROOT_O) obj/
 	@rm -rf $(ROOT_O)

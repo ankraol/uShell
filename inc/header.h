@@ -12,6 +12,11 @@
 #include <errno.h>
 #include <malloc/malloc.h>
 #include <termios.h>
+#include <stdbool.h>
+
+
+#include <curses.h>
+#include <term.h>
 
 
 
@@ -36,7 +41,7 @@ typedef struct s_reddir {
     t_path *output;
 } t_reddir;
 
-int main(void);
+//int main(void);
 int mx_count_words(const char *str, char c);
 char *mx_strnew(const int size);
 char **mx_strsplit(const char *s, char c);
