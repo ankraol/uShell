@@ -13,6 +13,7 @@ int mx_ush_execute(char *command) {
     
     pid = fork();
     if (pid == 0) {
+        //mx_printstr("start");
         if (execvp(path, argv) == -1)
             perror("ush");
                 exit(1);

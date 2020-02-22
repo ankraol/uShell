@@ -2,22 +2,59 @@
 
 #include <stdlib.h>
 
-char *mx_read_line() {
-    char c;
-    int bufsize = 1024;
-    int position = 0;
-    char *buffer = (char *)malloc(sizeof(char) * bufsize);
+// char *mx_read_line() {
+//     char c;
+//     int bufsize = 1024;
+//     int position = 0;
+//     char *buffer = (char *)malloc(sizeof(char) * bufsize);
 
-    while(1) {
-        c = getchar();
-        if (c == '\0' || c == '\n') {
-            buffer[position] = '\0';
-            return buffer;
-        }
-        else {
-            buffer[position] = c;
-        }
-        position++;
+//     while(1) {
+//         c = getchar();
+//         if (c == '\0' || c == '\n') {
+//             buffer[position] = '\0';
+//             return buffer;
+//         }
+//         else {
+//             buffer[position] = c;
+//         }
+//         position++;
+//     }
+// }
+
+void mx_get_twidth(int *col, int *line) {
+    char *termtype = getenv("TERM");
+    char *buff = malloc(2048);
+    bool if_term = 0;
+
+    if (termtype == 0) {
+        termtype = strdup("xterm-256color");
+        if_term = 1;
+    }
+    if (tgetent (buff, termtype) == 0) {
+        perror("ush: ");
+        exit(1);
+    }
+    free(buff);
+    if (if_term)
+        mx_strdel(&termtype);
+    *col = tgetnum("co");
+    *line = tgetnum("li");
+}
+
+void add_to_str(char **str, char c, int *n, int *len_line) {
+    (*n) += 1;
+    (*len_line)++;
+    (*str) = (char *)realloc(*str, (*n));
+    (*str)[(*n) - 1] = '\0';
+    (*str)[(*n) - 2] = c;
+    //*(str[n+1]) = '\0';
+}
+
+void back_to_str(char **str, int *n) {
+    if ((*n) > 1) {
+        (*str)[(*n) - 2] = '\0';
+        (*n) -= 1;
+        (*str) = (char *)realloc(*str, (*n));
     }
 }
 
@@ -38,58 +75,133 @@ char *mx_read_line() {
 // }
 
 
-
-// char *mx_read_line() {
-//     struct termios savetty;
-//     struct termios tty;
-//     char ch = 0;
-//     char *mystr = (char *)malloc(sizeof(char) * 1);
-//     mystr[0] = '\0';
-//     int n = 1;
-
-//     tcgetattr (0, &tty);
-//     savetty = tty; /* Сохранить упр. информацию канонического режима */
-//     tty.c_lflag &= ~(ICANON | ECHO | ISIG);
-//     tty.c_cc[VMIN] = 1;
-//     tcsetattr (0, TCSAFLUSH, &tty);
-
-//     mx_printstr("\x1B[s");
+char *mx_read_line() {
+    struct termios savetty;
+    struct termios tty;
+    char ch = 0;
+    char *mystr = (char *)malloc(sizeof(char) * 1);
+    mystr[0] = '\0';
+    char *line = (char *)malloc(sizeof(char) * 1);
+    line[0] = '\0';
+    int n = 1;
     
-//     mx_printstr("u$h> ");
 
- 
-//     while (1) {
+    tcgetattr (0, &tty);
+    savetty = tty; /* Сохранить упр. информацию канонического режима */
+    tty.c_lflag &= ~(ICANON | ECHO | ISIG);
+    tty.c_cc[VMIN] = 1;
+    tcsetattr (0, TCSAFLUSH, &tty);
 
-//         read (0, &ch, 1);
-//         // mx_printstr("u$h> ");
-//         mx_printstr("\x1B[u");
-//         mx_printstr("\x1B[0K");
-//         //read (0, &ch, 1);
+    // int x = 1;
+    // int y = 1;
+    int col = 0;
+    int lin = 0;
+    int start_x = 0;
+    int start_y = 0;
+     mx_get_twidth(&col, &lin);
 
- 
-//         if (ch == 127)
-//             back_to_str(&mystr, &n);
-//         else if (ch == '\n') {
-//             mx_printstr("u$h> ");
-//             mx_printstr(mystr);
-//             write(1, "\n", 1);
-//             if (strcmp("exit", mystr) == 0)
-//                 exit(0);
-//             break;
-//         }
-//         else 
-//             add_to_str(&mystr, ch, &n);
 
-//         //mx_printstr(mx_itoa(ch));
-//         mx_printstr("u$h> ");
-//         mx_printstr(mystr);
-//         // if (ch != 'n')
-//         //     write(1, "\n", 1);
-//     }
+    mx_printstr("\033[6n");
+
+    //scanf("\033[%d;%dR", &start_x, &start_y);
+
+    
+    //mx_printstr("\0337");
+    scanf("\033[%d;%dR", &start_x, &start_y);
+
+    int len_str = 0;
+    if (lin != start_x)
+        len_str = ((lin - start_x) * col ) - 5;
+    else 
+        len_str =  col - 5;
+    // fprintf(stdout, "--%d--", len_str);
+    // fflush(stdout);
+
+   
+    mx_printstr("u$h> ");
+    // scanf("\033[%d;%df", &start_x, &start_y);
+    // mx_printstr("\033[6n");
+
+    //scanf("\033[%d;%dR", &start_x, &start_y);
+    //mx_printstr("\033[1S");
+    // fprintf(stdout, "%d;%d", start_x, start_y);
+    //         fflush(stdout);
+
+    // fprintf(stdout, "%d", y);
+    //  fflush(stdout);
+//  fprintf(stdout, "\033[%d;%dH", start_x, start_y);
+//  fflush(stdout);
+int len_line = 5;
+
+
+
+    while (1) {
+
+        read (0, &ch, 1);
+
+            //if (lin != x && col != y) {
+            mx_printstr("\033[1K");
+            //mx_printstr("DWSVMCLSKNVKJDN ");
+
+          
+             fprintf(stdout, "\033[%d;%dH", start_x, start_y);
+            fflush(stdout);
+            mx_printstr("u$h> ");
+            //}
+            //scanf("\033[%d;%dH", &start_x, &start_y);
+            
+            //mx_printstr("u$h> ");
+            //mx_printstr("\033[1M");
+            //mx_printstr("u$h> ");
+    
+
+
+   
+        if (ch == 127) {
+            back_to_str(&mystr, &n);
+            len_line--;
+        
+        }
+        else if (ch == '\n') {
+            //mx_printstr("u$h> ");
+            mx_printstr(mystr);
+            write(1, "\n", 1);
+            if (strcmp("exit", mystr) == 0)
+                exit(0);
+            break;
+        }
+        else {
+            add_to_str(&mystr, ch, &n, &len_line);
+            
+        }
+        
+        
+        mx_get_twidth(&col, &lin);
+
+         if (n >= len_str && len_line == lin) {
+                mx_printstr("\033[1S");
+            //    fprintf(stdout, "%d;%d", lin, len_line);
+            //   fflush(stdout);
+        start_x--;
+        //start_y++;
+
+         }
+          if (len_line == lin )
+            len_line = 0;
+        //  else {
+  
+            mx_printstr(mystr);
+        // }
+    //         mx_printstr("\033[6n");
+    //         scanf("\033[%d;%dR", &x, &y);
+    //      fprintf(stdout, "x = %d, y = %d, line = %d, col = %d", x, y, lin, col );
+    //   fflush(stdout);
+      
+    }
 
 //     tcsetattr (0, TCSAFLUSH, &savetty);
 //     return mystr;
-// }
+}
 
 
 void lsh_loop(void) {
