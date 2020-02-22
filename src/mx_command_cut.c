@@ -1,5 +1,18 @@
 #include "header.h"
 
+static bool isSpace(char *command, int i, int f) {
+    bool check;
+
+    for (int j = i; (command[j + 1] != '>' && command[j + 1] != '<') && j < f; j++) {
+        if (command[i] == ' ') {
+            check = true;
+        }
+        else if (command[j] != ' ')
+            check = false;
+    }
+    return check;
+}
+
 t_path *create_list(char *command, int *i, int f, int s) {
     t_path *p = NULL;
     int j = 0;
@@ -8,8 +21,15 @@ t_path *create_list(char *command, int *i, int f, int s) {
     p->op = command[(*i)];
     (*i) += 2;
     p->file = (char *)malloc(sizeof(char) * (f - s));
-    for (; (*i) < f && command[(*i) + 1] != '<' && command[(*i) + 1] != '>'; (*i)++, j++) {
-        p->file[j] = command[(*i)];
+    while ((*i) < f && command[(*i) + 1] != '<' && command[(*i) + 1] != '>') {
+        if (isSpace(command, (*i), f) == false) {
+            p->file[j] = command[(*i)];
+            (*i)++;
+            j++;
+        }
+        else {
+            (*i)++;
+        }
     }
     p->file[j] = '\0';
     p->file = realloc(p->file, strlen(p->file));
@@ -45,10 +65,16 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
                     for(; (*output)->next; output = &(*output)->next);
                     (*output)->next = (t_path *)malloc(sizeof(t_path));
                     (*output)->next->op = command[i];
-                    i += 2;
+                    for (i += 1; command[i] == ' '; i++);
                     (*output)->next->file = (char *)malloc(sizeof(char) * (f - s));
-                    for (j = 0; i < f && command[i + 1] != '<' && command[i + 1] != '>'; i++, j++) {
-                        (*output)->next->file[j] = command[i];
+                    for (j = 0; i < f && command[i + 1] != '<' && command[i + 1] != '>';) {
+                        if (isSpace(command, i, f) == false){
+                            (*output)->next->file[j] = command[i];
+                            i++;
+                            j++;
+                        }
+                        else
+                            i++;
                     }
                     (*output)->next->file[j] = '\0';
                     (*output)->next->file = realloc((*output)->next->file, strlen((*output)->next->file));
@@ -63,10 +89,16 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
                     for(; (*input)->next; input = &(*input)->next);
                     (*input)->next = (t_path *)malloc(sizeof(t_path));
                     (*input)->next->op = command[i];
-                    i += 2;
+                    for (i += 1; command[i] == ' '; i++);
                     (*input)->next->file = (char *)malloc(sizeof(char) * (f - s));
-                    for (j = 0; i < f && command[i + 1] != '<' && command[i + 1] != '>'; i++, j++) {
-                        (*input)->next->file[j] = command[i];
+                    for (j = 0; i < f && command[i + 1] != '<' && command[i + 1] != '>';) {
+                        if (isSpace(command, i, f) == false) {
+                            (*input)->next->file[j] = command[i];
+                            i++;
+                            j++;
+                        }
+                        else
+                            i++;
                     }
                     (*input)->next->file[j] = '\0';
                     (*input)->next->file = realloc((*input)->next->file, strlen((*input)->next->file));

@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <malloc/malloc.h>
 #include <termios.h>
+#include <stdbool.h>
 
 
 
@@ -51,14 +52,15 @@ char *mx_strcat(char *restrict s1, const char *restrict s2);
 t_tree *mx_parcing(char *input);
 void mx_strdel(char **str);
 int mx_redirection(char *command);
-int mx_pipe_rec(t_reddir *command, int pos, int in_fd);
+int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput);
 int mx_ush_execute(char *argv);
 
 char *mx_itoa(int number);
 
-void mx_fd_change(t_reddir *command, int pos, int in_fd);
+void mx_fd_change(t_reddir *command, int pos, int in_fd, bool extInput);
 void mx_command_cut(char *command, int s, int f, t_reddir *tasks);
 char *mx_file_to_str(const char *file);
 void mx_printstr(const char *s);
+t_tree **mx_works_queue(char *line);
 
 #endif
