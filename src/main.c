@@ -50,10 +50,11 @@ void add_to_str(char **str, char c, int *n, int *len_line) {
     //*(str[n+1]) = '\0';
 }
 
-void back_to_str(char **str, int *n) {
+void back_to_str(char **str, int *n, int *len_line) {
     if ((*n) > 1) {
         (*str)[(*n) - 2] = '\0';
         (*n) -= 1;
+        (*len_line)--;
         (*str) = (char *)realloc(*str, (*n));
     }
 }
@@ -111,13 +112,14 @@ char *mx_read_line() {
 
     int len_str = 0;
     if (lin != start_x)
-        len_str = ((lin - start_x) * col ) - 5;
+        len_str = (((lin+1) - start_x) * col ) - 5;
     else 
         len_str =  col - 5;
     // fprintf(stdout, "--%d--", len_str);
     // fflush(stdout);
 
-   
+//   fprintf(stdout, "line = %d, col = %d, len_line = %d", lin, col, len_str );
+//        fflush(stdout);
     mx_printstr("u$h> ");
     // scanf("\033[%d;%df", &start_x, &start_y);
     // mx_printstr("\033[6n");
@@ -133,15 +135,23 @@ char *mx_read_line() {
 //  fflush(stdout);
 int len_line = 5;
 
-
+    // fprintf(stdout, "\033[%d;%dH", 100, 100);
+    // fflush(stdout);
 
     while (1) {
+ 
 
         read (0, &ch, 1);
+               mx_get_twidth(&col, &lin);
+           //int len_str = 0;
+    if (lin != start_x)
+        len_str = (((lin+1) - start_x) * col ) - 5;
+    else 
+        len_str =  col - 5;
 
-            //if (lin != x && col != y) {
+            if (n <= len_str) {
             mx_printstr("\033[1K");
-            //mx_printstr("DWSVMCLSKNVKJDN ");
+            
 
           
              fprintf(stdout, "\033[%d;%dH", start_x, start_y);
@@ -158,12 +168,10 @@ int len_line = 5;
 
    
         if (ch == 127) {
-            back_to_str(&mystr, &n);
-            len_line--;
-        
+            back_to_str(&mystr, &n, &len_line);
+
         }
         else if (ch == '\n') {
-            //mx_printstr("u$h> ");
             mx_printstr(mystr);
             write(1, "\n", 1);
             if (strcmp("exit", mystr) == 0)
@@ -174,23 +182,82 @@ int len_line = 5;
             add_to_str(&mystr, ch, &n, &len_line);
             
         }
-        
-        
-        mx_get_twidth(&col, &lin);
-
-         if (n >= len_str && len_line == lin) {
-                mx_printstr("\033[1S");
-            //    fprintf(stdout, "%d;%d", lin, len_line);
-            //   fflush(stdout);
-        start_x--;
-        //start_y++;
-
-         }
-          if (len_line == lin )
-            len_line = 0;
+ 
+         if (n-1 == len_str)
+                len_line = col;
         //  else {
   
             mx_printstr(mystr);
+            }
+            else {
+                if (len_line == col) {
+           
+                    fprintf(stdout, "\033[%d;%dH", start_x, 0);
+                    fflush(stdout);
+                    mx_printstr("\033[0J");
+                    mx_printstr("\033[1S");
+                    start_x--;
+                    fprintf(stdout, "\033[%d;%dH", start_x, 0);
+                    fflush(stdout);
+                    mx_printstr("u$h> ");
+                    len_line = 0;
+                    if (ch == 127) 
+                        back_to_str(&mystr, &n, &len_line);
+
+                    else if (ch == '\n') {
+                        mx_printstr(mystr);
+                        write(1, "\n", 1);
+                        if (strcmp("exit", mystr) == 0)
+                            exit(0);
+                        break;
+                    }
+                    else {
+                        add_to_str(&mystr, ch, &n, &len_line);
+                        
+                    }
+                    mx_printstr(mystr);
+        
+                }
+                    
+                else {
+                             mx_printstr("\033[1K");
+            
+
+          
+             fprintf(stdout, "\033[%d;%dH", start_x, start_y);
+            fflush(stdout);
+            mx_printstr("u$h> ");
+            //}
+            //scanf("\033[%d;%dH", &start_x, &start_y);
+            
+            //mx_printstr("u$h> ");
+            //mx_printstr("\033[1M");
+            //mx_printstr("u$h> ");
+    
+
+
+   
+        if (ch == 127) {
+            back_to_str(&mystr, &n, &len_line);
+
+        }
+        else if (ch == '\n') {
+            mx_printstr(mystr);
+            write(1, "\n", 1);
+            if (strcmp("exit", mystr) == 0)
+                exit(0);
+            break;
+        }
+        else {
+            add_to_str(&mystr, ch, &n, &len_line);
+            
+        }
+  
+            mx_printstr(mystr);
+                }
+    
+            }
+
         // }
     //         mx_printstr("\033[6n");
     //         scanf("\033[%d;%dR", &x, &y);
