@@ -200,7 +200,7 @@ int len_line = 5;
     }
 
 //     tcsetattr (0, TCSAFLUSH, &savetty);
-//     return mystr;
+     return mystr;
 }
 
 

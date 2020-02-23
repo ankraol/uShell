@@ -13,13 +13,12 @@
 #include <malloc/malloc.h>
 #include <termios.h>
 #include <stdbool.h>
-<<<<<<< HEAD
-=======
+
 
 
 #include <curses.h>
 #include <term.h>
->>>>>>> cb8d7e048bcfd19b67127bdad0cbad4d96009284
+
 
 
 
