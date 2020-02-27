@@ -6,8 +6,11 @@
 int mx_ush_execute(char *command) {
     pid_t pid;
     pid_t wpid;
-    char **argv = mx_strsplit(command, ' ');
+    char **argv = mx_tokens(command, ' ');
+    //printf("ARGUMENTS FOR COMMAND == %s\n", argv[1]);
+    //printf("COMMAND == %s\n", argv[0]);
     char *path = mx_read_env(argv[0]);
+    // printf("PATH == %s\n", path);
     int status;
 
     

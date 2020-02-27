@@ -16,12 +16,19 @@ static bool isSpace(char *command, int i, int f) {
 t_path *create_list(char *command, int *i, int f, int s) {
     t_path *p = NULL;
     int j = 0;
+    // bool iSbl = false;
+    // bool iSesc = false;
 
     p = (t_path *)malloc(sizeof(t_path));
     p->op = command[(*i)];
-    (*i) += 2;
+    for ((*i) += 1; command[(*i)] == ' '; (*i)++);
     p->file = (char *)malloc(sizeof(char) * (f - s));
     while ((*i) < f && command[(*i) + 1] != '<' && command[(*i) + 1] != '>') {
+        // && iSesc == false) {
+        //if (command[(*i)] == '/')
+          //  iSbl = true;
+        // else if ((command[(*i)] == 34 || command[(*i)] == 39) && iSbl == false)
+            // iSesc = true;
         if (isSpace(command, (*i), f) == false) {
             p->file[j] = command[(*i)];
             (*i)++;
@@ -43,21 +50,67 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
     int i = s;
     int q = 0;
     int j = 0;
+    bool iSdq = false;
+    bool iSsq = false;
 
     tasks->task = (char *)malloc(sizeof(char) * (f - s));
-    // tasks->path = (t_path *)malloc(sizeof(t_path));
-    // tasks->path->next = NULL;
     tasks->input = NULL;
     tasks->output = NULL;
     input = &tasks->input;
     output = &tasks->output;
-        for (; command[i] != '>' && command[i] != '<' && i < f; i++, q++) {
+    while (i < f) {
+        if (command[i] == 34 && command[i - 1] != 92 && iSsq == false) {
+            if (iSdq == false)
+                iSdq = true;
+            else
+                iSdq = false;
+            // i++;
             tasks->task[q] = command[i];
+            i++;
+            q++;
         }
+        else if (command[i] == 39 && iSdq == false) {
+            if (iSsq == false)
+                iSsq = true;
+            else
+                iSsq = false;
+            // i++;
+            tasks->task[q] = command[i];
+            i++;
+            q++;
+        }
+        // else if (command[i] == 92 && command[i + 1] == 34) {
+            // i++;
+        // }
+        else if (((command[i] == '>' || command[i] == '<') && iSdq == false && iSsq == false) || command[i] == '\0') {
+            break;
+        }
+        else {
+            tasks->task[q] = command[i];
+            i++;
+            q++;
+        }
+    }
+        // for (; command[i] != '>' && command[i] != '<' && i < f; i++, q++) {
+            // tasks->task[q] = command[i];
+        // }
         tasks->task[q] = '\0';
         tasks->task = realloc(tasks->task, strlen(tasks->task));
+        // printf("coomand cut ----%s\n", tasks->task);
         for (; i < f; i++) {
-            if (command[i] == '>'&& i < f) {
+            if (command[i] == 34 && command[i - 1] != 92 && iSsq == false) {
+                if (iSdq == false)
+                    iSdq = true;
+                else
+                    iSdq = false;
+            }
+            else if (command[i] == 39 && iSdq == false) {
+                if (iSsq == false)
+                    iSsq = true;
+                else
+                    iSsq = false;
+            }
+            if (command[i] == '>'&& i < f && iSdq == false && iSsq == false) {
                 if (!(*output)) {
                     *output = create_list(command, &i, f, s);
                 }
@@ -67,42 +120,84 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
                     (*output)->next->op = command[i];
                     for (i += 1; command[i] == ' '; i++);
                     (*output)->next->file = (char *)malloc(sizeof(char) * (f - s));
-                    for (j = 0; i < f && command[i + 1] != '<' && command[i + 1] != '>';) {
-                        if (isSpace(command, i, f) == false){
+                    for (j = 0; i < f;) {
+                        if (command[i] == 34 && command[i - 1] != 92 && iSsq == false) {
+                            if (iSdq == false)
+                                iSdq = true;
+                            else
+                                iSdq = false;
+                        }
+                        else if (command[i] == 39 && iSdq == false) {
+                            if (iSsq == false)
+                                iSsq = true;
+                            else
+                                iSsq = false;
+                        }
+                        if (iSsq == false && iSdq == false){
+                            if (isSpace(command, i, f) == false){
+                                (*output)->next->file[j] = command[i];
+                                i++;
+                                j++;
+                            }
+                            else
+                                i++;
+                        }
+                        else if (iSsq == true || iSdq == true) {
                             (*output)->next->file[j] = command[i];
                             i++;
                             j++;
                         }
-                        else
-                            i++;
+                        else if ((command[i] == '<' || command[i] == '>') && iSsq == false && iSdq == false)
+                            break;
                     }
                     (*output)->next->file[j] = '\0';
                     (*output)->next->file = realloc((*output)->next->file, strlen((*output)->next->file));
                     (*output)->next->next = NULL;
                 }
             }
-            if (command[i] == '<' && i < f) {
+            if (command[i] == '<' && i < f && iSsq == false && iSdq == false) {
                 if (!(*input)) {
                     *input = create_list(command, &i, f, s);
                 }
                 else {
-                    for(; (*input)->next; input = &(*input)->next);
-                    (*input)->next = (t_path *)malloc(sizeof(t_path));
-                    (*input)->next->op = command[i];
+                    for(; (*output)->next; output = &(*output)->next);
+                    (*output)->next = (t_path *)malloc(sizeof(t_path));
+                    (*output)->next->op = command[i];
                     for (i += 1; command[i] == ' '; i++);
-                    (*input)->next->file = (char *)malloc(sizeof(char) * (f - s));
-                    for (j = 0; i < f && command[i + 1] != '<' && command[i + 1] != '>';) {
-                        if (isSpace(command, i, f) == false) {
-                            (*input)->next->file[j] = command[i];
+                    (*output)->next->file = (char *)malloc(sizeof(char) * (f - s));
+                    for (j = 0; i < f;) {
+                        if (command[i] == 34 && command[i - 1] != 92 && iSsq == false) {
+                            if (iSdq == false)
+                                iSdq = true;
+                            else
+                                iSdq = false;
+                        }
+                        else if (command[i] == 39 && iSdq == false) {
+                            if (iSsq == false)
+                                iSsq = true;
+                            else
+                                iSsq = false;
+                        }
+                        if (iSsq == false && iSdq == false){
+                            if (isSpace(command, i, f) == false){
+                                (*output)->next->file[j] = command[i];
+                                i++;
+                                j++;
+                            }
+                            else
+                                i++;
+                        }
+                        else if (iSsq == true || iSdq == true) {
+                            (*output)->next->file[j] = command[i];
                             i++;
                             j++;
                         }
-                        else
-                            i++;
-                    }
-                    (*input)->next->file[j] = '\0';
-                    (*input)->next->file = realloc((*input)->next->file, strlen((*input)->next->file));
-                    (*input)->next->next = NULL;
+                        else if ((command[i] == '<' || command[i] == '>') && iSsq == false && iSdq == false)
+                            break;
+                        }
+                        (*input)->next->file[j] = '\0';
+                        (*input)->next->file = realloc((*input)->next->file, strlen((*input)->next->file));
+                        (*input)->next->next = NULL;
                 }
             }
         }

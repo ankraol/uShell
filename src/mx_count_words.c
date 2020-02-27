@@ -13,7 +13,7 @@ int mx_count_words(const char *str, char c) {
             }
         }
         if (str[0] == c && str[size - 1] == c) {
-            count = count - 1;
+            count -= 1;
         }
         if (str[0] != c && str[size - 1] != c) {
             count = count + 1;

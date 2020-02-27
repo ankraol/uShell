@@ -13,14 +13,10 @@
 #include <malloc/malloc.h>
 #include <termios.h>
 #include <stdbool.h>
-<<<<<<< HEAD
-=======
 
 
 #include <curses.h>
 #include <term.h>
->>>>>>> cb8d7e048bcfd19b67127bdad0cbad4d96009284
-
 
 
 typedef struct s_tree {
@@ -69,5 +65,6 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks);
 char *mx_file_to_str(const char *file);
 void mx_printstr(const char *s);
 t_tree **mx_works_queue(char *line);
+char **mx_tokens(char *line, char sp);
 
 #endif

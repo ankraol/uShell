@@ -18,11 +18,11 @@ char **mx_strsplit(const char *s, char c) {
     arr = (char **)malloc(sizeof (char *) * word + 1);
     
     for (int i = 0; first[i] != '\0'; i++) {
-        if ((first[i] == c &&  first[i+1] != c && first[i+1] != '\0') || (i == 0 && first[i] != c))  {
+        if ((first[i] == c &&  first[i+1] != c && first[i+1] != '\0') || first[0] != c)  {
             if (i != 0 || (i == 0 && first[i]  == c))
                 i++;
             count = i;
-            while (first[count]  != c && first[count]  != '\0')
+            while (first[count] != c && first[count]  != '\0')
                 count++;
             len = count - i;
             arr[l] = mx_strnew(len);
@@ -40,4 +40,3 @@ char **mx_strsplit(const char *s, char c) {
     return arr;
     
 }
-

@@ -16,12 +16,27 @@ static char *operant_cut(char *input, int f, char c) {
     return buf;
 }
 
+static bool onlySpaces(char *command, int start, int end) {
+    for (int i = start; i <= end; i++) {
+        if (command[i] !=' ')
+            return false;
+    }
+    return true;
+}
+
 static char *command_cut(char *input, int s, int f) {
     char *buf = (char *)malloc(sizeof(char) * (f - s));
     int j = 0;
+    // bool iSesc = false;
 
-    for (int i = s + 1; i <= f; i++, j++) {
-        buf[j] = input[i];
+    for (int i = s + 1; i <= f;) {
+        if (onlySpaces(input, i, f) == false) {
+            buf[j] = input[i];
+            i++;
+            j++;
+        }
+        else
+            i++;
     }
     buf[j] = '\0';
     return buf;
@@ -31,18 +46,35 @@ t_tree *mx_parcing(char *input) {
     t_tree *work = (t_tree *)malloc(sizeof(t_tree));
     t_tree *p = NULL;
     t_tree *parent = NULL;
-    int trig = 1;
     int size = strlen(input);
+    bool iSdq = false;
+    bool iSsq = false;
 
     (*work).parent = parent;
-    for (int i = strlen(input) - 2; i >= 0; i--) {
-        if (input[i] == '"') {
-            if (trig == 1)
-                trig = 0;
-            else if (trig == 0)
-                trig = 1;
+    for (int i = strlen(input) - 1; i >= 0; i--) {
+        if (input[i] == 39 && iSdq == false) {
+            if (iSsq == false) {
+                // printf("OPEN SINGLE QUOTES - %d\n", i);
+                iSsq = true;
+            }
+            else if (iSsq == true) {
+                // printf("CLOSE SINGLE QUOTES - %d\n", i);
+                iSsq = false;
+            }
         }
-        if (input[i] == '|' && input[i - 1] == '|' && trig == 1) {
+        else if (input[i] == 34 && input[i - 1] != 92 && iSsq == false) {
+            if (iSdq == false) {
+                // printf("OPEN DOUBLE QUOTES - %d\n", i);
+                iSdq = true;
+            }
+            else if (iSdq == true) {
+                // printf("CLOSE DOUBLE QUOTES - %d\n", i);
+                iSdq = false;
+            }
+        }
+
+        if (input[i] == '|' && input[i - 1] == '|' && iSdq == false && iSsq == false) {
+            // printf("NOT SUPPOSED TO BE HERE - %d\n", i);
             parent = work;
             (*work).operant = operant_cut(input, i, '|');
             (*work).command = NULL;
@@ -57,7 +89,7 @@ t_tree *mx_parcing(char *input) {
             for (; input[i] == '|'; i--);
             size = i;
         }
-        else if (input[i] == '&' && input[i - 1] == '&' && trig == 1) {
+        else if (input[i] == '&' && input[i - 1] == '&' && iSdq == false && iSsq == false) {
             parent = work;
             (*work).operant = operant_cut(input, i, '&');
             (*work).command = NULL;
@@ -74,7 +106,9 @@ t_tree *mx_parcing(char *input) {
         }
     }
     (*work).operant = NULL;
+    // printf("%s - %d\n", input, size);
     (*work).command = command_cut(input, -1, size);
+    // printf("%s\n", (*work).command);
     (*work).parent = parent;
     (*work).left_child = NULL;
     (*work).right_child = NULL;
