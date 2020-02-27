@@ -26,7 +26,7 @@ static int dir_count(char *command) {
 }
 
 static t_reddir *pipe_check(char *command) {
-    // printf("\n\nparced string = %s\n\n", command);
+    printf("\n\nparced string = %s\n\n", command);
     int size = dir_count(command);
     t_reddir *tasks = (t_reddir *)malloc(sizeof(t_reddir) * (size + 2));
     int start = 0;
@@ -81,15 +81,19 @@ int mx_redirection(char *command) {
     if (tasks[0].op == '|' || tasks[0].output || tasks[0].input) {
         // printf("REDIRECTIONS\n");
         if (tasks[0].op == '|' || tasks[0].output) {
+            printf("EXTERNAL OUTPUT or PIPE\n");
             status = mx_pipe_rec(tasks, 0, 0, extInput);
         }
         for (int i = 0; tasks[i - 1].op != '-'; i++) {
             if (tasks[i].input) {
+                printf("EXTERNAL INPUT\n");
                 t_path *p = tasks[i].input;
                 for (; p;  p = p->next) {
                     input = open(p->file, O_RDONLY);
-                    if (input == -1)
+                    if (input == -1) {
+                        printf("FILENAME = %s\n", p->file);
                         perror("ush");
+                    }
                     extInput = true;
                     mx_pipe_rec(tasks, i, input, extInput);
                     extInput = false;
@@ -100,6 +104,7 @@ int mx_redirection(char *command) {
         for (int i = 0; tasks[i - 1].op != '-'; i++) {
             if (tasks[i].output != NULL) {
                 if (tasks[i].output->next) {
+                    printf("EXTRA EXTERNAL OUTPUT\n");
                     char *str = mx_file_to_str(tasks[i].output->file);
                     int size = strlen(str);
                     t_path *p = tasks[i].output->next;

@@ -17,9 +17,11 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput) {
     // fprintf(stdout, "%s\n", command[pos].task);
     if (command[pos].op == '-') {
         if (command[pos].output) {
+            printf("EXTERNAL OUTPUT && NO TERMINAL OUT\n");
             mx_fd_change(command, pos, in_fd, extInput);
         }
         else {
+            printf("TERMINAL OUT\n");
             pid = fork();
             if (pid == 0) {
                 close(0);
@@ -29,7 +31,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput) {
                 task = mx_strsplit(command[pos].task, ' ');
                 path = mx_read_env(task[0]);
                 if (execvp(path, task) == -1)
-                    perror("lsh");
+                    perror("psh");
             }
             else
             {
@@ -39,6 +41,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput) {
     }
     else if (command[pos].op == '|'){
         if (command[pos].output) {
+            printf("EXTERNAL OUTPUT && PIPE\n");
             mx_fd_change(command, pos, in_fd, extInput);
         }
         int fd[2];

@@ -40,6 +40,7 @@ t_path *create_list(char *command, int *i, int f, int s) {
     }
     p->file[j] = '\0';
     p->file = realloc(p->file, strlen(p->file));
+    printf("INPUT = %s\n", p->file);
     p->next = NULL;
     return p;
 }

@@ -30,10 +30,12 @@ void mx_fd_change(t_reddir *command, int pos, int in_fd, bool extInput) {
             if (pid == 0) {
                 redirect(0, in_fd);
                 redirect(1, output);
-                task = mx_strsplit(command[pos].task, ' ');
+                task = mx_tokens(command[pos].task, ' ');
                 path = mx_read_env(task[0]);
-                if (execvp(path, task) == -1)
+                if (execvp(path, task) == -1) {
+                    printf("TASK = %s\n", command[pos].task);
                     perror("lsh");
+                }
             }
             else {
                 close(output);

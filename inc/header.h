@@ -13,11 +13,8 @@
 #include <malloc/malloc.h>
 #include <termios.h>
 #include <stdbool.h>
-
-
 #include <curses.h>
 #include <term.h>
-
 
 typedef struct s_tree {
 	struct s_tree *parent;
@@ -66,5 +63,6 @@ char *mx_file_to_str(const char *file);
 void mx_printstr(const char *s);
 t_tree **mx_works_queue(char *line);
 char **mx_tokens(char *line, char sp);
+int mx_strcmp(const char *s1, unsigned const char *s2);
 
 #endif
