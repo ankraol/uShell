@@ -1,6 +1,0 @@
-total 48
--rw-r--r--   1 akrasnosel  4242    884 Feb 21 12:19 Makefile
-drwxr-xr-x   3 akrasnosel  4242    102 Feb 21 12:19 inc
--rw-r--r--   1 akrasnosel  4242      0 Feb 22 14:31 out1
-drwxr-xr-x  26 akrasnosel  4242    884 Feb 21 14:30 src
--rwxr-xr-x   1 akrasnosel  4242  19248 Feb 22 14:25 ush

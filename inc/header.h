@@ -22,6 +22,7 @@
 
 
 
+
 typedef struct s_tree {
 	struct s_tree *parent;
 	struct s_tree *left_child;
@@ -68,5 +69,6 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks);
 char *mx_file_to_str(const char *file);
 void mx_printstr(const char *s);
 t_tree **mx_works_queue(char *line);
+int mx_strcmp(const char *s1, unsigned const char *s2);
 
 #endif

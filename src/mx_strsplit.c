@@ -22,7 +22,7 @@ char **mx_strsplit(const char *s, char c) {
             if (i != 0 || (i == 0 && first[i]  == c))
                 i++;
             count = i;
-            while (first[count]  != c && first[count]  != '\0')
+            while (first[count] != c && first[count]  != '\0')
                 count++;
             len = count - i;
             arr[l] = mx_strnew(len);
