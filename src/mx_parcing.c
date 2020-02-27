@@ -16,9 +16,29 @@ static char *operant_cut(char *input, int f, char c) {
     return buf;
 }
 
+static bool ommitChar(char *command, int *i) {
+    if ((command[(*i)] == 92 || command[(*i)] == ' ' || command[(*i)] == 34 || command[(*i)] == 39
+        || command[(*i)] == 36 || command[(*i)] == 125 || command[(*i)] == 123
+        || command[(*i)] == 40 || command[(*i)] == 41) && command[(*i) - 1] == 92)
+        {
+            return false;
+        }
+    else if (command[(*i)] != 92
+        && command[(*i)] != 34 && command[(*i)] != 39
+        && command[(*i)] != 36 && command[(*i)] != 125 && command[(*i)] != 123
+        && command[(*i)] != 40 && command[(*i)] != 41)
+        {
+            return false;
+        }
+    else if (command[(*i)] != ' ' && command[(*i) + 1] != ' ')
+        return false;
+    else
+        return true;
+}
+
 static bool onlySpaces(char *command, int start, int end) {
     for (int i = start; i <= end; i++) {
-        if (command[i] !=' ')
+        if (command[i] != ' ')
             return false;
     }
     return true;
@@ -27,10 +47,10 @@ static bool onlySpaces(char *command, int start, int end) {
 static char *command_cut(char *input, int s, int f) {
     char *buf = (char *)malloc(sizeof(char) * (f - s));
     int j = 0;
-    // bool iSesc = false;
 
     for (int i = s + 1; i <= f;) {
-        if (onlySpaces(input, i, f) == false) {
+        if (onlySpaces(input, i, f) == false && ommitChar(input, &i) == false) {
+            printf("i let you -> %c in\n", input[i]);
             buf[j] = input[i];
             i++;
             j++;
@@ -39,6 +59,7 @@ static char *command_cut(char *input, int s, int f) {
             i++;
     }
     buf[j] = '\0';
+    buf = realloc(buf, strlen(buf));
     return buf;
 }
 
@@ -115,3 +136,5 @@ t_tree *mx_parcing(char *input) {
     return work;
     // out(work);
 }
+
+// echo hello \\\\\\\\\\\\\world

@@ -1,16 +1,22 @@
 #include "header.h"
 
-static bool isSpace(char *command, int i, int f) {
-    bool check;
-
-    for (int j = i; (command[j + 1] != '>' && command[j + 1] != '<') && j < f; j++) {
-        if (command[i] == ' ') {
-            check = true;
-        }
-        else if (command[j] != ' ')
-            check = false;
-    }
-    return check;
+static bool isSpace(char *command, int i) {
+    if (command[i] == ' ' && command[i - 1] != 92)
+        return true;
+    else if (command[i] == 92 && command[i - 1] != 92)
+        return true;
+    else if (command[i] == 34 && command[i - 1] != 92)
+        return true;
+    else if (command[i] == 39 && command[i - 1] != 92)
+        return true;
+    else if (command[i] == 36 && command[i - 1] != 92)
+        return true;
+    else if ((command[i] == 125 || command[i] == 123) && command[i - 1] != 92)
+        return true;
+    else if ((command[i] == 40 || command[i] == 41) && command[i - 1] != 92)
+        return true;
+    else
+        return false;
 }
 
 t_path *create_list(char *command, int *i, int f, int s) {
@@ -24,12 +30,7 @@ t_path *create_list(char *command, int *i, int f, int s) {
     for ((*i) += 1; command[(*i)] == ' '; (*i)++);
     p->file = (char *)malloc(sizeof(char) * (f - s));
     while ((*i) < f && command[(*i) + 1] != '<' && command[(*i) + 1] != '>') {
-        // && iSesc == false) {
-        //if (command[(*i)] == '/')
-          //  iSbl = true;
-        // else if ((command[(*i)] == 34 || command[(*i)] == 39) && iSbl == false)
-            // iSesc = true;
-        if (isSpace(command, (*i), f) == false) {
+        if (isSpace(command, (*i)) == false) {
             p->file[j] = command[(*i)];
             (*i)++;
             j++;
@@ -65,7 +66,6 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
                 iSdq = true;
             else
                 iSdq = false;
-            // i++;
             tasks->task[q] = command[i];
             i++;
             q++;
@@ -75,14 +75,10 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
                 iSsq = true;
             else
                 iSsq = false;
-            // i++;
             tasks->task[q] = command[i];
             i++;
             q++;
         }
-        // else if (command[i] == 92 && command[i + 1] == 34) {
-            // i++;
-        // }
         else if (((command[i] == '>' || command[i] == '<') && iSdq == false && iSsq == false) || command[i] == '\0') {
             break;
         }
@@ -92,12 +88,9 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
             q++;
         }
     }
-        // for (; command[i] != '>' && command[i] != '<' && i < f; i++, q++) {
-            // tasks->task[q] = command[i];
-        // }
         tasks->task[q] = '\0';
         tasks->task = realloc(tasks->task, strlen(tasks->task));
-        // printf("coomand cut ----%s\n", tasks->task);
+
         for (; i < f; i++) {
             if (command[i] == 34 && command[i - 1] != 92 && iSsq == false) {
                 if (iSdq == false)
@@ -135,7 +128,7 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
                                 iSsq = false;
                         }
                         if (iSsq == false && iSdq == false){
-                            if (isSpace(command, i, f) == false){
+                            if (isSpace(command, i) == false){
                                 (*output)->next->file[j] = command[i];
                                 i++;
                                 j++;
@@ -180,7 +173,7 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
                                 iSsq = false;
                         }
                         if (iSsq == false && iSdq == false){
-                            if (isSpace(command, i, f) == false){
+                            if (isSpace(command, i) == false){
                                 (*output)->next->file[j] = command[i];
                                 i++;
                                 j++;
