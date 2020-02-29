@@ -14,7 +14,6 @@ FILES = main \
 	mx_strjoin_two \
 	mx_strjoin \
 	mx_strcat \
-	mx_parcing \
 	mx_pipe_rec \
 	mx_ush_execute \
 	mx_itoa \
@@ -25,7 +24,8 @@ FILES = main \
 	mx_printstr \
 	mx_works_queue \
 	mx_tokens \
-	mx_strcmp\
+	mx_strcmp \
+	mx_logicOp \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

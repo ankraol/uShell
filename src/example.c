@@ -1,5 +1,24 @@
  #include "header.h"
 
+// char *mx_read_line() {
+//     char c;
+//     int bufsize = 1024;
+//     int position = 0;
+//     char *buffer = (char *)malloc(sizeof(char) * bufsize);
+
+//     while(1) {
+//         c = getchar();
+//         if (c == '\0' || c == '\n') {
+//             buffer[position] = '\0';
+//             return buffer;
+//         }
+//         else {
+//             buffer[position] = c;
+//         }
+//         position++;
+//     }
+// } 
+
 
 // int mx_ush_execute(char **argv) {
 //     pid_t pid;

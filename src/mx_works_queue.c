@@ -10,14 +10,24 @@ static int worksCount(char *line) {
     return count;
 }
 
-t_tree **mx_works_queue(char *line) {
+// static void listPrint(t_queue *list) {
+    // t_queue *p = list;
+// 
+    // for (; p; p = (*p).next) {
+        // printf("command-%s,operand-%c\n", (*p).command, (*p).op);
+    // }
+// 
+// }
+
+t_queue **mx_works_queue(char *line) {
     int size = worksCount(line);
-    t_tree **queue = (t_tree **)malloc(sizeof(t_tree *) * (size + 1));
     char **jobs = mx_strsplit(line, ';');
+    t_queue **list = (t_queue **)malloc(sizeof(t_queue *) * (size + 1));
 
     for (int i = 0; i < size; i++) {
-        queue[i] = mx_parcing(jobs[i]);
+        list[i] = NULL;
+        mx_logicOp(jobs[i], &list[i]);
     }
-    queue[size] = NULL;
-    return queue;
+    list[size] = NULL;
+    return list;
 }

@@ -1,5 +1,20 @@
 #include "header.h"
 
+static void quotesCheck(bool *sQ, bool *dQ, char *command, int i) {
+    if (command[i] == 34 && command[i - 1] != 92 && (*sQ) == false) {
+        if ((*dQ) == false)
+            *dQ = true;
+        else
+            *dQ = false;
+    }
+    else if (command[i] == 39 && (*dQ) == false) {
+        if ((*sQ) == false)
+            *sQ = true;
+        else
+            *sQ = false;
+    }
+}
+
 static bool isSpace(char *command, int i) {
     if (command[i] == ' ' && command[i - 1] != 92)
         return true;
@@ -31,6 +46,7 @@ t_path *create_list(char *command, int *i, int f, int s) {
     p->file = (char *)malloc(sizeof(char) * (f - s));
     while ((*i) < f && command[(*i) + 1] != '<' && command[(*i) + 1] != '>') {
         if (isSpace(command, (*i)) == false) {
+            // printf("let it in -> %c\n", command[(*i)]);
             p->file[j] = command[(*i)];
             (*i)++;
             j++;
@@ -41,7 +57,7 @@ t_path *create_list(char *command, int *i, int f, int s) {
     }
     p->file[j] = '\0';
     p->file = realloc(p->file, strlen(p->file));
-    printf("INPUT = %s\n", p->file);
+    // printf("INPUT = %s\n", p->file);
     p->next = NULL;
     return p;
 }
@@ -60,36 +76,21 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
     tasks->output = NULL;
     input = &tasks->input;
     output = &tasks->output;
-    while (i < f) {
-        if (command[i] == 34 && command[i - 1] != 92 && iSsq == false) {
-            if (iSdq == false)
-                iSdq = true;
-            else
-                iSdq = false;
-            tasks->task[q] = command[i];
-            i++;
-            q++;
-        }
-        else if (command[i] == 39 && iSdq == false) {
-            if (iSsq == false)
-                iSsq = true;
-            else
-                iSsq = false;
-            tasks->task[q] = command[i];
-            i++;
-            q++;
-        }
-        else if (((command[i] == '>' || command[i] == '<') && iSdq == false && iSsq == false) || command[i] == '\0') {
-            break;
-        }
-        else {
-            tasks->task[q] = command[i];
-            i++;
-            q++;
-        }
+    for (; i < f; i++) {
+        quotesCheck(&iSsq, &iSdq, command, i);
+        if (((command[i] == '>' || command[i] == '<')
+            && iSdq == false && iSsq == false) || command[i] == '\0')
+            {
+                break;
+            }
+            else {
+                tasks->task[q] = command[i];
+                q++;
+            }
     }
-        tasks->task[q] = '\0';
-        tasks->task = realloc(tasks->task, strlen(tasks->task));
+    tasks->task[q] = '\0';
+    tasks->task = realloc(tasks->task, strlen(tasks->task));
+    // printf("%s\n", tasks->task);
 
         for (; i < f; i++) {
             if (command[i] == 34 && command[i - 1] != 92 && iSsq == false) {

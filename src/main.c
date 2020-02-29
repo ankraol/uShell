@@ -1,26 +1,5 @@
  #include "header.h"
 
-
-
-// char *mx_read_line() {
-//     char c;
-//     int bufsize = 1024;
-//     int position = 0;
-//     char *buffer = (char *)malloc(sizeof(char) * bufsize);
-
-//     while(1) {
-//         c = getchar();
-//         if (c == '\0' || c == '\n') {
-//             buffer[position] = '\0';
-//             return buffer;
-//         }
-//         else {
-//             buffer[position] = c;
-//         }
-//         position++;
-//     }
-// }
-
 void mx_get_twidth(int *col) {
     char *termtype = getenv("TERM");
     char *buff = malloc(2048);
@@ -305,60 +284,30 @@ unsigned char *mx_read_line(bool *trig) {
 }
 
 
-void lsh_loop(void) {
+void ush_loop(void) {
     unsigned char *line;
     int status = 2;
-    t_tree **work = NULL;
-    t_tree *p = NULL;
+    t_queue **work = NULL;
+    t_queue *p = NULL;
     bool trig = false;
 
     while (trig == false) {
-        //mx_printstr("u$h> ");
         line = mx_read_line(&trig);
         if (line[0] != '\0') {
-        // fprintf(stdout, "%s", line);
-        // fflush(stdout);
-        work = mx_works_queue((char *)line);
-        for (int i = 0; work[i]; i++) {
-            p = work[i];
-            for (; (*p).right_child; p = (*p).right_child);
-            if ((*p).parent) {
-                p = (*p).parent;
-                status = mx_redirection((*(*p).right_child).command);
-                // printf("\n\nSTATUS = %d\n\n\n", status);
-                // if (status == 2)
-                    // status = mx_ush_execute((*(*p).right_child).command);
-                for (; p != NULL; p = (*p).parent) {
-                    if ((*p).operant[1] == '|') {
-                        if (status == 1) {
-                            status = mx_redirection((*(*p).left_child).command);
-                            // printf("\n\nSTATUS = %d\n\n\n", status);
-                            // if (status == 2)
-                                // status = mx_ush_execute((*(*p).left_child).command);
-                        }
-                        else if ((*p).operant[1] == '&') {
-                            if (status == 0) {
-                                status = mx_redirection((*(*p).left_child).command);
-                                // printf("\n\nSTATUS = %d\n\n\n", status);
-                                // if (status == 2)
-                                    // status = mx_ush_execute((*(*p).left_child).command);
-                            }
-                        }
-                    }
-                }
-            }
-                else
-                {
+            work = mx_works_queue((char *)line);
+            for (int i = 0; work[i]; i++) {
+                p = work[i];
+                for (; p; p = (*p).next) {
                     status = mx_redirection((*p).command);
-                    // printf("\n\nSTATUS = %d\n\n\n", status);
-                    // if (status == 2)
-                        // status = mx_ush_execute((*p).command);
+                    if (((*p).op == '&' && status == 1)
+                        || ((*p).op == '|' && status == 0))
+                        {
+                            p = (*p).next;
+                        }
                 }
             }
-            free(line);
         }
     }
-     //free(line);
 }
 
 void hdl(int sig)
@@ -394,7 +343,7 @@ int main(void) {
 
 
 
-    lsh_loop();
+    ush_loop();
     // lsh_loop();
     // mx_ush_pipe_execute(); 
     

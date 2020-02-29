@@ -1,12 +1,33 @@
 #include "header.h"
 
+// static bool ommitChar(char *command, int *i) {
+    // if (command[(*i)] == 92 && (command[(*i) + 1] == ' ' || command[(*i) + 1] == 34
+        // || command[(*i) + 1] == 39 || command[(*i) + 1] == 36 || command[(*i) + 1] == 40
+        // || command[(*i) + 1] == 41 || command[(*i) + 1] == 123 || command[(*i) + 1] == 125))
+        // {
+            // *i += 1;
+            // return false;
+        // }
+    // else if (command[(*i)] == 92 && command[(*i) + 1] == 92) {
+        // for (int j = 0; j < 4; j++) {
+            // if (command[(*i) + 1] == 92)
+                // *i += 1;
+        // }
+        // return false;
+    // }
+    // else if (command[(*i)] == ' ' && command[(*i) + 1] == ' ')
+        // return true;
+    // else
+        // return false;
+// }
+
 static int countWords(const char *s, char c) {
     int count = 0;
     int size = strlen(s);
     bool iSsq = false;
     bool iSdq = false;
 
-    for (int i = 0; s[i] != '\0'; i++) {            
+    for (int i = 0; s[i] != '\0'; i++) {
         if (s[i] == 34 && s[i - 1] != 92 && iSsq == false) {
             if (iSdq == false)
                 iSdq = true;

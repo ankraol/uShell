@@ -1,32 +1,37 @@
 #include "header.h"
 
+static void quoteCheck(bool *sQ, bool *dQ, char *command, int i) {
+        if (command[i] == 34 && command[i - 1] != 92 && (*sQ) == false) {
+            if ((*dQ) == false)
+                *dQ = true;
+            else
+                *dQ = false;
+        }
+        if (command[i] == 39 && (*dQ) == false) {
+            if ((*sQ) == false)
+                *sQ = true;
+            else
+                *sQ = false;
+        }
+}
+
 static int dir_count(char *command) {
     int count = 0;
     bool iSdq = false;
     bool iSsq = false;
 
     for (int i = 0; command[i] != '\0'; i++) {
-        if (command[i] == 34 && command[i + 1] != 92 && iSsq == false) {
-            if (iSdq == false)
-                iSdq = true;
-            else
-                iSdq = false;
-        }
-        else if (command[i] == 39 && iSdq == false) {
-            if (iSsq == false)
-                iSsq = true;
-            else
-                iSsq = false;
-        }
-        if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|' && iSdq == false && iSsq  == false) {
-            count++;
-        }
+        quoteCheck(&iSsq, &iSdq, command, i);
+        if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'
+            && iSdq == false && iSsq  == false)
+            {
+                count++;
+            }
     }
     return count;
 }
 
 static t_reddir *pipe_check(char *command) {
-    printf("\n\nparced string = %s\n\n", command);
     int size = dir_count(command);
     t_reddir *tasks = (t_reddir *)malloc(sizeof(t_reddir) * (size + 2));
     int start = 0;
@@ -35,37 +40,25 @@ static t_reddir *pipe_check(char *command) {
     bool iSdq = false;
     bool iSsq = false;
 
-
-//the string after mx_parcing is without any double quotes
-//needs some corretion;
     for (; command[i] != '\0'; i++) {
-        if (command[i] == 34 && command[i - 1] != 92 && iSsq == false) {
-            if (iSdq == false)
-                iSdq = true;
-            else
-                iSdq = false;
-        }
-        if (command[i] == 39 && iSdq == false) {
-            if (iSsq == false)
-                iSsq = true;
-            else
-                iSsq = false;
-        }
-        if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'&& iSdq == false && iSsq == false) {
-            tasks[q].input = NULL;
-            tasks[q].output = NULL;
-            mx_command_cut(command, start, i, &tasks[q]);
-            tasks[q].op = command[i];
-            i++;
-            start = i;
-            q++;
-        }
+        quoteCheck(&iSsq, &iSdq, command, i);
+        if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'
+            && iSdq == false && iSsq == false)
+            {
+                tasks[q].input = NULL;
+                tasks[q].output = NULL;
+                if (command[i - 1] == ' ')
+                    i -= 1;
+                mx_command_cut(command, start, i, &tasks[q]);
+                tasks[q].op = '|';
+                for (; command[i] == ' ' || command[i] == '|'; i++);
+                start = i;
+                q++;
+            }
     }
     tasks[q].input = NULL;
     tasks[q].output = NULL;
-    // printf("COMMAND CUT\n");
     mx_command_cut(command, start, i, &tasks[q]);
-    // printf("PIPE CHECK SUCCESS\n");
     tasks[q].op = '-';
     return tasks;
 }
@@ -73,27 +66,27 @@ static t_reddir *pipe_check(char *command) {
 
 
 int mx_redirection(char *command) {
+    // printf("redirection -> %s\n", command);
     t_reddir *tasks = pipe_check(command);
     int status = 2;
     int input;
     bool extInput = false;
+    t_path *p = NULL;
+    char *str = NULL;
+    int size = 0;
+    int output = 0;
 
     if (tasks[0].op == '|' || tasks[0].output || tasks[0].input) {
-        // printf("REDIRECTIONS\n");
         if (tasks[0].op == '|' || tasks[0].output) {
-            printf("EXTERNAL OUTPUT or PIPE\n");
             status = mx_pipe_rec(tasks, 0, 0, extInput);
         }
         for (int i = 0; tasks[i - 1].op != '-'; i++) {
             if (tasks[i].input) {
-                printf("EXTERNAL INPUT\n");
-                t_path *p = tasks[i].input;
+                p = tasks[i].input;
                 for (; p;  p = p->next) {
                     input = open(p->file, O_RDONLY);
-                    if (input == -1) {
-                        printf("FILENAME = %s\n", p->file);
+                    if (input == -1)
                         perror("ush");
-                    }
                     extInput = true;
                     mx_pipe_rec(tasks, i, input, extInput);
                     extInput = false;
@@ -104,12 +97,12 @@ int mx_redirection(char *command) {
         for (int i = 0; tasks[i - 1].op != '-'; i++) {
             if (tasks[i].output != NULL) {
                 if (tasks[i].output->next) {
-                    printf("EXTRA EXTERNAL OUTPUT\n");
-                    char *str = mx_file_to_str(tasks[i].output->file);
-                    int size = strlen(str);
-                    t_path *p = tasks[i].output->next;
+                    // printf("EXTRA EXTERNAL OUTPUT\n");
+                    str = mx_file_to_str(tasks[i].output->file);
+                    size = strlen(str);
+                    p = tasks[i].output->next;
                     for (; p;  p = p->next) {
-                        int output = open(p->file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_ISUID);
+                        output = open(p->file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_ISUID);
                         if (output == -1) {
                             perror("ush");
                         }
@@ -123,8 +116,6 @@ int mx_redirection(char *command) {
         }
     }
     else {
-        // printf("EXECUTING\n");
-        // printf("TASK = %s\n", tasks[0].task);
         status = mx_ush_execute(tasks[0].task);
     }
     return status;
