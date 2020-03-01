@@ -298,6 +298,7 @@ void ush_loop(void) {
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
+                    (*p).command = mx_substitute((*p).command);
                     status = mx_redirection((*p).command);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))

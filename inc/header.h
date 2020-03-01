@@ -18,6 +18,12 @@
 typedef struct s_queue t_queue;
 typedef struct s_path t_path;
 typedef struct s_reddir t_reddir;
+typedef struct s_list t_list;
+
+struct s_list {
+    char *command;
+    struct s_list *next;
+};
 
 struct s_queue {
     char *command;
@@ -65,5 +71,6 @@ t_queue **mx_works_queue(char *line);
 char **mx_tokens(char *line, char sp);
 int mx_strcmp(const char *s1, unsigned const char *s2);
 void mx_logicOp(char *line, t_queue **list);
+char *mx_substitute(char *command);
 
 #endif

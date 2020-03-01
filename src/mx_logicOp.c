@@ -114,7 +114,7 @@ void mx_logicOp(char *line, t_queue **list) {
     }
     else
         newLine = line;
-    
+
     for (; newLine[i] != '\0'; i++) {
         if (newLine[i] == 34 || newLine[i] == 39)
             isQuote(&dQ, &sQ, newLine, i);

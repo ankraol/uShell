@@ -195,6 +195,9 @@ char **mx_tokens(char *line, char sp) {
     }
 
     tokens[l] = NULL;
+    // for (int i = 0; tokens[i]; i++) {
+        // printf("parced COMMAND ==> %s\n", tokens[i]);
+    // }
     return tokens;
 }
 // failed test cases :

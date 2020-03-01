@@ -1,13 +1,23 @@
 #include "header.h"
 
-static void quoteCheck(bool *sQ, bool *dQ, char *command, int i) {
-        if (command[i] == 34 && command[i - 1] != 92 && (*sQ) == false) {
-            if ((*dQ) == false)
-                *dQ = true;
-            else
-                *dQ = false;
-        }
-        if (command[i] == 39 && (*dQ) == false) {
+static void quoteCheck(bool *sQ, bool *dQ, bool *iSs, char *command, int i) {
+        if (command[i] == 96 && command[i - 1] != 92 && (*sQ) == false
+            && (*dQ) == false)
+            {
+                if ((*iSs) == false)
+                    *iSs = true;
+                else
+                    *iSs = false;
+            }
+        else if (command[i] == 34 && command[i - 1] != 92 && (*sQ) == false
+            && (*iSs) == false)
+            {
+                if ((*dQ) == false)
+                    *dQ = true;
+                else
+                    *dQ = false;
+            }
+        else if (command[i] == 39 && (*dQ) == false && (*iSs) == false) {
             if ((*sQ) == false)
                 *sQ = true;
             else
@@ -19,11 +29,12 @@ static int dir_count(char *command) {
     int count = 0;
     bool iSdq = false;
     bool iSsq = false;
+    bool iSs = false;
 
     for (int i = 0; command[i] != '\0'; i++) {
-        quoteCheck(&iSsq, &iSdq, command, i);
+        quoteCheck(&iSsq, &iSdq, &iSs, command, i);
         if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'
-            && iSdq == false && iSsq  == false)
+            && iSdq == false && iSsq  == false && iSs == false)
             {
                 count++;
             }
@@ -39,11 +50,12 @@ static t_reddir *pipe_check(char *command) {
     int i = 0;
     bool iSdq = false;
     bool iSsq = false;
+    bool iSsub = false;
 
     for (; command[i] != '\0'; i++) {
-        quoteCheck(&iSsq, &iSdq, command, i);
+        quoteCheck(&iSsq, &iSdq, &iSsub, command, i);
         if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'
-            && iSdq == false && iSsq == false)
+            && iSdq == false && iSsq == false && iSsub == false)
             {
                 tasks[q].input = NULL;
                 tasks[q].output = NULL;
