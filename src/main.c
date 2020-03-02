@@ -40,22 +40,45 @@ void mx_get_twidth(int *col) {
     *col = tgetnum("co");
 }
 
+void mx_byte_check_add(unsigned char *ch, int *delte_len, int *delta_byte,
+                       int start) {
+    if (ch[start] >> 7 == 0)
+        *delta_byte = 1;
+    if (ch[start] >> 5 == 6 && ch[start + 1] >> 6 == 2 )
+        *delta_byte = 2;
+    if (ch[start] >> 4 == 14 && ch[start + 1] >> 6 == 2
+        && ch[start + 2] >> 6 == 2 )
+        *delta_byte = 3;
+    if (ch[start] >> 3 == 30 && ch[start + 1] >> 6 == 2 
+        && ch[start + 2] >> 6 == 2 && ch[start + 3] >> 6 == 2) {
+        *delta_byte = 4;
+        *delte_len = 2;
+    }
+}
+
+void mx_byte_check_back(unsigned char *str, int *len, int *minus, int n) {
+    if ( str[n-2] >> 7 == 0)
+        *minus = 1;
+    if (str[n-3] >> 5 == 6 && str[n-2] >> 6 == 2 )
+        *minus = 2;
+    if (str[n-4] >> 4 == 14 && str[n-3] >> 6 == 2 && str[n-2] >> 6 == 2 )
+        *minus = 3;
+    if (str[n-5] >> 3 == 30 && str[n-4] >> 6 == 2 && str[n-3] >> 6 == 2
+        && str[n-2] >> 6 == 2) {
+        *minus = 4;
+        *len = 2;
+    }
+}
+
+
+
 void add_to_str(unsigned char **str, unsigned char *ch, int *n, int *n_len, int *n_cursor, int *n_cursor_b) {
     int plus = 0;
     int len = 1;
     int buf_plus = 0;
     unsigned char *buf_str = NULL;
 
-    if (ch[0] >> 7 == 0)
-        plus = 1;
-    if (ch[0] >> 5 == 6 && ch[1] >> 6 == 2 )
-        plus = 2;
-    if (ch[0] >> 4 == 14 && ch[1] >> 6 == 2 && ch[2] >> 6 == 2 )
-        plus = 3;
-    if (ch[0] >> 3 == 30 && ch[1] >> 6 == 2 && ch[1] >> 6 == 2 && ch[3] >> 6 == 2) {
-        plus = 4;
-        len = 2;
-    }
+    mx_byte_check_add(ch, &len, &plus, 0);
     if (ch[0] >> 7 == 0 && ch[1] >> 7 == 0 && ch[2] >> 7 == 0 && ch[3] >> 7 == 0 && ch[1] != 0 && ch[2] != 0 && ch[3] != 0) {
         plus = 4;
         len = 4;
@@ -98,17 +121,7 @@ void back_to_str(unsigned char **str, int *n, int *n_len, int *n_cursor, int *n_
     unsigned char *buf_str = NULL;
     int q = 0;
 
-
-    if ( (*str)[(*n)-2] >> 7 == 0)
-        minus = 1;
-    if ((*str)[(*n)-3] >> 5 == 6 && (*str)[(*n)-2] >> 6 == 2 )
-        minus = 2;
-    if ((*str)[(*n)-4] >> 4 == 14 && (*str)[(*n)-3] >> 6 == 2 && (*str)[(*n)-2] >> 6 == 2 )
-        minus = 3;
-    if ((*str)[(*n)-5] >> 3 == 30 && (*str)[(*n)-4] >> 6 == 2 && (*str)[(*n)-3] >> 6 == 2 && (*str)[(*n)-2] >> 6 == 2) {
-        minus = 4;
-        len = 2;
-    }
+    mx_byte_check_back(*str, &len, &minus, *n);
     if ((*n_cursor_b) == (*n)) {
         if ((*n) > 1) {
             for (int i = 0; i < minus; i++) {
@@ -143,17 +156,29 @@ void back_to_str(unsigned char **str, int *n, int *n_len, int *n_cursor, int *n_
 }
 
 
-
-unsigned char *mx_read_line(bool *trig) {
+unsigned char *mx_read_line(bool *trig, t_history_name **history) {
     struct termios savetty;
     struct termios tty;
     unsigned char ch[4];
     unsigned char *mystr = (unsigned char *)malloc(sizeof(char) * 1);
+
     int n_bute = 1;
     int n_len = 0;
-     int n_cursor = 0;
-     int cur_pos_x = 0;
-     int n_cursor_b = 1;
+    int n_cursor = 0;
+    int cur_pos_x = 0;
+    int n_cursor_b = 1;
+    int col = 0;
+    int cursor_delta_len = 1;
+    int cursor_delta_b = 0;
+
+    bool first_line = true;
+    char *buf_first = NULL;
+    int first_line_len = 0;
+    int first_line_byte = 1;
+
+
+
+
 
 
     mystr[0] = '\0';
@@ -165,7 +190,7 @@ unsigned char *mx_read_line(bool *trig) {
     tty.c_cc[VMIN] = 1;
     tcsetattr (0, TCSAFLUSH, &tty);
 
-    int col = 0;
+    
     
 
     mx_get_twidth(&col);
@@ -188,12 +213,10 @@ unsigned char *mx_read_line(bool *trig) {
 
 
         mx_get_twidth(&col);
-        //cur_pos_x = col - ((((n_cursor + 4)/col + 1) * col) - (n_cursor + 5));
         if (ch[0] != 27 ) {
         if (n_cursor + 5  > col) {
             fprintf(stdout, "\033[%dF", (n_cursor + 4)/col);
             fflush(stdout);
-            //mx_printstr("\x1b[31m");
         }
         else {
             mx_printstr("\033[1G");
@@ -210,8 +233,13 @@ unsigned char *mx_read_line(bool *trig) {
             fprintf(stdout, "%s", mystr);
             fflush(stdout);
             write(1, "\n", 1);
-            if (mx_strcmp("exit", mystr) == 0)
+            if (mx_strcmp("exit", mystr) == 0) {
+                if (malloc_size(buf_first))
+                    free(buf_first);
+                free(mystr);
                 exit(0);
+            }
+                
             break;
         }
         else if (ch[0] != 27) {
@@ -227,7 +255,6 @@ unsigned char *mx_read_line(bool *trig) {
         
 
          if ((((n_len + 4)/col - (n_cursor + 4)/col)) > 0) {
-            // mx_printstr("ssssuka");
             fprintf(stdout, "\033[%dF", ((n_len + 4)/col - (n_cursor + 4)/col));
             fprintf(stdout, "\033[%dG", cur_pos_x);
             fflush(stdout);
@@ -242,9 +269,11 @@ unsigned char *mx_read_line(bool *trig) {
         
          if (ch[0] == 27 && ch[1] == 91 && ch[2] == 68) {// errow left
             if (n_cursor > 0) {
-                cur_pos_x = cur_pos_x - 1;
-                n_cursor = n_cursor - 1;
-                n_cursor_b = n_cursor_b - 1;
+                mx_byte_check_back(mystr, &cursor_delta_len, &cursor_delta_b, n_cursor_b);
+                cur_pos_x = cur_pos_x - cursor_delta_len;
+                n_cursor = n_cursor - cursor_delta_len;
+                n_cursor_b = n_cursor_b - cursor_delta_b;
+                cursor_delta_len = 1;
                 if (cur_pos_x < 1) {
                     fprintf(stdout, "\033[%dF",1);
                     fprintf(stdout, "\033[%dG", col);
@@ -257,12 +286,14 @@ unsigned char *mx_read_line(bool *trig) {
                 }
             }
          }
-         
+        
         if (ch[0] == 27 && ch[1] == 91 && ch[2] == 67) {// errow right
             if (n_cursor < n_len) {
-                cur_pos_x = cur_pos_x + 1;
-                n_cursor = n_cursor + 1;
-                n_cursor_b = n_cursor_b + 1;
+                mx_byte_check_add(mystr, &cursor_delta_len, &cursor_delta_b, n_cursor_b);
+                cur_pos_x = cur_pos_x + cursor_delta_len;
+                n_cursor = n_cursor + cursor_delta_len;
+                n_cursor_b = n_cursor_b + cursor_delta_b;
+                cursor_delta_len = 1;
                 if (cur_pos_x > col) {
                     fprintf(stdout, "\033[%dE",1);
                     fprintf(stdout, "\033[%dG", 1);
@@ -275,6 +306,75 @@ unsigned char *mx_read_line(bool *trig) {
                 }
             }
          }
+         if (ch[0] == 27 && ch[1] == 91 && ch[2] == 65) {// errow up
+            if (*history != NULL) {
+                if (first_line == true) {
+                    first_line_len = n_len;
+                    first_line_byte = n_bute;
+                    buf_first = strdup((char *) mystr);
+                    free(mystr);
+                    first_line = false;
+                }
+                if (n_cursor + 5 > col) {
+                    fprintf(stdout, "\033[%dF", (n_cursor + 4)/col);
+                    fflush(stdout);
+                }
+                else {
+                    mx_printstr("\033[1G");
+                    }
+                mx_printstr("\033[0J");
+                mx_printstr("u$h> ");
+                n_cursor =(*history)->n_len;
+                n_cursor_b = (*history)->n_byte;
+                n_len = n_cursor;
+                n_bute = n_cursor_b;
+                mystr = (*history)->name;
+                fprintf(stdout, "%s", (*history)->name);
+                fflush(stdout);
+                if ((*history)->next)
+                    (*history) = (*history)->next;
+           }
+         }
+        if (ch[0] == 27 && ch[1] == 91 && ch[2] == 66) { // errow down
+                if ((*history)->previous != NULL || first_line == false) {
+                    
+                if (n_cursor + 5 > col) {
+                    fprintf(stdout, "\033[%dF", (n_cursor + 4)/col);
+                    fflush(stdout);
+                }
+                else {
+                    mx_printstr("\033[1G");
+                    }
+                mx_printstr("\033[0J");
+                mx_printstr("u$h> ");
+                if ((*history)->previous != NULL) {
+                    (*history) = (*history)->previous;
+                    n_cursor =(*history)->n_len;
+                    n_cursor_b = (*history)->n_byte;
+                    n_len = n_cursor;
+                    n_bute = n_cursor_b;
+                    mystr = (*history)->name;
+                    fprintf(stdout, "%s", (*history)->name);
+                    fflush(stdout);
+                }
+                else {
+                    if (first_line == false) {
+                        n_cursor = first_line_len;
+                        n_cursor_b = first_line_byte;
+                        n_len = first_line_len;
+                        n_bute = n_cursor_b;
+                        mystr = (unsigned char *) buf_first;
+                        fprintf(stdout, "%s", mystr);
+                        fflush(stdout);
+                        first_line = true;
+                        first_line_len = 0;
+                        first_line_byte = 1;
+                    }
+                }
+                //mx_printstr("check");
+            }
+        }
+        
 
         ch[0] = 0;
         ch[1] = 0;
@@ -293,8 +393,12 @@ unsigned char *mx_read_line(bool *trig) {
     // fprintf(stdout, "n_len = %d, n_cursor = %d, mylen = %d, ", n_len, n_cursor, (n_len - n_cursor)/col);
     // fprintf(stdout, "mylen2 = %d", (n_len + 5)/col - (n_cursor + 5)/col);
     //fflush(stdout);
-     tcsetattr (0, TCSAFLUSH, &savetty);
-     return mystr;
+    if (first_line != true)
+        free(buf_first);
+
+    mx_push_back_history(history, mystr, n_bute, n_len);
+    tcsetattr (0, TCSAFLUSH, &savetty);
+    return mystr;
 }
 
 
@@ -305,10 +409,11 @@ void lsh_loop(void) {
     t_tree *p = NULL;
     pid_t pid = 1;
     bool trig = false;
+    t_history_name *history = NULL;
 
     while (trig == false) {
         //mx_printstr("u$h> ");
-        line = mx_read_line(&trig);
+        line = mx_read_line(&trig, &history);
         if (line[0] != '\0') {
         // fprintf(stdout, "%s", line);
         // fflush(stdout);
@@ -349,7 +454,7 @@ void lsh_loop(void) {
                     // status = mx_ush_execute((*p).command);
             }
         }
-        free(line);
+        //free(line);
     }
     pid = getpid();
      //free(line);

@@ -44,6 +44,14 @@ typedef struct s_reddir {
     t_path *output;
 } t_reddir;
 
+typedef struct s_history_name {
+    unsigned char *name;
+    int n_byte;
+    int n_len;
+    struct s_history_name *next;
+    struct s_history_name *previous;
+} t_history_name;
+
 //int main(void);
 int mx_count_words(const char *str, char c);
 char *mx_strnew(const int size);
@@ -70,5 +78,8 @@ char *mx_file_to_str(const char *file);
 void mx_printstr(const char *s);
 t_tree **mx_works_queue(char *line);
 int mx_strcmp(const char *s1, unsigned const char *s2);
+void mx_push_back_history(t_history_name **history, unsigned char *str,
+int n_byte, int len);
+t_history_name *mx_creat_history(unsigned char *str, int n_byte, int len);
 
 #endif

@@ -25,6 +25,7 @@ FILES = main \
 	mx_printstr \
 	mx_works_queue \
 	mx_strcmp\
+	mx_history_use \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
