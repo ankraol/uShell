@@ -1,38 +1,62 @@
 #include "header.h"
 
+// static bool iSsub(char *command) {
+    // for (int i = 0; command[i] != '\0'; i++) {
+        // if (command[i] == 96)
+            // return true;
+    // }
+    // return false;
+// }
+
 char *mx_substitute(char *command) {
     bool ap = false;
+    bool iSbr = false;
+    bool extr = false;
+
     char *line = (char *)malloc(sizeof(char) * strlen(command));
     char *mainCommand = (char *)malloc(sizeof(char) * strlen(command));
     int j = 0;
     int k = 0;
+    int i = 0;
 
-    for (int i = 0; command[i] != '\0'; i++) {
-        if (command[i] == 96 && command[i -1] != 92) {
+    // fprintf(stdout, "command in CHECK FOR SUBSTITUTION %s\n", command);
+    for (; command[i] != '\0'; i++) {
+        if (command[i] == 96 && command[i - 1] != 92 && iSbr == false) {
             if (ap == false) {
                 ap = true;
             }
             else {
-                ap = false;
+                // ap = false;
+                break;
             }
         }
-        if (ap == false) {
-            if (command[i] != 96 && command[i] != ' ') {
+        else if (command[i - 1] == 36 && command[i] == 40 && ap == false) {
+            if (iSbr == false)
+                iSbr = true;
+            else
+                extr = true;
+        }
+        else if (command[i] == 41) {
+            if (extr == true)
+                extr = false;
+            else
+                break;
+        }
+        else if (ap == false && iSbr == false) {
+            if (command[i] != 36) {
                 mainCommand[k] = command[i];
                 k++;
             }
         }
-        else if (ap == true) {
-            if (command[i] != 96) {
+        else if (ap == true || iSbr == true) {
                 line[j] = command[i];
                 j++;
-            }
         }
     }
     line[j] = '\0';
     mainCommand[k] = ' ';
     line = realloc(line, strlen(line) + 1);
-    printf("substitution -> %s\n", line);
+    fprintf(stdout, "substitution %s\n", line);
 
     int fd[2];
     t_queue **work = NULL;
@@ -49,6 +73,7 @@ char *mx_substitute(char *command) {
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
+                    (*p).command = mx_substitute((*p).command);
                     status = mx_redirection((*p).command);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
@@ -63,16 +88,20 @@ char *mx_substitute(char *command) {
             close(fd[1]);
         }
         char c;
-        int i = k + 1;
-        for(; read(fd[0], &c, 1); i++) {
+        // int i = k + 1;
+        for(k += 1; read(fd[0], &c, 1); k++) {
             if (c == '\n')
                 c = ' ';
-            mainCommand[i] = c;
+            mainCommand[k] = c;
         }
         close(fd[0]);
+        for (i += 1; command[i] != '\0'; i++) {
+            mainCommand[k] = command[i];
+            k++;
+        }
         mainCommand[i] = '\0';
         mainCommand = realloc(mainCommand, strlen(mainCommand) + 1);
-        printf("command -> %s\n", mainCommand);
+        printf("command - %s\n", mainCommand);
         return mainCommand;
     }
     return command;

@@ -46,10 +46,21 @@ static bool onlySpaces(char *line, int st, int end) {
 static char *commandCut(char *line, int start, int end) {
     char *command = (char *)malloc(sizeof(char) * (end - start + 2));
     int q = 0;
+    bool ap = false;
 
     for (int i = start; i < end; i++) {
+        if (line[i] == 96 && line[i - 1] != 92) {
+            if (ap == false)
+                ap = true;
+            else
+                ap = false;
+        }
         if (i == start && line[i] == ' ')
             for (; line[i] == ' '; i++);
+        if (line[i - 1] != 92 && line[i] == 92 && (line[i + 1] == 34 || line[i + 1] == 39 || line[i + 1] == 96) && ap == false)
+            i++;
+        else if (line[i] == 92 && line[i + 1] == 92 && ap == false)
+            for (int k = 0; line[i + 1] == 92 && k < 4; i++, k++);
         if (onlySpaces(line, i, end) == false) {
             command[q] = line[i];
             q++;

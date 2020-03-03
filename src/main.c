@@ -13,7 +13,7 @@ void mx_get_twidth(int *col) {
         perror("ush: ");
         exit(1);
     }
-    free(buff);
+    // free(buff);
     if (if_term)
         mx_strdel(&termtype);
     *col = tgetnum("co");
@@ -61,7 +61,7 @@ void add_to_str(unsigned char **str, unsigned char *ch, int *n, int *n_len, int 
             buf_str[(*n_cursor_b) + i - 1] = ch[i];
         for (int i = (*n_cursor_b) + plus - 1; i <= (*n); i++)
             buf_str[i] = (*str)[i - plus];
-        free(*str);
+        // free(*str);
         *str = buf_str;
          (*n) = (*n) + plus;
          (*n_cursor_b) = (*n_cursor_b) + plus;
@@ -110,7 +110,7 @@ void back_to_str(unsigned char **str, int *n, int *n_len, int *n_cursor, int *n_
                 buf_str[q] = (*str)[i];
                 q++;
             }
-            free(*str);
+            // free(*str);
             *str = buf_str;
             (*n_len) = (*n_len) - len;
             (*n_cursor) = (*n_cursor) - len;
