@@ -27,6 +27,8 @@ FILES = main \
 	mx_strcmp \
 	mx_logicOp \
 	mx_substitute \
+	mx_strcmp\
+	mx_history_use \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
