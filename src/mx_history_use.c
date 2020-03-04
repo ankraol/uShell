@@ -1,10 +1,10 @@
  #include "header.h"
 
- t_history_name *mx_creat_history(unsigned char *str, int byte, int len) {
+ static t_history_name *creat_history(unsigned char *str, t_len_name *len) {
     t_history_name *history = (t_history_name *)malloc(sizeof(t_history_name));
-    history->name = str;
-    history->n_len = len;
-    history->n_byte = byte;
+    history->name = (unsigned char *)strdup((char *)str);
+    history->n_len = len->n_len;
+    history->n_byte = len->n_bute;
     history->previous = NULL;
     history->next = NULL;
 
@@ -13,8 +13,8 @@
 
 
 void mx_push_back_history(t_history_name **history, unsigned char *str,
-                          int n_byte, int len) {
-    t_history_name *front = mx_creat_history(str, n_byte, len);
+                          t_len_name *len) {
+    t_history_name *front = creat_history(str, len);
     if ((*history) != NULL) {
         (*history) -> previous = front;
     }
@@ -23,5 +23,12 @@ void mx_push_back_history(t_history_name **history, unsigned char *str,
 }
 
 void mx_delete_history(t_history_name **history) {
-    
+    t_history_name *tmp = NULL;
+
+    while ((*history)) {
+        tmp = (*history)->next;
+        free((*history)->name);
+        free((*history));
+        *history = tmp;
+    }
 }

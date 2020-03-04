@@ -3,7 +3,6 @@ NAME = ush
 HEADER = header.h \
 
 FILES = main \
-	example \
 	mx_strsplit \
 	mx_count_words \
 	mx_strnew \
@@ -27,8 +26,18 @@ FILES = main \
 	mx_strcmp \
 	mx_logicOp \
 	mx_substitute \
-	mx_strcmp\
 	mx_history_use \
+	mx_input_key \
+	mx_main_cycle_key \
+	mx_get_width \
+	mx_one_cycle \
+	mx_two_cycle \
+	mx_four_cycle \
+	mx_byte_check \
+	mx_arrow_use \
+	mx_arrow_up \
+	mx_arrow_down \
+	mx_add_to_str \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

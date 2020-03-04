@@ -50,7 +50,26 @@ typedef struct s_history_name {
     int n_len;
     struct s_history_name *next;
     struct s_history_name *previous;
-} t_history_name;
+}               t_history_name;
+
+typedef struct s_len_name {
+    unsigned char ch[4];
+    int n_bute;
+    int n_len;
+    int n_cursor;
+    int cur_pos_x;
+    int n_cursor_b;
+    int col;
+    int cursor_delta_len;
+    int cursor_delta_b;
+    bool first_line;
+    int first_line_len;
+    int first_line_byte;
+    bool trig;
+    bool trig_copy;
+    unsigned char *buf;
+}              t_len_name;
+
 
 //int main(void);
 int mx_count_words(const char *str, char c);
@@ -81,7 +100,27 @@ int mx_strcmp(const char *s1, unsigned const char *s2);
 void mx_logicOp(char *line, t_queue **list);
 char *mx_substitute(char *command);
 void mx_push_back_history(t_history_name **history, unsigned char *str,
-int n_byte, int len);
-t_history_name *mx_creat_history(unsigned char *str, int n_byte, int len);
+                          t_len_name *len);
+void mx_delete_history(t_history_name **history);
+t_len_name *mx_creat_len();
+void mx_main_cycle_key(t_history_name **history, unsigned char **mystr, 
+                        t_len_name *len, char *buf_first);
+void mx_get_width(int *col);
+void mx_one_cycle(unsigned char **mystr, t_len_name *len, unsigned char *buf);
+void mx_two_cycle(t_history_name **history, unsigned char **mystr, 
+                  t_len_name *len, char *buf_first);
+void mx_three_cycle(unsigned char **mystr, t_len_name *len);
+void mx_four_cycle(unsigned char **mystr, t_len_name *len, char **buf_first,
+                   t_history_name **his);
+void mx_byte_check_add(unsigned char *ch, int *delte_len, int *delta_byte,
+                       int start);
+void mx_byte_check_back(unsigned char *str, int *len, int *minus, int n);
+void mx_arrow_left(unsigned char **mystr, t_len_name *len);
+void mx_arrow_right(unsigned char **mystr, t_len_name *len);
+void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
+                t_history_name **his);
+void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
+                t_history_name **his);
+void mx_add_to_str(unsigned char **str, t_len_name **le);
 
 #endif
