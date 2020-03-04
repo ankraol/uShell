@@ -122,5 +122,6 @@ void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
 void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
                 t_history_name **his);
 void mx_add_to_str(unsigned char **str, t_len_name **le);
+char *mx_parameter_exp(char *command);
 
 #endif

@@ -26,15 +26,17 @@ char *mx_substitute(char *command) {
                 ap = true;
             }
             else {
-                // ap = false;
                 break;
             }
         }
         else if (command[i - 1] == 36 && command[i] == 40 && ap == false) {
             if (iSbr == false)
                 iSbr = true;
-            else
+            else {
                 extr = true;
+                line[j] = command[i];
+                j++;
+            }
         }
         else if (command[i] == 41) {
             if (extr == true)
@@ -56,7 +58,6 @@ char *mx_substitute(char *command) {
     line[j] = '\0';
     mainCommand[k] = ' ';
     line = realloc(line, strlen(line) + 1);
-    fprintf(stdout, "substitution %s\n", line);
 
     int fd[2];
     t_queue **work = NULL;
@@ -99,9 +100,9 @@ char *mx_substitute(char *command) {
             mainCommand[k] = command[i];
             k++;
         }
-        mainCommand[i] = '\0';
+        mainCommand[k] = '\0';
         mainCommand = realloc(mainCommand, strlen(mainCommand) + 1);
-        printf("command - %s\n", mainCommand);
+        // printf("command - %s\n", mainCommand);
         return mainCommand;
     }
     return command;

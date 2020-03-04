@@ -25,31 +25,32 @@ unsigned char *mx_read_line(bool *trig, t_history_name **history) {
 
 void ush_loop(void) {
     unsigned char *line;
-    //int status = 2;
-    //t_queue **work = NULL;
-    //t_queue *p = NULL;
+    int status = 2;
+    t_queue **work = NULL;
+    t_queue *p = NULL;
     bool trig = false;
     t_history_name *history = NULL;
 
     while (trig == false) {
-        //mx_printstr("u$h> ");
+        // mx_printstr("u$h> ");
         line = mx_read_line(&trig, &history);
-        //mx_printstr((char *)line);
-        // if (line[0] != '\0') {
-        //     work = mx_works_queue((char *)line);
-        //     for (int i = 0; work[i]; i++) {
-        //         p = work[i];
-        //         for (; p; p = (*p).next) {
-        //             (*p).command = mx_substitute((*p).command);
-        //             status = mx_redirection((*p).command);
-        //             if (((*p).op == '&' && status == 1)
-        //                 || ((*p).op == '|' && status == 0))
-        //                 {
-        //                     p = (*p).next;
-        //                 }
-        //         }
-        //     }
-        // }
+       
+        if (line[0] != '\0') {
+            work = mx_works_queue((char *)line);
+            for (int i = 0; work[i]; i++) {
+                p = work[i];
+                for (; p; p = (*p).next) {
+                    (*p).command = mx_parameter_exp((*p).command);
+                    (*p).command = mx_substitute((*p).command);
+                    status = mx_redirection((*p).command);
+                    if (((*p).op == '&' && status == 1)
+                        || ((*p).op == '|' && status == 0))
+                        {
+                            p = (*p).next;
+                        }
+                }
+            }
+        }
         free(line);
         //system("leaks -q ush");
     }
