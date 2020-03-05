@@ -311,6 +311,13 @@ void lsh_loop(void) {
     t_tree **work = NULL;
     t_tree *p = NULL;
     bool trig = false;
+    t_path_builtin pwd; 
+    //= malloc(sizeof(t_path_builtin));
+    // memset(pwd, 0, sizeof(t_path_builtin));
+
+    pwd.pwdP = getcwd(NULL, 0);
+    pwd.pwdL = getcwd(NULL, 0);
+    pwd.oldpwd = getcwd(NULL, 0);
 
     while (trig == false) {
         //mx_printstr("u$h> ");
@@ -324,21 +331,21 @@ void lsh_loop(void) {
             for (; (*p).right_child; p = (*p).right_child);
             if ((*p).parent) {
                 p = (*p).parent;
-                status = mx_redirection((*(*p).right_child).command);
+                status = mx_redirection((*(*p).right_child).command, &pwd);
                 // printf("\n\nSTATUS = %d\n\n\n", status);
                 // if (status == 2)
                     // status = mx_ush_execute((*(*p).right_child).command);
                 for (; p != NULL; p = (*p).parent) {
                     if ((*p).operant[1] == '|') {
                         if (status == 1) {
-                            status = mx_redirection((*(*p).left_child).command);
+                            status = mx_redirection((*(*p).left_child).command, &pwd);
                             // printf("\n\nSTATUS = %d\n\n\n", status);
                             // if (status == 2)
                                 // status = mx_ush_execute((*(*p).left_child).command);
                         }
                         else if ((*p).operant[1] == '&') {
                             if (status == 0) {
-                                status = mx_redirection((*(*p).left_child).command);
+                                status = mx_redirection((*(*p).left_child).command, &pwd);
                                 // printf("\n\nSTATUS = %d\n\n\n", status);
                                 // if (status == 2)
                                     // status = mx_ush_execute((*(*p).left_child).command);
@@ -349,7 +356,7 @@ void lsh_loop(void) {
             }
                 else
                 {
-                    status = mx_redirection((*p).command);
+                    status = mx_redirection((*p).command, &pwd);
                     // printf("\n\nSTATUS = %d\n\n\n", status);
                     // if (status == 2)
                         // status = mx_ush_execute((*p).command);

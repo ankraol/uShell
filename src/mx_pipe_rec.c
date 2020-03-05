@@ -29,6 +29,8 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput) {
                 close(in_fd);
                 // redirect(in_fd, 0);
                 task = mx_strsplit(command[pos].task, ' ');
+                printf("%s\n", task[0]);
+                printf("%s\n", task[1]);
                 path = mx_read_env(task[0]);
                 if (execvp(path, task) == -1)
                     perror("psh");

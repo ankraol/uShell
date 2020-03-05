@@ -26,6 +26,11 @@ FILES = main \
 	mx_works_queue \
 	mx_tokens \
 	mx_strcmp\
+	mx_implementarion_of_builtin_commands \
+	mx_cd_command \
+	mx_logic_path \
+	mx_pwd \
+
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
