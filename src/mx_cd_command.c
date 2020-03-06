@@ -50,10 +50,14 @@ void mx_swap_str(char **str1, char **str2) {
 
 void mx_command_cd(char **file, int *err, t_builtin_command *command, t_path_builtin *pwd) {
 	if (command->cd->arg_min) {
-		if (command->cd->flag_P)
+		if (command->cd->flag_P) {
 			mx_swap_str(&pwd->oldpwd, &pwd->pwdP);
-		else
+			printf("%s\n", pwd->pwdP);
+		}
+		else {
 			mx_swap_str(&pwd->oldpwd, &pwd->pwdL);
+			printf("%s\n", pwd->pwdL);
+		}
 	}
 	 if (chdir(pwd->pwdL) != 0) {
 		fprintf(stderr, "cd: no such file or directory: %s\n", file[0]);
@@ -103,9 +107,6 @@ void mx_falid_files(char **file, int count_files, t_builtin_command *command,
 		mx_cd_logic(file, command, err, pwd);
 		mx_command_cd(file, err, command, pwd);
 	}
-	// printf("pwd->pwdP == %s\n", pwd->pwdP);
-	// printf("pwd->oldpwd == %s\n", pwd->oldpwd);
-	// printf("pwd->pwdL == %s\n", pwd->pwdL);
 }
 
 void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, t_path_builtin *pwd, int *err) {
@@ -113,8 +114,9 @@ void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, t_path_bui
 	bool flag_priority = true;
 	int count_files = 0;
 	char **file = NULL;
-	memset(command->cd, 0, sizeof(t_cd));
 
+	command->cd = (t_cd *)malloc(sizeof(t_cd));
+	memset(command->cd, 0, sizeof(t_cd));
 	for(int i = 1; i < ac; i++) {
 		if (flag_priority == true) {
 			if (arg[i][0] == '-' && arg[i][1] != '-')

@@ -43,6 +43,7 @@ FILES = main \
 	mx_cd_command \
 	mx_logic_path \
 	mx_pwd \
+	mx_echo \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

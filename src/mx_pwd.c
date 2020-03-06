@@ -20,6 +20,8 @@ void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err,
 	bool flag_priority = true;
 	int count_files = 0;
 
+	command->pwd = (t_pwd *)malloc(sizeof(t_pwd));
+	memset(command->pwd, 0, sizeof(t_pwd));
 	for(int i = 1; i < ac; i++) {
 		if (flag_priority == true) {
 			if (arg[i][0] == '-' && arg[i][1] != '-')
@@ -36,8 +38,6 @@ void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err,
 	}
 	if (count_files > 0)
 		fprintf(stderr, "pwd: too many arguments\n");
-	if (command->cd->flag_P)
-		printf("true\n");
 	if (command->pwd->flag_P || command->cd->flag_P) {
 		printf("%s\n", pwd->pwdP);
 	}

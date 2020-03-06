@@ -73,7 +73,8 @@ void mx_cd_logic(char **file, t_builtin_command *command, int *err,
     t_path_builtin *pwd);
 void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err,
     t_path_builtin *pwd);
-
+//char **mx_create_file(char **av, int ac, int count_files, char **file);
+void mx_valid_flag_echo(t_builtin_command *command, char **arg, int ac);
 
 /*************************************************************************/
 
