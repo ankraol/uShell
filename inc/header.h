@@ -15,14 +15,10 @@
 #include <stdbool.h>
 #include <curses.h>
 #include <term.h>
-#include <limits.h>
-
 typedef struct s_queue t_queue;
 typedef struct s_path t_path;
 typedef struct s_reddir t_reddir;
 typedef struct s_list t_list;
-
-
 
 struct s_list {
     char *command;
@@ -75,66 +71,7 @@ typedef struct s_len_name {
 }              t_len_name;
 
 
-
-
-
-
-/*************************************************************************/
-
-
-typedef struct s_cd {
-    bool flag_s;
-    bool flag_P;
-    bool arg_min;
-}               t_cd;
-
-typedef struct s_env {
-    bool flag_i;
-    bool flag_P;
-    bool flag_u;
-}               t_env;
-
-typedef struct s_pwd {
-    bool flag_L;
-    bool flag_P;
-}               t_pwd;
-
-typedef struct s_which {
-    bool flag_a;
-    bool flag_s;
-}               t_which;
-
-typedef struct s_echo {
-    bool flag_n;
-    bool flag_e;
-    bool flag_E;
-}               t_echo;
-
-typedef struct s_builtin_command {
-    t_cd *cd;
-    t_env *env;
-    t_which *which;
-    t_echo *echo;
-    t_pwd *pwd;
-}               t_builtin_command;
-
-
-typedef struct s_path_builtin {
-    char *pwdP;
-    char *pwdL;
-    char *oldpwd;
-}               t_path_builtin;
-
-
-bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd);
-void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, t_path_builtin *pwd, int *err);
-void mx_cd_logic(char **file, t_builtin_command *command, int *err, t_path_builtin *pwd);
-void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err, t_path_builtin *pwd);
-
-
-/*************************************************************************/
-
-int main(void);
+//int main(void);
 int mx_count_words(const char *str, char c);
 char *mx_strnew(const int size);
 char **mx_strsplit(const char *s, char c);
@@ -147,9 +84,9 @@ char *mx_strjoin( char *s1,  char *s2);
 char *mx_strcat(char *restrict s1, const char *restrict s2);
 
 void mx_strdel(char **str);
-int mx_redirection(char *command, t_path_builtin *pwd);
+int mx_redirection(char *command);
 int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput);
-int mx_ush_execute(char *argv, t_path_builtin *pwd);
+int mx_ush_execute(char *argv);
 
 char *mx_itoa(int number);
 
