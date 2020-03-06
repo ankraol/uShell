@@ -77,7 +77,7 @@ static t_reddir *pipe_check(char *command) {
 
 
 
-int mx_redirection(char *command) {
+int mx_redirection(char *command, t_pid_name **pid_ar) {
     // printf("redirection -> %s\n", command);
     t_reddir *tasks = pipe_check(command);
     int status = 2;
@@ -128,7 +128,7 @@ int mx_redirection(char *command) {
         }
     }
     else {
-        status = mx_ush_execute(tasks[0].task);
+        status = mx_ush_execute(tasks[0].task, pid_ar);
     }
     return status;
 }

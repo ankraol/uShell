@@ -38,7 +38,9 @@ FILES = main \
 	mx_arrow_up \
 	mx_arrow_down \
 	mx_add_to_str \
-
+	mx_back_to_str \
+	mx_pid_list \
+	
 INC_H = $(addprefix "inc/", $(HEADER))
 
 ROOT_C = $(addsuffix ".c", $(FILES))

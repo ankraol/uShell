@@ -8,7 +8,7 @@
     // return false;
 // }
 
-char *mx_substitute(char *command) {
+char *mx_substitute(char *command, t_pid_name **pid_ar) {
     bool ap = false;
     bool iSbr = false;
     bool extr = false;
@@ -73,8 +73,8 @@ char *mx_substitute(char *command) {
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
-                    (*p).command = mx_substitute((*p).command);
-                    status = mx_redirection((*p).command);
+                    (*p).command = mx_substitute((*p).command, pid_ar);
+                    status = mx_redirection((*p).command, pid_ar);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                         {
