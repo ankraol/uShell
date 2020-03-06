@@ -30,6 +30,14 @@ void ush_loop(void) {
     t_queue *p = NULL;
     bool trig = false;
     t_history_name *history = NULL;
+    t_path_builtin pwd; 
+    t_builtin_command my_command;
+
+    pwd.pwdP = getcwd(NULL, 0);
+    pwd.pwdL = getcwd(NULL, 0);
+    pwd.oldpwd = getcwd(NULL, 0);
+
+
 
     while (trig == false) {
         // mx_printstr("u$h> ");
@@ -41,8 +49,8 @@ void ush_loop(void) {
                 p = work[i];
                 for (; p; p = (*p).next) {
                     (*p).command = mx_parameter_exp((*p).command);
-                    (*p).command = mx_substitute((*p).command);
-                    status = mx_redirection((*p).command);
+                    (*p).command = mx_substitute((*p).command, &pwd, &my_command);
+                    status = mx_redirection((*p).command, &pwd, &my_command);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                         {

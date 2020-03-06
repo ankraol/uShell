@@ -1,11 +1,11 @@
 #include "header.h"
 
-static bool iStilda(char *command) {
-    for (int i = 0; command[i] != '\0'; i++)
-        if (command[i] == 126)
-            return true;
-    return false;
-}
+// static bool iStilda(char *command) {
+//     for (int i = 0; command[i] != '\0'; i++)
+//         if (command[i] == 126)
+//             return true;
+//     return false;
+// }
 
 static bool parExt(char *command) {
     for (int i = 0; command[i] != '\0'; i++) {

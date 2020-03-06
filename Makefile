@@ -39,6 +39,10 @@ FILES = main \
 	mx_arrow_down \
 	mx_add_to_str \
 	mx_parameter_exp \
+	mx_implementarion_of_builtin_commands \
+	mx_cd_command \
+	mx_logic_path \
+	mx_pwd \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
