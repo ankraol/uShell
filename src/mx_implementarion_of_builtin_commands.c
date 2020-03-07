@@ -119,12 +119,13 @@ bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command
 	"unset", "fg", "exit", NULL};
 	int err = 0;
 
+    // printf("lol\n");
+
 	// command->env = (t_env *)malloc(sizeof(t_env));
 	// command->which = (t_which *)malloc(sizeof(t_which));
 
 	// memset(command->env, 0, sizeof(t_env));
 	// memset(command->which, 0, sizeof(t_which));
-	
 
 	if (strcmp(builtin_str[0], arg[0]) == 0 && strlen(arg[0]) == 2) {
 		mx_valid_flag_cd(command, arg, ac, pwd, &err);
@@ -137,17 +138,19 @@ bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command
 	else if (strcmp(builtin_str[4], arg[0]) == 0 && strlen(arg[0]) == 4) {
 		mx_valid_flag_echo(command, arg, ac);
 		return true;
-	}
+	} 
 	// else if (strcmp(builtin_str[1], arg[0]) == 0 && strlen(arg[0]) == 3)
 	// 	mx_valid_flag_env(command, arg, ac);
-	// else if (strcmp(builtin_str[3], arg[0]) == 0 && strlen(arg[0]) == 5)
-	// 	mx_valid_flag_which(command, arg, ac);
+	else if (strcmp(builtin_str[3], arg[0]) == 0 && strlen(arg[0]) == 5) {
+		mx_which(arg, 0);
+        return true;
+    }
 	// else if (strcmp(builtin_str[5], arg[0]) == 0 && strlen(arg[0]) == 6)
 	// 	mx_command_export();
 	// else if (strcmp(builtin_str[6], arg[0]) == 0 && strlen(arg[0]) == 5)
 	// 	mx_command_unset();
-	// else if (strcmp(builtin_str[7], arg[0]) == 0 && strlen(arg[0]) == 2)
-	// 	mx_command_fg();
+	else if (strcmp(builtin_str[7], arg[0]) == 0 && strlen(arg[0]) == 2)
+		mx_fg_command(command, arg, ac);
 	// else if (strcmp(builtin_str[8], arg[0]) == 0 && strlen(arg[0]) == 4)
 	// 	mx_command_exit();
 	return false;

@@ -16,6 +16,8 @@
 #include <curses.h>
 #include <term.h>
 #include <limits.h>
+#include <sys/stat.h>
+
 
 
 
@@ -200,9 +202,9 @@ void mx_byte_check_back(unsigned char *str, int *len, int *minus, int n);
 void mx_arrow_left(unsigned char **mystr, t_len_name *len);
 void mx_arrow_right(unsigned char **mystr, t_len_name *len);
 void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
-                t_history_name **his);
+                 t_history_name **his);
 void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
-                t_history_name **his);
+                   t_history_name **his);
 void mx_add_to_str(unsigned char **str, t_len_name **le);
 char *mx_parameter_exp(char *command);
 void mx_aliasList(char *command, t_alias **aliasList);
@@ -210,5 +212,14 @@ char *mx_aliasSearch(char *command, t_alias *list);
 void mx_back_to_str(unsigned char **str,  t_len_name **le);
 void mx_delete_pid(t_pid_name **pid_list);
 void mx_push_back_pid(t_pid_name **pid_list,int pid);
+void mx_which(char **argv, int err);
+void mx_printchar(char c);
+void mx_printcharerr(char c);
+void mx_printerr(const char *s);
+char *mx_strjoin2(char *s1, char *s2);
+char *mx_strcpy(char *dst, const char *src);
+bool mx_is_buildin(char *str);
+char *mx_strdup(const char *s1);
+void mx_fg_command(t_builtin_command *command, char **arg, int ac);
 
 #endif
