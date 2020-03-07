@@ -19,10 +19,37 @@ static bool parExt(char *command) {
     return false;
 }
 
-static char *parameterSearch(char *parameter) {
+static char *checkSame(char *command, char *replace) {
+    int slashCount = 0;
+    char  *newReplace = NULL;
+    int i = 2;
+    int j = 0;
+    int k = 0;
+
+    for(; replace[i - 1] != '/'; i++);
+    for(; command[j - 1] != '~'; j++);
+    if (command[j] == '\0')
+        return replace;
+    for (; replace[i] != '\0' && command[j] != '\0'; j++, i++) {
+        if (command[j] != replace[i])
+            return replace;
+    }
+    newReplace = (char *)malloc(sizeof(char) * strlen(replace));
+    for (; slashCount < 2; k++) {
+        newReplace[k] = replace[k];
+        if (replace[k] == '/')
+            slashCount++;
+    }
+    newReplace[k] = '\0';
+    newReplace = realloc(newReplace, strlen(newReplace) + 1);
+    return newReplace;
+}
+
+static char *parameterSearch(char *parameter, char *command) {
     char **envParam = NULL;
     extern char **environ;
     bool subPar = true;
+    char *extend = NULL;
 
     for (int j = 0; environ[j]; j++) {
         subPar = true;
@@ -32,8 +59,11 @@ static char *parameterSearch(char *parameter) {
         }
         if (subPar == true) {
             envParam = mx_strsplit(environ[j], '=');
+            extend = envParam[1];
+            if (iStilda(command) == true)
+                extend = checkSame(command, envParam[1]);
             // printf("FOUNDED - %s\n", envParam[1]);
-            return envParam[1];
+            return extend;
         }
     }
     return NULL;
@@ -65,6 +95,8 @@ char *mx_parameter_exp(char *command) {
             else if (command[i] == 36 && sQ == false)
                 dollar = true;
             else if (command[i] == 126) {
+                if (command[i + 1] == '+' || command[i + 1] == '-')
+                    i++;
                 tilda = true;
                 break;
             }
@@ -100,11 +132,17 @@ char *mx_parameter_exp(char *command) {
         if (tilda == false) {
             expLine[k] = '\0';
             expLine = realloc(expLine, strlen(expLine) + 1);
-            replace = parameterSearch(expLine);
+            replace = parameterSearch(expLine, command);
         }
-        else
-            replace = parameterSearch("HOME");
-        printf("expand - %s\nrest command - %s\n", expLine, newLine);
+        else {
+            if (command[i] == '+')
+                replace = parameterSearch("PWD", command);
+            else if (command[i] == '-')
+                replace = parameterSearch("OLDPWD", command);
+            else
+                replace = parameterSearch("HOME", command);
+        }
+        // printf("expand - %s\nrest command - %s\n", expLine, newLine);
         tilda = false;
         k = 0;
         if (replace) {

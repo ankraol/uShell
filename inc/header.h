@@ -19,6 +19,13 @@ typedef struct s_queue t_queue;
 typedef struct s_path t_path;
 typedef struct s_reddir t_reddir;
 typedef struct s_list t_list;
+typedef struct s_alias t_alias;
+
+struct s_alias {
+    char *name;
+    char *meaning;
+    struct s_alias *next;
+};
 
 struct s_list {
     char *command;
@@ -84,7 +91,7 @@ char *mx_strjoin( char *s1,  char *s2);
 char *mx_strcat(char *restrict s1, const char *restrict s2);
 
 void mx_strdel(char **str);
-int mx_redirection(char *command);
+int mx_redirection(char *command, t_alias **aliasList);
 int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput);
 int mx_ush_execute(char *argv);
 
@@ -98,7 +105,7 @@ t_queue **mx_works_queue(char *line);
 char **mx_tokens(char *line, char sp);
 int mx_strcmp(const char *s1, unsigned const char *s2);
 void mx_logicOp(char *line, t_queue **list);
-char *mx_substitute(char *command);
+char *mx_substitute(char *command, t_alias **aliasList);
 void mx_push_back_history(t_history_name **history, unsigned char *str,
                           t_len_name *len);
 void mx_delete_history(t_history_name **history);
@@ -123,5 +130,7 @@ void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
                 t_history_name **his);
 void mx_add_to_str(unsigned char **str, t_len_name **le);
 char *mx_parameter_exp(char *command);
+void mx_aliasList(char *command, t_alias **aliasList);
+char *mx_aliasSearch(char *command, t_alias *list);
 
 #endif

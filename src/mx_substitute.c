@@ -8,7 +8,7 @@
     // return false;
 // }
 
-char *mx_substitute(char *command) {
+char *mx_substitute(char *command, t_alias **aliasList) {
     bool ap = false;
     bool iSbr = false;
     bool extr = false;
@@ -58,6 +58,7 @@ char *mx_substitute(char *command) {
     line[j] = '\0';
     mainCommand[k] = ' ';
     line = realloc(line, strlen(line) + 1);
+    line = mx_aliasSearch(line, *aliasList);
 
     int fd[2];
     t_queue **work = NULL;
@@ -74,8 +75,8 @@ char *mx_substitute(char *command) {
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
-                    (*p).command = mx_substitute((*p).command);
-                    status = mx_redirection((*p).command);
+                    (*p).command = mx_substitute((*p).command, aliasList);
+                    status = mx_redirection((*p).command, aliasList);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                         {

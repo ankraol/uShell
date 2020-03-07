@@ -1,5 +1,14 @@
 #include "header.h"
 
+static bool isAlias(char *command) {
+    if (command[0] == 'a' && command[1] == 'l' && command[2] == 'i'
+        && command[3] == 'a' && command[4] == 's')
+        {
+            return true;
+        }
+    return false;
+}
+
 static void quoteCheck(bool *sQ, bool *dQ, bool *iSs, char *command, int i) {
         if (command[i] == 96 && command[i - 1] != 92 && (*sQ) == false
             && (*dQ) == false)
@@ -75,9 +84,18 @@ static t_reddir *pipe_check(char *command) {
     return tasks;
 }
 
+// static void printAlias(t_alias *list) {
+    // t_alias *p = list;
+// 
+    // printf("ALIAS:\n");
+    // for (; p; p = p->next) {
+        // printf("NAME -> %s\n", (*p).name);
+        // printf("MEANS -> %s\n", (*p).meaning);
+    // }
+    // printf("END FOR NOW\n");
+// }
 
-
-int mx_redirection(char *command) {
+int mx_redirection(char *command, t_alias **aliasList) {
     // printf("redirection -> %s\n", command);
     t_reddir *tasks = pipe_check(command);
     int status = 2;
@@ -128,7 +146,15 @@ int mx_redirection(char *command) {
         }
     }
     else {
-        status = mx_ush_execute(tasks[0].task);
+        if (isAlias(tasks[0].task) == true) {
+            // printf("ALIAS HERE\n");
+            mx_aliasList(tasks[0].task, aliasList);
+        }
+        // else
+            tasks[0].task = mx_aliasSearch(tasks[0].task, *aliasList);
+            // printf("TASK -> %s\n", tasks[0].task);
+            status = mx_ush_execute(tasks[0].task);
     }
+    // printAlias(*aliasList);
     return status;
 }

@@ -22,6 +22,16 @@ unsigned char *mx_read_line(bool *trig, t_history_name **history) {
     return mystr;
 }
 
+// static void printAlias(t_alias *list) {
+    // t_alias *p = list;
+// 
+    // printf("ALIAS:\n");
+    // for (; p; p = p->next) {
+        // printf("NAME -> %s\n", (*p).name);
+        // printf("MEANS -> %s\n", (*p).meaning);
+    // }
+    // printf("END FOR NOW\n");
+// }
 
 void ush_loop(void) {
     unsigned char *line;
@@ -30,6 +40,7 @@ void ush_loop(void) {
     t_queue *p = NULL;
     bool trig = false;
     t_history_name *history = NULL;
+    t_alias *aliasList = NULL;
 
     while (trig == false) {
         // mx_printstr("u$h> ");
@@ -41,8 +52,8 @@ void ush_loop(void) {
                 p = work[i];
                 for (; p; p = (*p).next) {
                     (*p).command = mx_parameter_exp((*p).command);
-                    (*p).command = mx_substitute((*p).command);
-                    status = mx_redirection((*p).command);
+                    (*p).command = mx_substitute((*p).command, &aliasList);
+                    status = mx_redirection((*p).command, &aliasList);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                         {
@@ -50,6 +61,8 @@ void ush_loop(void) {
                         }
                 }
             }
+            // printf("NAME -> %s\n", aliasList->name);
+            // printAlias(aliasList);
         }
         free(line);
         //system("leaks -q ush");
