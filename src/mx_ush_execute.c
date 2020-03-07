@@ -20,12 +20,15 @@ int mx_ush_execute(char *command, t_pid_name **pid_ar) {
 
         pid = fork();
         // mx_push_back_pid(pid_ar, getpid());
-        //  fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-        //         fflush(stdout);
+            //  fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
+            //         fflush(stdout);
         if (pid == 0) {
+                signal(SIGTTIN, SIG_DFL);
+    signal(SIGTTOU, SIG_DFL);
+            setpgid(0, 0);
             mx_push_back_pid(pid_ar, getpid());
-            fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-                fflush(stdout);
+           // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
+           //     fflush(stdout);
             //mx_printstr("start");
             if (execvp(path, argv) == -1)
                 perror("ushi");
@@ -33,29 +36,46 @@ int mx_ush_execute(char *command, t_pid_name **pid_ar) {
         }
         else
         {
+            setpgid(pid, pid);
+            tcsetpgrp(1, pid);
             wpid = waitpid(pid, &status, WUNTRACED);
-            if (WIFEXITED(status))
+            if (WIFEXITED(status)) {
+                tcsetpgrp(1, getpid());
                 return 0;
+            }
             else if (WIFSTOPPED(status)) {//ctrl+Z
+                 //fprintf(stdout, "%d\n", wpid);
+                //fflush(stdout);
                 mx_printstr("and now stop");
+                sleep(2);
+                mx_push_back_pid(pid_ar, wpid);
+                tcsetpgrp(1, getpid());
+                return 1;
+            //    sleep(2);
+            //    kill (wpid, SIGCONT);
+            //    wpid = waitpid(pid, &status, WUNTRACED);
             // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
             //     fflush(stdout);
-                (*pid_ar) = (*pid_ar)->next;
-                fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-                fflush(stdout);
-                mx_printstr("and now stop2");
+                // (*pid_ar) = (*pid_ar)->next;
+                // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
+                // fflush(stdout);
+                // mx_printstr("and now stop2");
             }
-            else if (WTERMSIG(status)) { //ctrl+C
-                mx_printstr("and now term");
-                fprintf(stdout, "%d\n", getpid());
-                fflush(stdout);
-            }
-            if (status != 0) {
-                //printf("%d", WTERMSIG(status));
-                mx_printstr("status<0");
-                return status;
-            }
+             else if (WTERMSIG(status)) { //ctrl+C
+                 mx_printstr("and now term");
+                 sleep(2);
+                 tcsetpgrp(1, getpid());
+            //     fprintf(stdout, "%d\n", getpid());
+            //     fflush(stdout);
+             }
+             if (status != 0) {
+            //     //printf("%d", WTERMSIG(status));
+            //     mx_printstr("status<0");
+            tcsetpgrp(1, getpid());
+                 return status;
+             }
         // }
     }
+    tcsetpgrp(1, getpid());
     return 0;
 }

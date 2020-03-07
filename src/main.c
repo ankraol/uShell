@@ -47,12 +47,43 @@ void ush_loop(void) {
     bool trig = false;
     t_history_name *history = NULL;
     t_pid_name *pid_ar = NULL;
+    t_pid_name *pid_buf = NULL;
+    int status_pid;
+    pid_t wpid;
+
 
     while (trig == false) {
         //mx_printstr("u$h> ");
         line = mx_read_line(&trig, &history);
-        //mx_printstr((char *)line);
-        if (line[0] != '\0') {
+        if (strcmp((char *)line, "fg") == 0) {
+            if (pid_ar != NULL) {
+                kill (-(pid_ar->pid), SIGCONT);
+                tcsetpgrp(1, pid_ar->pid);
+                wpid = waitpid(pid_ar->pid, &status_pid, WUNTRACED);
+                tcsetpgrp(1, getpid());
+
+                if (WIFEXITED(status_pid)) {
+                    pid_buf = pid_ar->next;
+                    free(pid_ar);
+                    pid_ar = pid_buf;
+                    mx_printstr("exit");
+                    sleep(2);
+                }
+                else if (WIFSTOPPED(status_pid)) {
+
+                }
+
+                else if (WTERMSIG(status_pid)) { //ctrl+C
+                     mx_printstr("and now term");
+                     sleep(2);
+                    pid_buf = pid_ar->next;
+                    free(pid_ar);
+                    pid_ar = pid_buf;
+                    
+                }
+             }
+        }
+        else if (line[0] != '\0') {
             work = mx_works_queue((char *)line);
             for (int i = 0; work[i]; i++) {
                 p = work[i];
@@ -96,6 +127,8 @@ int main(void) {
 
     signal(SIGINT, hdl);
     signal(SIGTSTP, hdl);
+    signal(SIGTTIN, SIG_IGN);
+    signal(SIGTTOU, SIG_IGN);
 
 
 
