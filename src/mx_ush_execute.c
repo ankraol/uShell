@@ -1,11 +1,20 @@
 #include "header.h"
 
 
+int mx_count_elem(char **av) {
+    int i = 0;
+
+    while (av[i])
+        i++;
+    return i;
+}
 
 
-int mx_ush_execute(char *command) {
+int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar) {
     pid_t pid;
     pid_t wpid;
+    //t_pid_name *buf = *pid_ar;
+
     // if (mx_substitute(command) == 1) {
         char **argv = mx_tokens(command, ' ');
         // mx_substitute(argv);
@@ -16,29 +25,71 @@ int mx_ush_execute(char *command) {
         int status;
 
 
+        bool builtin = mx_valid_command(argv, mx_count_elem(argv), pwd, my_command);
+        
+        if (!builtin) {
+
         pid = fork();
+        // mx_push_back_pid(pid_ar, getpid());
+            //  fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
+            //         fflush(stdout);
         if (pid == 0) {
+                signal(SIGTTIN, SIG_DFL);
+    signal(SIGTTOU, SIG_DFL);
+            setpgid(0, 0);
+            mx_push_back_pid(pid_ar, getpid());
+           // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
+           //     fflush(stdout);
             //mx_printstr("start");
             if (execvp(path, argv) == -1)
-                perror("ush");
-                    exit(1);
+                perror("ushi");
+            exit(1);
         }
         else
         {
+            setpgid(pid, pid);
+            tcsetpgrp(1, pid);
             wpid = waitpid(pid, &status, WUNTRACED);
-            if (WIFEXITED(status))
+            if (WIFEXITED(status)) {
+                tcsetpgrp(1, getpid());
                 return 0;
-            else if (WIFSTOPPED(status))//ctrl+Z
+            }
+            else if (WIFSTOPPED(status)) {//ctrl+Z
+                 //fprintf(stdout, "%d\n", wpid);
+                //fflush(stdout);
                 mx_printstr("and now stop");
-            else if (WTERMSIG(status)) { //ctrl+C
-                mx_printstr("and now term");
+                sleep(2);
+                mx_push_back_pid(pid_ar, wpid);
+                tcsetpgrp(1, getpid());
+                return 1;
+            //    sleep(2);
+            //    kill (wpid, SIGCONT);
+            //    wpid = waitpid(pid, &status, WUNTRACED);
+            // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
+            //     fflush(stdout);
+                // (*pid_ar) = (*pid_ar)->next;
+                // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
+                // fflush(stdout);
+                // mx_printstr("and now stop2");
             }
-            if (status != 0) {
-                //printf("%d", WTERMSIG(status));
-                mx_printstr("status<0");
-                return status;
-            }
+             else if (WTERMSIG(status)) { //ctrl+C
+                 mx_printstr("and now term");
+                 sleep(2);
+                 tcsetpgrp(1, getpid());
+            //     fprintf(stdout, "%d\n", getpid());
+            //     fflush(stdout);
+             }
+             if (status != 0) {
+            //     //printf("%d", WTERMSIG(status));
+            //     mx_printstr("status<0");
+            tcsetpgrp(1, getpid());
+                 return status;
+             }
         // }
+
+    }
+    tcsetpgrp(1, getpid());
+    return 0;
     }
     return 0;
 }
