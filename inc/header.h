@@ -136,6 +136,12 @@ typedef struct s_len_name {
     unsigned char *buf;
 }              t_len_name;
 
+typedef struct s_pid_name {
+    int pid; 
+    struct s_pid_name *next;
+}               t_pid_name;
+
+
 
 //int main(void);
 int mx_count_words(const char *str, char c);
@@ -150,9 +156,11 @@ char *mx_strjoin( char *s1,  char *s2);
 char *mx_strcat(char *restrict s1, const char *restrict s2);
 
 void mx_strdel(char **str);
-int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command);
+
+int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar);
 int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput);
-int mx_ush_execute(char *argv, t_path_builtin *pwd, t_builtin_command *my_command);
+int mx_ush_execute(char *argv, t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar);
+
 
 char *mx_itoa(int number);
 
@@ -164,7 +172,9 @@ t_queue **mx_works_queue(char *line);
 char **mx_tokens(char *line, char sp);
 int mx_strcmp(const char *s1, unsigned const char *s2);
 void mx_logicOp(char *line, t_queue **list);
-char *mx_substitute(char *command,t_path_builtin *pwd, t_builtin_command *my_command);
+
+char *mx_substitute(char *command,t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar);
+
 void mx_push_back_history(t_history_name **history, unsigned char *str,
                           t_len_name *len);
 void mx_delete_history(t_history_name **history);
@@ -173,8 +183,7 @@ void mx_main_cycle_key(t_history_name **history, unsigned char **mystr,
                         t_len_name *len, char *buf_first);
 void mx_get_width(int *col);
 void mx_one_cycle(unsigned char **mystr, t_len_name *len, unsigned char *buf);
-void mx_two_cycle(t_history_name **history, unsigned char **mystr, 
-                  t_len_name *len, char *buf_first);
+void mx_two_cycle(unsigned char **mystr, t_len_name *len);
 void mx_three_cycle(unsigned char **mystr, t_len_name *len);
 void mx_four_cycle(unsigned char **mystr, t_len_name *len, char **buf_first,
                    t_history_name **his);
@@ -189,5 +198,8 @@ void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
                 t_history_name **his);
 void mx_add_to_str(unsigned char **str, t_len_name **le);
 char *mx_parameter_exp(char *command);
+void mx_back_to_str(unsigned char **str,  t_len_name **le);
+void mx_delete_pid(t_pid_name **pid_list);
+void mx_push_back_pid(t_pid_name **pid_list,int pid);
 
 #endif

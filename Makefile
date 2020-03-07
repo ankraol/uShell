@@ -44,7 +44,9 @@ FILES = main \
 	mx_logic_path \
 	mx_pwd \
 	mx_echo \
-
+	mx_back_to_str \
+	mx_pid_list \
+	
 INC_H = $(addprefix "inc/", $(HEADER))
 
 ROOT_C = $(addsuffix ".c", $(FILES))

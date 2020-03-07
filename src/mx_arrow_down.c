@@ -37,7 +37,7 @@ static void print_line(unsigned char **mystr, t_len_name *len,
 void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
                     t_history_name **his) {
     if (len->ch[0] == 27 && len->ch[1] == 91 && len->ch[2] == 66) {//errow down
-        if (((*his) && (*his)->previous != NULL)|| len->first_line == false) {
+        if (((*his) && (*his)->previous != NULL) || len->first_line == false) {
             if (len->n_cursor + 5 > len->col) {
                 fprintf(stdout, "\033[%dF", (len->n_cursor + 4)/len->col);
                 fflush(stdout);
