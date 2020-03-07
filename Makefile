@@ -46,6 +46,14 @@ FILES = main \
 	mx_echo \
 	mx_back_to_str \
 	mx_pid_list \
+	mx_which \
+	mx_printerr \
+	mx_printchar \
+	mx_strjoin2 \
+	mx_strdup \
+	mx_strcpy \
+	mx_is_buildin \
+	mx_fg_command \
 	
 INC_H = $(addprefix "inc/", $(HEADER))
 

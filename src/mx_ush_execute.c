@@ -19,12 +19,12 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
         char **argv = mx_tokens(command, ' ');
         // mx_substitute(argv);
         // printf("ARGUMENTS FOR COMMAND == %s\n", argv[1]);
-        // printf("COMMAND == %s\n", argv[0]);
+        //printf("COMMAND == %s\n", argv[0]);
         char *path = mx_read_env(argv[0]);
-        // printf("PATH == %s\n", path);
+        //printf("PATH == %s\n", path);
         int status;
 
-
+        
         bool builtin = mx_valid_command(argv, mx_count_elem(argv), pwd, my_command);
         
         if (!builtin) {
@@ -34,15 +34,18 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
             //  fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
             //         fflush(stdout);
         if (pid == 0) {
-                signal(SIGTTIN, SIG_DFL);
-    signal(SIGTTOU, SIG_DFL);
+            signal(SIGTTIN, SIG_DFL);
+            signal(SIGTTOU, SIG_DFL);
             setpgid(0, 0);
             mx_push_back_pid(pid_ar, getpid());
            // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
            //     fflush(stdout);
             //mx_printstr("start");
-            if (execvp(path, argv) == -1)
+            // if (execvp(path, argv) == -1)
+            //     perror("ushi");
+            if (execve(path, argv, NULL) == -1)
                 perror("ushi");
+
             exit(1);
         }
         else

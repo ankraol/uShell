@@ -19,13 +19,17 @@ void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err,
 	char flag[] = "LP";
 	bool flag_priority = true;
 	int count_files = 0;
-
 	command->pwd = (t_pwd *)malloc(sizeof(t_pwd));
 	memset(command->pwd, 0, sizeof(t_pwd));
+    printf("%s\n", pwd->pwdL);
+    printf("STSRT\n");
 	for(int i = 1; i < ac; i++) {
+        printf("AAAAAAAA\n");
 		if (flag_priority == true) {
 			if (arg[i][0] == '-' && arg[i][1] != '-')
+                printf("AAAAAAAA\n");
 				mx_struct_flag_pwd(arg[i], command, flag, err);
+                printf("RRRRRRRRR\n");
 			if (arg[i][0] != '-') {
 				flag_priority = false;
 				count_files++;
@@ -36,6 +40,7 @@ void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err,
 		else if (!flag_priority)
 			count_files++;
 	}
+    printf("file = %d ,END\n", count_files);
 	if (count_files > 0)
 		fprintf(stderr, "pwd: too many arguments\n");
 	if (command->pwd->flag_P || command->cd->flag_P) {
@@ -43,4 +48,5 @@ void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err,
 	}
 	else
 		printf("%s\n", pwd->pwdL);
+     
 }
