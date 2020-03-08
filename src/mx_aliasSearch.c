@@ -54,3 +54,6 @@ char *mx_aliasSearch(char *command, t_alias *list) {
     }
     return newCommand;
 }
+
+
+

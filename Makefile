@@ -41,7 +41,6 @@ FILES = main \
 	mx_parameter_exp \
 	mx_aliasList \
 	mx_aliasSearch \
-
 	mx_implementarion_of_builtin_commands \
 	mx_cd_command \
 	mx_logic_path \
