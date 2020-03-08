@@ -14,7 +14,7 @@ char *mx_substitute(char *command, t_path_builtin *pwd, t_builtin_command *my_co
     bool extr = false;
 
     char *line = (char *)malloc(sizeof(char) * strlen(command));
-    char *mainCommand = (char *)malloc(sizeof(char) * strlen(command));
+    char *mainCommand = (char *)malloc(sizeof(char) * strlen(command) * 50);
     int j = 0;
     int k = 0;
     int i = 0;
@@ -26,6 +26,7 @@ char *mx_substitute(char *command, t_path_builtin *pwd, t_builtin_command *my_co
                 ap = true;
             }
             else {
+                // printf("I`M DONE WITH IT\n");
                 break;
             }
         }
@@ -41,8 +42,10 @@ char *mx_substitute(char *command, t_path_builtin *pwd, t_builtin_command *my_co
         else if (command[i] == 41) {
             if (extr == true)
                 extr = false;
-            else
+            else {
+                // printf("I`M DONE WITH IT\n");
                 break;
+            }
         }
         else if (ap == false && iSbr == false) {
             if (command[i] != 36) {
@@ -55,10 +58,12 @@ char *mx_substitute(char *command, t_path_builtin *pwd, t_builtin_command *my_co
                 j++;
         }
     }
+    // printf("count for line = %d count for maincommand = %d general count = %d\n", j, k, i);
     line[j] = '\0';
     mainCommand[k] = ' ';
     line = realloc(line, strlen(line) + 1);
     line = mx_aliasSearch(line, *aliasList);
+    // printf("line - %s\n", line);
 
     int fd[2];
     t_queue **work = NULL;

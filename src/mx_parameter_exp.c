@@ -92,7 +92,7 @@ char *mx_parameter_exp(char *command) {
         for (i = start; command[i] != '\0'; i++) {
             if ((command[i] == 123 && command[i - 1] == 36) && sQ == false)
                 exp = true;
-            else if (command[i] == 36 && sQ == false)
+            else if (command[i] == 36 && command[i + 1] != 40 && sQ == false)
                 dollar = true;
             else if (command[i] == 126) {
                 if (command[i + 1] == '+' || command[i + 1] == '-')
@@ -120,10 +120,10 @@ char *mx_parameter_exp(char *command) {
                 k++;
             }
             else if (exp == false && dollar == false) {
-                if (command[i] != 36) {
+                // if (command[i] != 36) {
                     newLine[j] = command[i];
                     j++;
-                }
+                // }
             }
         }
         start = i + 1;

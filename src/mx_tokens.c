@@ -65,10 +65,9 @@ char **mx_tokens(char *line, char sp) {
     
 
     //echo " hello      \" hello     " <- that is wrong case
-    // printf ("\nWORDS -- %d\n\n", count);
+    printf ("\nWORDS -- %d\n\n", count);
 
     for (int i = 0; line[i] != '\0' && l < count; i++) {
-        if (line[i+1] == '\0')
             // printf("END = %d\n", i);
         // printf ("\nStart cycle -- \n");
         iSsq = false;

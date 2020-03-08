@@ -135,10 +135,10 @@ bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command
 		mx_valid_flag_pwd(command, arg, ac, &err, pwd);
 		return true;
 	}
-	else if (strcmp(builtin_str[4], arg[0]) == 0 && strlen(arg[0]) == 4) {
-		mx_valid_flag_echo(command, arg, ac);
-		return true;
-	} 
+	// else if (strcmp(builtin_str[4], arg[0]) == 0 && strlen(arg[0]) == 4) {
+	// 	mx_valid_flag_echo(command, arg, ac);
+	// 	return true;
+	// } 
 	// else if (strcmp(builtin_str[1], arg[0]) == 0 && strlen(arg[0]) == 3)
 	// 	mx_valid_flag_env(command, arg, ac);
 	else if (strcmp(builtin_str[3], arg[0]) == 0 && strlen(arg[0]) == 5) {

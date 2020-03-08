@@ -83,6 +83,11 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
             {
                 break;
             }
+            else if (command[i] == ' ' && (command[i + 1] == '>' || command[i + 1] == '<')
+                && iSdq == false && iSsq == false)
+                {
+                    break;
+                }
             else {
                 tasks->task[q] = command[i];
                 q++;

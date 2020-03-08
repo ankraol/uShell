@@ -8,14 +8,13 @@ static char *nameCut(char *command, int *start) {
     for ( ; command[(*start)] != '='
         && command[(*start)] != '\0'; (*start)++)
         {
-            if (command[(*start)] == 34) {
-                if (iSq == false)
+            if (command[(*start)] == 34 && iSq == false)
                     iSq = true;
-                else
-                    iSq = false;
-            }
-            else if (command[(*start)] == ' ' && iSq == false)
-                break;
+            else if ((command[(*start)] == ' ' && iSq == false)
+                || (command[(*start)] == 34 && iSq == true))
+                {
+                    break;
+                }
             else {
                 name[i] = command[(*start)];
                 i++;
