@@ -11,8 +11,6 @@ static bool parExt(char *command) {
     for (int i = 0; command[i] != '\0'; i++) {
         if (command[i] == 123 && command[i - 1] == 36)
             return true;
-        else if (command[i] == 36)
-            return true;
         else if (command[i] == 126)
             return true;
     }

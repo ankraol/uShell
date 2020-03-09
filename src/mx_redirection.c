@@ -71,11 +71,11 @@ static t_reddir *pipe_check(char *command) {
                 if (command[i - 1] == ' ')
                     i -= 1;
                 mx_command_cut(command, start, i, &tasks[q]);
-                printf("command%d - %s\n", q, tasks[q].task);
+                // printf("command%d - %s\n", q, tasks[q].task);
                 if (tasks[q].input)
-                    printf("input - %s\n", tasks[q].input->file);
+                    // printf("input - %s\n", tasks[q].input->file);
                 if (tasks[q].output)
-                    printf("output - %s\n", tasks[q].output->file);
+                    // printf("output - %s\n", tasks[q].output->file);
                 tasks[q].op = '|';
                 for (; command[i] == ' ' || command[i] == '|'; i++);
                 start = i;
@@ -85,29 +85,36 @@ static t_reddir *pipe_check(char *command) {
     tasks[q].input = NULL;
     tasks[q].output = NULL;
     mx_command_cut(command, start, i, &tasks[q]);
-    printf("command%d - %s\n", q, tasks[q].task);
+    // printf("command%d - %s\n", q, tasks[q].task);
     if (tasks[q].input)
-        printf("input - %s\n", tasks[q].input->file);
+        // printf("input - %s\n", tasks[q].input->file);
      if (tasks[q].output)
-        printf("output - %s\n", tasks[q].output->file);
+        // printf("output - %s\n", tasks[q].output->file);
     tasks[q].op = '-';
     return tasks;
 }
 
-// static void printAlias(t_alias *list) {
-    // t_alias *p = list;
-// 
-    // printf("ALIAS:\n");
-    // for (; p; p = p->next) {
-        // printf("NAME -> %s\n", (*p).name);
-        // printf("MEANS -> %s\n", (*p).meaning);
-    // }
-    // printf("END FOR NOW\n");
-// }
+static void printAlias(t_var *varList) {
+    t_var *p = varList;
 
+    printf("VARIABLES:\n");
+    for (; p; p = p->next) {
+        printf("NAME -> %s\n", (*p).name);
+        printf("MEANS -> %s\n", (*p).meaning);
+    }
+    printf("END FOR NOW\n");
+}
 
-int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar, t_alias **aliasList) {
-    printf("redirection -> %s\n", command);
+static bool iSvar(char *task) {
+    for (int i = 0; task[i] != '\0'; i++) {
+        if (task[i] == '=' && task[i - 1] != ' ' && task[i + 1] != ' ')
+            return true;
+    }
+    return false;
+}
+
+int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar, t_alias **aliasList,  t_var **varList) {
+    // printf("redirection -> %s\n", command);
     t_reddir *tasks = pipe_check(command);
     int status = 2;
     int input;
@@ -161,11 +168,16 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
             // printf("ALIAS HERE\n");
             mx_aliasList(tasks[0].task, aliasList);
         }
-        // else
+        else if (iSvar(tasks[0].task) == true) {
+            mx_varList(tasks[0].task, varList);
+            printAlias(*varList);
+        }
+        else {
             tasks[0].task = mx_aliasSearch(tasks[0].task, *aliasList);
-            printf("TASK -> %s\n", tasks[0].task);
+            // printf("TASK -> %s\n", tasks[0].task);
             status = mx_ush_execute(tasks[0].task, pwd, my_command, pid_ar);
+        }
     }
-    // printAlias(*aliasList);
+    // printAlias(*varList);
     return status;
 }

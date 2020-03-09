@@ -55,6 +55,7 @@ void ush_loop(void) {
     bool trig = false;
     t_history_name *history = NULL;
     t_alias *aliasList = NULL;
+    t_var *varList = NULL;
     t_path_builtin pwd; 
     t_builtin_command my_command;
 
@@ -74,9 +75,11 @@ void ush_loop(void) {
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
-                    (*p).command = mx_parameter_exp((*p).command);
-                    (*p).command = mx_substitute((*p).command, &pwd, &my_command, &pid_ar, &aliasList);
-                    status = mx_redirection((*p).command, &pwd, &my_command, &pid_ar, &aliasList);
+                    // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
+                    // (*p).command = mx_parameter_exp((*p).command);
+                    // printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
+                    (*p).command = mx_substitute((*p).command, &pwd, &my_command, &pid_ar, &aliasList, &varList);
+                    status = mx_redirection((*p).command, &pwd, &my_command, &pid_ar, &aliasList, &varList);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                         {

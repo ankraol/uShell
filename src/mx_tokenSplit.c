@@ -1,0 +1,92 @@
+#include "header.h"
+
+static void quotesCheck(bool *iSsq, bool *iSdq, char *command, int i) {
+    if (command[i] == 34 && command[i - 1] != 92 && (*iSsq) == false) {
+        if ((*iSdq) == false)
+            *iSdq = true;
+        else
+            *iSdq = false;
+    }
+    else if (command[i] == 39 && (*iSdq) == false) {
+        if ((*iSsq) == false)
+            *iSsq = true;
+        else
+            *iSsq = false;
+    }
+}
+
+static int tokensCount(char *command) {
+    int count = 0;
+    bool iSsq = false;
+    bool iSdq = false;
+
+    for (int i = 0; command[i] != '\0'; i++) {
+        if (command[i] == 34 || command[i] == 39)
+            quotesCheck(&iSsq, &iSdq, command, i);
+        if (iSsq == false && iSdq == false
+        && command[i] == ' ' && command[i + 1] != '\0')
+            {
+                count++;
+            }
+    }
+    return count + 1;
+}
+
+static char *tokenCut(char *command, int start, int end) {
+    char *token = (char *)malloc(sizeof(char) * (strlen(command) + 1));
+    int j = 0;
+
+    if (command[start] == 34 || command[start] == 39)
+        start += 1;
+    if (command[end - 1] == 34 || command[end - 1] == 39)
+        end -= 1;
+    for (int i = start; i < end; i++) {
+        if (command[i] == 92 && command[i + 1] == 92)
+            for (int c = 0; command[i + 1] == 92 && c < 4; i++, c++);
+        else if (command[i] == 92 && (command[i + 1] == 34
+            || command[i + 1] == 39 || command[i + 1] == 36 || command[i + 1] == 44
+            || command[i + 1] == 123 || command[i + 1] == 125 || command[i + 1] == 40
+            || command[i + 1] == 41))
+            {
+                i++;
+            }
+        else if ((command[i] == 34
+            || command[i] == 39 || command[i] == 36 || command[i] == 44
+            || command[i] == 123 || command[i] == 125 || command[i] == 40
+            || command[i] == 41) && command[i - 1] != 92)
+            {
+                i++;
+            }
+            token[j] = command[i];
+            j++;
+    }
+    token[j] = '\0';
+    token = realloc(token, strlen(token) + 1);
+    return token;
+}
+
+char **mx_tokenSplit(char *command) {
+    bool iSsq = false;
+    bool iSdq = false;
+    int q = 0;
+    int start = 0;
+    int i = 0;
+    int count = tokensCount(command);
+    char **tokens = (char **)malloc(sizeof(char *) * (count + 1));
+
+    // printf("WORDS IN COMMAND - %d\n", count);
+    for (; command[i] != '\0'; i++) {
+        if (command[i] == 34 || command[i] == 39)
+            quotesCheck(&iSsq, &iSdq, command, i);
+        else if (command[i] == ' ' && iSsq == false && iSdq == false) {
+            tokens[q] = tokenCut(command, start, i);
+            // printf("TOKEN %d - %s\n",q + 1,  tokens[q]);
+            start = i + 1;
+            q++;
+        }
+    }
+    tokens[q] = tokenCut(command, start, i);
+    // printf("TOKEN %d - %s\n",q + 1,  tokens[q]);
+    tokens[q + 1] = NULL;
+    return tokens;
+}

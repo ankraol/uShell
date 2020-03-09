@@ -56,6 +56,8 @@ FILES = main \
 	mx_strcpy \
 	mx_is_buildin \
 	mx_fg_command \
+	mx_tokenSplit \
+	mx_varList \
 	
 INC_H = $(addprefix "inc/", $(HEADER))
 

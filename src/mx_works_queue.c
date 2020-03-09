@@ -43,27 +43,55 @@ static bool onlySpaces(char *line, int st, int end) {
     return true;
 }
 
+static void quotesCheck(bool *ap, bool *iSsq, bool *iSdq, char *command, int i) {
+    if (command[i] == 34 && command[i - 1] != 92
+        && (*ap) == false && (*iSsq) == false)
+        {
+            if ((*iSdq) == false)
+                *iSdq = true;
+            else
+                *iSdq = false;
+        }
+        else if (command[i] == 39 && (*iSdq) == false && (*ap) == false) {
+            if ((*iSsq) == false)
+                *iSsq = true;
+            else
+                *iSsq = false;
+        }
+        else if (command[i] == 96 && command[i - 1] != 92
+            && (*iSsq) == false && (*iSdq) == false)
+            {
+                if ((*ap) == false)
+                    *ap = true;
+                else
+                    *ap = false;
+            }
+}
+
 static char *commandCut(char *line, int start, int end) {
     char *command = (char *)malloc(sizeof(char) * (end - start + 2));
     int q = 0;
     bool ap = false;
+    bool iSsq = false;
+    bool iSdq = false;
 
     for (int i = start; i < end; i++) {
-        if (line[i] == 96 && line[i - 1] != 92) {
-            if (ap == false)
-                ap = true;
-            else
-                ap = false;
-        }
         if (i == start && line[i] == ' ')
             for (; line[i] == ' '; i++);
-        if (line[i - 1] != 92 && line[i] == 92 && (line[i + 1] == 34 || line[i + 1] == 39 || line[i + 1] == 96) && ap == false)
-            i++;
-        else if (line[i] == 92 && line[i + 1] == 92 && ap == false)
-            for (int k = 0; line[i + 1] == 92 && k < 4; i++, k++);
-        if (onlySpaces(line, i, end) == false) {
-            command[q] = line[i];
-            q++;
+        if (line[i] == 34 || line[i] == 39 || line[i] == 96) {
+            quotesCheck(&ap, &iSsq, &iSdq, line, i);
+        }
+        if (line[i - 1] != 92 && line[i] == 92
+            && (line[i + 1] == 34 || line[i + 1] == 39 || line[i + 1] == 96)
+            && ap == false && iSsq == false && iSdq == false)
+            {
+                i++;
+            }
+            else if (line[i] == 92 && line[i + 1] == 92 && ap == false && iSsq == false && iSdq == false)
+                for (int k = 0; line[i + 1] == 92 && k < 4; i++, k++);
+            if (onlySpaces(line, i, end) == false) {
+                command[q] = line[i];
+                q++;
         }
     }
     command[q] = '\0';
