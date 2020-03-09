@@ -145,12 +145,17 @@ bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command
 		mx_which(arg, 0);
         return true;
     }
-	// else if (strcmp(builtin_str[5], arg[0]) == 0 && strlen(arg[0]) == 6)
-	// 	mx_command_export();
+	else if (strcmp(builtin_str[5], arg[0]) == 0 && strlen(arg[0]) == 6) {
+		mx_command_export(command, arg, ac);
+        return true;
+    
+    }
 	// else if (strcmp(builtin_str[6], arg[0]) == 0 && strlen(arg[0]) == 5)
 	// 	mx_command_unset();
-	else if (strcmp(builtin_str[7], arg[0]) == 0 && strlen(arg[0]) == 2)
+	else if (strcmp(builtin_str[7], arg[0]) == 0 && strlen(arg[0]) == 2) {
 		mx_fg_command(command, arg, ac);
+        return true;
+    }
 	// else if (strcmp(builtin_str[8], arg[0]) == 0 && strlen(arg[0]) == 4)
 	// 	mx_command_exit();
 	return false;

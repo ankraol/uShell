@@ -58,6 +58,9 @@ FILES = main \
 	mx_fg_command \
 	mx_tokenSplit \
 	mx_varList \
+	mx_for_fg_command \
+	mx_export_list \
+	mx_command_export \
 	
 INC_H = $(addprefix "inc/", $(HEADER))
 

@@ -115,8 +115,8 @@ void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, t_path_bui
 	int count_files = 0;
 	char **file = NULL;
 
-	command->cd = (t_cd *)malloc(sizeof(t_cd));
-	memset(command->cd, 0, sizeof(t_cd));
+	// command->cd = (t_cd *)malloc(sizeof(t_cd));
+	// memset(command->cd, 0, sizeof(t_cd));
 	for(int i = 1; i < ac; i++) {
 		if (flag_priority == true) {
 			if (arg[i][0] == '-' && arg[i][1] != '-')
