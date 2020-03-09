@@ -10,9 +10,10 @@ int mx_count_elem(char **av) {
 }
 
 
-int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar) {
+int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_command) {
     pid_t pid;
     pid_t wpid;
+    int number = 0;
     //t_pid_name *buf = *pid_ar;
 
     // if (mx_substitute(command) == 1) {
@@ -37,14 +38,14 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
             signal(SIGTTIN, SIG_DFL);
             signal(SIGTTOU, SIG_DFL);
             setpgid(0, 0);
-            mx_push_back_pid(pid_ar, getpid());
+            //mx_push_back_pid(pid_ar, getpid());
            // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
            //     fflush(stdout);
             //mx_printstr("start");
-            // if (execvp(path, argv) == -1)
-            //     perror("ushi");
-            if (execve(path, argv, NULL) == -1)
+            if (execvp(path, argv) == -1)
                 perror("ushi");
+            // if (execve(path, argv, NULL) == -1)
+            //     perror("ushi");
 
             exit(1);
         }
@@ -61,8 +62,9 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
                  //fprintf(stdout, "%d\n", wpid);
                 //fflush(stdout);
                 mx_printstr("and now stop");
-                sleep(2);
-                mx_push_back_pid(pid_ar, wpid);
+                number = mx_get_pid_num(&my_command->pid_ar);
+                printf("%d\n", number);
+                mx_push_back_pid(&my_command->pid_ar, wpid, argv[0], number);
                 tcsetpgrp(1, getpid());
                 return 1;
             //    sleep(2);

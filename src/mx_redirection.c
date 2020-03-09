@@ -96,7 +96,7 @@ static t_reddir *pipe_check(char *command) {
 // }
 
 
-int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar, t_alias **aliasList) {
+int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_alias **aliasList) {
     // printf("redirection -> %s\n", command);
     t_reddir *tasks = pipe_check(command);
     int status = 2;
@@ -153,8 +153,8 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
         }
         // else
             tasks[0].task = mx_aliasSearch(tasks[0].task, *aliasList);
-            // printf("TASK -> %s\n", tasks[0].task);
-            status = mx_ush_execute(tasks[0].task, pwd, my_command, pid_ar);
+            printf("TASK -> %s\n", tasks[0].task);
+            status = mx_ush_execute(tasks[0].task, pwd, my_command);
     }
     // printAlias(*aliasList);
     return status;

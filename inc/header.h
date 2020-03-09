@@ -17,12 +17,15 @@
 #include <term.h>
 #include <limits.h>
 #include <sys/stat.h>
+#include <ctype.h>
 
 
 
 
 /*************************************************************************/
-
+typedef struct s_pid_name t_pid_name;
+typedef struct s_env t_env;
+typedef struct s_export t_export;
 
 typedef struct s_cd {
     bool flag_s;
@@ -30,11 +33,11 @@ typedef struct s_cd {
     bool arg_min;
 }               t_cd;
 
-typedef struct s_env {
-    bool flag_i;
-    bool flag_P;
-    bool flag_u;
-}               t_env;
+struct s_export {
+    char *name;
+    char *value;
+    struct s_export *next;
+};
 
 typedef struct s_pwd {
     bool flag_L;
@@ -58,6 +61,10 @@ typedef struct s_builtin_command {
     t_which *which;
     t_echo *echo;
     t_pwd *pwd;
+    t_pid_name *pid_ar;
+    t_export *export_ar;
+
+
 }               t_builtin_command;
 
 
@@ -66,6 +73,8 @@ typedef struct s_path_builtin {
     char *pwdL;
     char *oldpwd;
 }               t_path_builtin;
+
+
 
 
 bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command *command);
@@ -145,10 +154,12 @@ typedef struct s_len_name {
     unsigned char *buf;
 }              t_len_name;
 
-typedef struct s_pid_name {
-    int pid; 
+struct s_pid_name {
+    int pid;
+    char *name;
+    int number;
     struct s_pid_name *next;
-}               t_pid_name;
+};
 
 
 
@@ -166,9 +177,9 @@ char *mx_strcat(char *restrict s1, const char *restrict s2);
 
 void mx_strdel(char **str);
 
-int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar, t_alias **aliasList);
+int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_alias **aliasList);
 int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput);
-int mx_ush_execute(char *argv, t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar);
+int mx_ush_execute(char *argv, t_path_builtin *pwd, t_builtin_command *my_command);
 
 
 char *mx_itoa(int number);
@@ -182,7 +193,7 @@ char **mx_tokens(char *line, char sp);
 int mx_strcmp(const char *s1, unsigned const char *s2);
 void mx_logicOp(char *line, t_queue **list);
 
-char *mx_substitute(char *command,t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar, t_alias **aliasList);
+char *mx_substitute(char *command,t_path_builtin *pwd, t_builtin_command *my_command, t_alias **aliasList);
 
 void mx_push_back_history(t_history_name **history, unsigned char *str,
                           t_len_name *len);
@@ -211,7 +222,7 @@ void mx_aliasList(char *command, t_alias **aliasList);
 char *mx_aliasSearch(char *command, t_alias *list);
 void mx_back_to_str(unsigned char **str,  t_len_name **le);
 void mx_delete_pid(t_pid_name **pid_list);
-void mx_push_back_pid(t_pid_name **pid_list,int pid);
+void mx_push_back_pid(t_pid_name **pid_list,int pid, char *name, int num);
 void mx_which(char **argv, int err);
 void mx_printchar(char c);
 void mx_printcharerr(char c);
@@ -221,5 +232,13 @@ char *mx_strcpy(char *dst, const char *src);
 bool mx_is_buildin(char *str);
 char *mx_strdup(const char *s1);
 void mx_fg_command(t_builtin_command *command, char **arg, int ac);
+int mx_get_pid_num(t_pid_name **pid_list);
+void mx_for_fg_command(t_builtin_command *command, char **arg, int ac);
+void mx_wait_cont(t_pid_name **pid_ar, int n_pid);
+int mx_get_peid_name(char *name, t_pid_name *pid_arr);
+int mx_get_peid(int n, t_pid_name *pid_arr);
+void mx_push_back_export(t_export **export_list, char *name, char *val);
+void mx_delete_export(t_export **export_list);
+void mx_command_export(t_builtin_command *command, char **arg, int ac);
 
 #endif

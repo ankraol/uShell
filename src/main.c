@@ -36,6 +36,20 @@ unsigned char *mx_read_line(bool *trig, t_history_name **history) {
     return mystr;
 }
 
+static void build_export(t_export **export_list) {
+    extern char **environ;
+    char **full_val = NULL;
+    
+    if (environ != NULL) {
+        for (int i = 0; environ[i] != NULL; i++) {
+            full_val = mx_strsplit(environ[i], '=');
+            mx_push_back_export(export_list, full_val[0], full_val[1]);
+            mx_del_strarr(&full_val);
+        }
+    }
+}
+
+
 // static void printAlias(t_alias *list) {
     // t_alias *p = list;
 // 
@@ -47,6 +61,7 @@ unsigned char *mx_read_line(bool *trig, t_history_name **history) {
     // printf("END FOR NOW\n");
 // }
 
+
 void ush_loop(void) {
     unsigned char *line;
     int status = 2;
@@ -57,13 +72,22 @@ void ush_loop(void) {
     t_alias *aliasList = NULL;
     t_path_builtin pwd; 
     t_builtin_command my_command;
+    extern char **environ;
+    //char **full_val = NULL;
 
     pwd.pwdP = getcwd(NULL, 0);
     pwd.pwdL = getcwd(NULL, 0);
     pwd.oldpwd = getcwd(NULL, 0);
 
+    my_command.cd = (t_cd *)malloc(sizeof(t_cd));
+    memset(my_command.cd, 0, sizeof(t_cd));
+    (&my_command)->pid_ar = NULL;
 
-    t_pid_name *pid_ar = NULL;
+    
+    my_command.export_ar = NULL;
+    build_export(&my_command.export_ar);
+    //print_list(my_command.export_ar);
+
 
 
     while (trig == false) {
@@ -75,8 +99,8 @@ void ush_loop(void) {
                 p = work[i];
                 for (; p; p = (*p).next) {
                     (*p).command = mx_parameter_exp((*p).command);
-                    (*p).command = mx_substitute((*p).command, &pwd, &my_command, &pid_ar, &aliasList);
-                    status = mx_redirection((*p).command, &pwd, &my_command, &pid_ar, &aliasList);
+                    (*p).command = mx_substitute((*p).command, &pwd, &my_command, &aliasList);
+                    status = mx_redirection((*p).command, &pwd, &my_command, &aliasList);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                         {

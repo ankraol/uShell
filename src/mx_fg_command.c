@@ -1,44 +1,62 @@
 #include "header.h"
 
+int mx_get_peid(int n, t_pid_name *pid_arr) {
+    t_pid_name *pid_buf = pid_arr;
+    
+    while(pid_buf) {
+        if (n == pid_buf->number)
+            return pid_buf->pid;
+        pid_buf = pid_buf->next;
+    }
+    return 0;
+}
+
+int mx_get_peid_name(char *name, t_pid_name *pid_arr) {
+    t_pid_name *pid_buf = pid_arr;
+    
+    while(pid_buf) {
+        if (strcmp(name, pid_buf->name) == 0)
+            return pid_buf->pid;
+        pid_buf = pid_buf->next;
+    }
+    return 0;
+}
+
+ void mx_wait_cont(t_pid_name **pid_ar, int n_pid) {
+    t_pid_name *pid_buf = NULL;;
+    int status_pid;
+    pid_t wpid;
+
+    kill (-(n_pid), SIGCONT);
+    tcsetpgrp(1, n_pid);
+    wpid = waitpid(n_pid, &status_pid, WUNTRACED);
+    tcsetpgrp(1, getpid());
+    if (WIFEXITED(status_pid)) {
+        pid_buf = (*pid_ar)->next;
+        free((*pid_ar)->name);
+        free((*pid_ar));
+        (*pid_ar) = pid_buf;
+    }
+    else if (WTERMSIG(status_pid) && !(WIFSTOPPED(status_pid))) {
+        free((*pid_ar)->name);
+        pid_buf = (*pid_ar)->next;
+        free((*pid_ar));
+        (*pid_ar) = pid_buf;
+        }
+}
+
 
 void mx_fg_command(t_builtin_command *command, char **arg, int ac) {
-    t_builtin_command *buf = command;
 
-    for(int i = 0; i < ac; i++) {
-        printf("ARG == %s\n", arg[i]);
+    // for (int i = 0; i < ac; i++)
+    //     printf("%s\n", arg[i]);
+    if (ac == 1) {
+        if (command->pid_ar != NULL)
+            mx_wait_cont(&(command)->pid_ar, command->pid_ar->pid);
+        else 
+            mx_printerr("fg: no current job\n");
     }
-    //printf("COMMAND == %s\n", command);
-    buf = NULL;
+    else {
+        mx_for_fg_command(command, arg, ac);
+    }
 }
-    // t_pid_name *pid_buf = NULL;
-    // int status_pid;
-    // pid_t wpid;
-
-// if (strcmp((char *)line, "fg") == 0) {
-//             if (pid_ar != NULL) {
-//                 kill (-(pid_ar->pid), SIGCONT);
-//                 tcsetpgrp(1, pid_ar->pid);
-//                 wpid = waitpid(pid_ar->pid, &status_pid, WUNTRACED);
-//                 tcsetpgrp(1, getpid());
-
-//                 if (WIFEXITED(status_pid)) {
-//                     pid_buf = pid_ar->next;
-//                     free(pid_ar);
-//                     pid_ar = pid_buf;
-//                     mx_printstr("exit");
-//                     sleep(2);
-//                 }
-//                 else if (WIFSTOPPED(status_pid)) {
-
-//                 }
-
-//                 else if (WTERMSIG(status_pid)) { //ctrl+C
-//                      mx_printstr("and now term");
-//                      sleep(2);
-//                     pid_buf = pid_ar->next;
-//                     free(pid_ar);
-//                     pid_ar = pid_buf;
-                    
-//                 }
-//              }
-//         }

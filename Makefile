@@ -41,7 +41,6 @@ FILES = main \
 	mx_parameter_exp \
 	mx_aliasList \
 	mx_aliasSearch \
-
 	mx_implementarion_of_builtin_commands \
 	mx_cd_command \
 	mx_logic_path \
@@ -57,6 +56,9 @@ FILES = main \
 	mx_strcpy \
 	mx_is_buildin \
 	mx_fg_command \
+	mx_for_fg_command \
+	mx_export_list \
+	mx_command_export \
 	
 INC_H = $(addprefix "inc/", $(HEADER))
 
