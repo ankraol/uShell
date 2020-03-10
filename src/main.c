@@ -9,6 +9,7 @@ static void exit_func(t_history_name **history, unsigned char *mystr,
         if (malloc_size(mystr))
             free(mystr);
         free(len);
+        //system("leaks -q ush");
         exit(0);
     }
 }
@@ -33,6 +34,7 @@ unsigned char *mx_read_line(bool *trig, t_history_name **history) {
     exit_func(history, mystr, len, buf_first);
     *trig = len->trig;
     free(len); 
+    //exit_func(history, mystr, len, buf_first);
     return mystr;
 }
 
@@ -69,12 +71,14 @@ void ush_loop(void) {
     t_queue *p = NULL;
     bool trig = false;
     t_history_name *history = NULL;
-    t_alias *aliasList = NULL;
-    t_var *varList = NULL;
+
     t_path_builtin pwd; 
     t_builtin_command my_command;
     extern char **environ;
     //char **full_val = NULL;
+
+    my_command.var = NULL;
+    my_command.alias_list = NULL;
 
     pwd.pwdP = getcwd(NULL, 0);
     pwd.pwdL = getcwd(NULL, 0);
@@ -102,8 +106,8 @@ void ush_loop(void) {
                     // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
                     // (*p).command = mx_parameter_exp((*p).command);
                     // printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
-                    (*p).command = mx_substitute((*p).command, &pwd, &my_command, &aliasList, &varList);
-                    status = mx_redirection((*p).command, &pwd, &my_command, &aliasList, &varList);
+                    (*p).command = mx_substitute((*p).command, &pwd, &my_command);
+                    status = mx_redirection((*p).command, &pwd, &my_command);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                         {

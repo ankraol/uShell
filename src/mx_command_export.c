@@ -53,6 +53,16 @@ static int check_str(char *str) {
     return 0;
 }
 
+static void find_in_var(char *str, t_var *varList){
+    while(varList) {
+        if (strcmp(varList->name, str) == 0) {
+            printf("SUCCCCCKKKK\n");
+            return;
+        }
+        varList = varList->next;
+    }
+}
+
 void mx_command_export(t_builtin_command *command, char **arg, int ac) {
     char **arr_val;
 
@@ -68,6 +78,7 @@ void mx_command_export(t_builtin_command *command, char **arg, int ac) {
             if (check_str(arr_val[0]) == 0) {
                 if(arr_val[1] != NULL) {
                     //check in the var_list and delete
+                    find_in_var(arr_val[0], command->var);
                     //check in the list if this val is already created
                     mx_push_back_export(&command->export_ar, arr_val[0], arr_val[1]);
                     //add to env

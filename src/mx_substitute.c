@@ -8,7 +8,7 @@
     // return false;
 // }
 
-char *mx_substitute(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_alias **aliasList,  t_var **varList) {
+char *mx_substitute(char *command, t_path_builtin *pwd, t_builtin_command *my_command) {
     bool ap = false;
     bool iSbr = false;
     bool extr = false;
@@ -62,7 +62,7 @@ char *mx_substitute(char *command, t_path_builtin *pwd, t_builtin_command *my_co
     line[j] = '\0';
     mainCommand[k] = ' ';
     line = realloc(line, strlen(line) + 1);
-    line = mx_aliasSearch(line, *aliasList);
+    line = mx_aliasSearch(line, my_command->alias_list);
     // printf("line - %s\n", line);
 
     int fd[2];
@@ -80,8 +80,8 @@ char *mx_substitute(char *command, t_path_builtin *pwd, t_builtin_command *my_co
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
-                    (*p).command = mx_substitute((*p).command, pwd, my_command, aliasList, varList);
-                    status = mx_redirection((*p).command, pwd, my_command, aliasList, varList);
+                    (*p).command = mx_substitute((*p).command, pwd, my_command);
+                    status = mx_redirection((*p).command, pwd, my_command);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                         {

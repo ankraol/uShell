@@ -11,7 +11,9 @@ void mx_one_cycle(unsigned char **mystr, t_len_name *len, unsigned char *buf) {
     mx_printstr("\033[0J");
     mx_printstr("u$h> ");
     if (len->trig_copy == true) {
-        *mystr = (unsigned char *) strdup((char *) buf);
+        if (malloc_size(*mystr))
+            free(*mystr);
+        *mystr = (unsigned char *)strdup((char *)buf);
         len->trig_copy = false;
     }
 }

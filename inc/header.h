@@ -27,6 +27,7 @@ typedef struct s_var t_var;
 typedef struct s_pid_name t_pid_name;
 typedef struct s_env t_env;
 typedef struct s_export t_export;
+typedef struct s_alias t_alias;
 
 struct s_var {
     char *name;
@@ -72,8 +73,7 @@ typedef struct s_builtin_command {
     t_var *var;
     t_pid_name *pid_ar;
     t_export *export_ar;
-
-
+    t_alias *alias_list;
 }               t_builtin_command;
 
 
@@ -105,7 +105,6 @@ typedef struct s_queue t_queue;
 typedef struct s_path t_path;
 typedef struct s_reddir t_reddir;
 typedef struct s_list t_list;
-typedef struct s_alias t_alias;
 
 struct s_alias {
     char *name;
@@ -187,7 +186,7 @@ char *mx_strcat(char *restrict s1, const char *restrict s2);
 void mx_strdel(char **str);
 
 
-int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_alias **aliasList,  t_var **varList);
+int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command);
 
 
 int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput);
@@ -204,7 +203,7 @@ t_queue **mx_works_queue(char *line);
 char **mx_tokens(char *line, char sp);
 int mx_strcmp(const char *s1, unsigned const char *s2);
 void mx_logicOp(char *line, t_queue **list);
-char *mx_substitute(char *command,t_path_builtin *pwd, t_builtin_command *my_command, t_alias **aliasList,  t_var **varList);
+char *mx_substitute(char *command,t_path_builtin *pwd, t_builtin_command *my_command);
 
 
 void mx_push_back_history(t_history_name **history, unsigned char *str,

@@ -7,11 +7,13 @@ static void first_line_use(unsigned char **mystr, t_len_name *len,
         len->n_cursor_b = len->first_line_byte;
         len->n_len = len->first_line_len;
         len->n_bute = len->n_cursor_b;
-        if (malloc_size(mystr))
-            free(mystr);
+        if (malloc_size(*mystr))
+            free(*mystr);
         *mystr = (unsigned char *) strdup(*buf_first);
         fprintf(stdout, "%s", *mystr);
         fflush(stdout);
+         if (malloc_size(*buf_first))
+            free(*buf_first);
         len->first_line = true;
         len->trig_copy = false;
         len->first_line_len = 0;
@@ -28,8 +30,6 @@ static void print_line(unsigned char **mystr, t_len_name *len,
     len->n_bute = len->n_cursor_b;
     len->buf = (*his)->name;
     len->trig_copy = true;
-    if (malloc_size(*mystr))
-        free(*mystr);
     fprintf(stdout, "%s", (*his)->name);
     fflush(stdout);
 }

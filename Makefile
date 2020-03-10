@@ -70,7 +70,7 @@ SRC = $(addprefix "src/", $(ROOT_C))
 
 ROOT_O = $(addsuffix ".o", $(FILES))
 
-CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
+CFLAGS = -std=c11 #-Wall -Wextra -Werror -Wpedantic
 
 all: install clean
 

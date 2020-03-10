@@ -20,8 +20,8 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
         // char **argv = mx_tokens(command, ' ');
         char **argv = mx_tokenSplit(command);
         // mx_substitute(argv);
-        // printf("ARGUMENTS FOR COMMAND == %s\n", argv[1]);
-        // printf("COMMAND == %s\n", argv[0]);
+        printf("ARGUMENTS FOR COMMAND == %s\n", argv[1]);
+        printf("COMMAND == %s\n", argv[0]);
         char *path = mx_read_env(argv[0]);
         //printf("PATH == %s\n", path);
         int status;
