@@ -27,6 +27,7 @@ typedef struct s_var t_var;
 struct s_var {
     char *name;
     char *meaning;
+    bool inEnv;
     struct s_var *next;
 };
 
@@ -213,7 +214,7 @@ void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
 void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
                    t_history_name **his);
 void mx_add_to_str(unsigned char **str, t_len_name **le);
-char *mx_parameter_exp(char *command);
+char *mx_parameter_exp(char *command, t_var *varList);
 void mx_aliasList(char *command, t_alias **aliasList);
 char *mx_aliasSearch(char *command, t_alias *list);
 void mx_back_to_str(unsigned char **str,  t_len_name **le);

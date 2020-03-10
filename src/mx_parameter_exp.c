@@ -8,10 +8,30 @@ static bool iStilda(char *command) {
 }
 
 static bool parExt(char *command) {
+    bool sQ = false;
+    bool dQ = false;
+
     for (int i = 0; command[i] != '\0'; i++) {
-        if (command[i] == 123 && command[i - 1] == 36)
+        if (command[i] == 123 && command[i - 1] == 36 && sQ == false)
             return true;
-        else if (command[i] == 126)
+        else if (command[i] == 39 && dQ == false) {
+            if (sQ == false)
+                sQ = true;
+            else
+                sQ = false;
+        }
+        else if (command[i] == 34 && command[i - 1] != 92 && sQ == false) {
+            if (dQ == false)
+                dQ = true;
+            else
+                dQ = false;
+        }
+        else if (command[i] == 36 && (command[i + 1] != ' ' || command[i + 1] != '\0')
+            && sQ == false)
+            {
+                return true;
+            }
+        else if (command[i] == 126 && sQ == false && dQ == false)
             return true;
     }
     return false;
@@ -43,6 +63,19 @@ static char *checkSame(char *command, char *replace) {
     return newReplace;
 }
 
+static char *varSearch(char *parameter, t_var *varList) {
+    t_var *p = varList;
+    char *varMeaning = NULL;
+
+    for (; p; p = p->next) {
+        if (mx_strcmp(parameter, (unsigned char *)p->name) == 0) {
+            varMeaning = mx_strdup(p->meaning);
+            return varMeaning;
+        }
+    }
+    return NULL;
+}
+
 static char *parameterSearch(char *parameter, char *command) {
     char **envParam = NULL;
     extern char **environ;
@@ -67,7 +100,7 @@ static char *parameterSearch(char *parameter, char *command) {
     return NULL;
 }
 
-char *mx_parameter_exp(char *command) {
+char *mx_parameter_exp(char *command, t_var *varList) {
     char *newLine = NULL;
     char *expLine = NULL;
     char *replace = NULL;
@@ -80,8 +113,10 @@ char *mx_parameter_exp(char *command) {
     int start = 0;
     int i = 0;
 
-    if (parExt(command) == false)
+    if (parExt(command) == false) {
+        printf("command without expansion - %s\n", command);
         return command;
+    }
     else
     {
         newLine = (char *)malloc(sizeof(char) * strlen(command));
@@ -118,10 +153,8 @@ char *mx_parameter_exp(char *command) {
                 k++;
             }
             else if (exp == false && dollar == false) {
-                // if (command[i] != 36) {
                     newLine[j] = command[i];
                     j++;
-                // }
             }
         }
         start = i + 1;
@@ -130,7 +163,10 @@ char *mx_parameter_exp(char *command) {
         if (tilda == false) {
             expLine[k] = '\0';
             expLine = realloc(expLine, strlen(expLine) + 1);
+            // printf("replace - %s\n", expLine);
             replace = parameterSearch(expLine, command);
+            if (replace == NULL)
+                replace = varSearch(expLine, varList);
         }
         else {
             if (command[i] == '+')
@@ -154,5 +190,6 @@ char *mx_parameter_exp(char *command) {
     }
     newLine = realloc(newLine, strlen(newLine) + 1);
     }
+    printf("NEWLINE - %s\n", newLine);
     return newLine;
 }

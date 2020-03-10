@@ -76,7 +76,7 @@ void ush_loop(void) {
                 p = work[i];
                 for (; p; p = (*p).next) {
                     // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
-                    // (*p).command = mx_parameter_exp((*p).command);
+                    (*p).command = mx_parameter_exp((*p).command, varList);
                     // printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &pwd, &my_command, &pid_ar, &aliasList, &varList);
                     status = mx_redirection((*p).command, &pwd, &my_command, &pid_ar, &aliasList, &varList);

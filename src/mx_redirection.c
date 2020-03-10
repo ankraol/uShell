@@ -114,7 +114,7 @@ static bool iSvar(char *task) {
 }
 
 int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command, t_pid_name **pid_ar, t_alias **aliasList,  t_var **varList) {
-    // printf("redirection -> %s\n", command);
+    // printf("PARSED COMMANED -> %s\n", command);
     t_reddir *tasks = pipe_check(command);
     int status = 2;
     int input;
