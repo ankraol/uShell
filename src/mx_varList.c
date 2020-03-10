@@ -33,6 +33,7 @@ static t_var *createNode(char *command) {
     (*p).name = nameCut(command, &start);
     start +=1;
     (*p).meaning = nameCut(command, &(start));
+    (*p).inEnv = false;
     (*p).next = NULL;
     return p;
 }
@@ -49,18 +50,25 @@ void mx_varList(char *command, t_var **varList) {
     t_var *p = (*varList);
     int start = 0;
     char *name = NULL;
+    bool change = false;
 
     if (p == NULL) {
         *varList = createNode(command);
     }
     else {
-        for (; command[start - 1] != ' '; start++);
         name = nameCut(command, &start);
-        for(; p->next; p = p->next) {
-            if (mx_strcmp(p->name, (unsigned char *)name) == 0)
-                break;
+        if (mx_strcmp(p->name, (unsigned char *)name) == 0)
+            change = true;
+
+        if (change == false) {
+            for(; p->next; p = p->next) {
+                if (mx_strcmp(p->name, (unsigned char *)name) == 0) {
+                    change = true;
+                    break;
+                }
+            }
         }
-        if (!p->next)
+        if (change == false)
             p->next = createNode(command);
         else
             changeNode(command, start + 1, p);
