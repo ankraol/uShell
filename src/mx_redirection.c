@@ -94,7 +94,7 @@ static t_reddir *pipe_check(char *command) {
     return tasks;
 }
 
-static void printAlias(t_var *varList) {
+static void printVar(t_var *varList) {
     t_var *p = varList;
 
     printf("VARIABLES:\n");
@@ -105,11 +105,23 @@ static void printAlias(t_var *varList) {
     printf("END FOR NOW\n");
 }
 
+static void printAlias(t_alias *aliasList) {
+    t_alias *p = aliasList;
+
+    printf("Aliases:\n");
+    for (; p; p = p->next) {
+        printf("NAME -> %s\n", (*p).name);
+        printf("MEANS -> %s\n", (*p).meaning);
+    }
+    printf("END FOR NOW\n");
+}
 
 static bool iSvar(char *task) {
     for (int i = 0; task[i] != '\0'; i++) {
         if (task[i] == '=' && task[i - 1] != ' ' && task[i + 1] != ' ')
             return true;
+        else if (task[i] == ' ' || task[i] == '$')
+            return false;
     }
     return false;
 }
@@ -169,11 +181,12 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
         if (isAlias(tasks[0].task) == true) {
             // printf("ALIAS HERE\n");
             mx_aliasList(tasks[0].task, &my_command->alias_list);
+            printAlias(my_command->alias_list);
         }
         else if (iSvar(tasks[0].task) == true) {
             printf("COMMAND TASK = %s\n", tasks[0].task);
             mx_varList(tasks[0].task, &my_command->var);
-            printAlias(my_command->var);
+            printVar(my_command->var);
             printf("COMMAND TASK = %s\n", tasks[0].task);
             if (tasks[0].task[0] == 'e' && tasks[0].task[1] == 'x'
                 && tasks[0].task[2] == 'p' && tasks[0].task[3] == 'o'

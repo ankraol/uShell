@@ -20,8 +20,7 @@ static void first_line_use(unsigned char **mystr, t_len_name *len,
     }
 }
 
-static void print_line(unsigned char **mystr, t_len_name *len, 
-                       t_history_name **his) {
+static void print_line(t_len_name *len, t_history_name **his) {
     mx_printstr("\033[0J");
     mx_printstr("u$h> ");
     len->n_cursor = (*his)->n_len;
@@ -49,7 +48,7 @@ void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
             }
             else
                 mx_printstr("\033[1G");
-            print_line(mystr, len, his);
+            print_line(len, his);
         }
     }
 }

@@ -34,7 +34,6 @@ unsigned char *mx_read_line(bool *trig, t_history_name **history) {
     exit_func(history, mystr, len, buf_first);
     *trig = len->trig;
     free(len); 
-    //exit_func(history, mystr, len, buf_first);
     return mystr;
 }
 
@@ -50,19 +49,6 @@ static void build_export(t_export **export_list) {
         }
     }
 }
-
-
-// static void printAlias(t_alias *list) {
-    // t_alias *p = list;
-// 
-    // printf("ALIAS:\n");
-    // for (; p; p = p->next) {
-        // printf("NAME -> %s\n", (*p).name);
-        // printf("MEANS -> %s\n", (*p).meaning);
-    // }
-    // printf("END FOR NOW\n");
-// }
-
 
 void ush_loop(void) {
     unsigned char *line;
