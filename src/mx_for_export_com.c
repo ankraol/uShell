@@ -2,6 +2,7 @@
 
 bool mx_find_in_export(char *str, t_export **export_list, char *change){
     t_export *buf = *export_list;
+    
     while(buf) {
         if (strcmp(buf->name, str) == 0) {
             free(buf->value);

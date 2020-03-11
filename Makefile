@@ -63,6 +63,7 @@ FILES = main \
 	mx_command_export \
 	mx_for_export_com \
 	mx_valid_flag_env \
+	mx_unset_command \
 	
 INC_H = $(addprefix "inc/", $(HEADER))
 

@@ -257,5 +257,6 @@ void mx_command_export(t_builtin_command *command, char **arg, int ac);
 bool mx_find_in_export(char *str, t_export **export_list, char *change);
 void mx_push_back_var(t_var **var_list, char *name, char *val);
 void mx_valid_flag_env(char **arg, int ac);
+void mx_unset_command(t_builtin_command *command, int ac, char **arg);
 
 #endif
