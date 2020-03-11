@@ -21,8 +21,7 @@ static void first_line_use(unsigned char **mystr, t_len_name *len,
     }
 }
 
-static void print_line(unsigned char **mystr, t_len_name *len, 
-                       t_history_name **his) {
+static void print_line(t_len_name *len, t_history_name **his) {
     (*his) = (*his)->previous;
     len->n_cursor = (*his)->n_len;
     len->n_cursor_b = (*his)->n_byte;
@@ -47,7 +46,7 @@ void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
             mx_printstr("\033[0J");
             mx_printstr("u$h> ");
             if ((*his)->previous != NULL)
-                print_line(mystr, len, his);
+                print_line(len, his);
             else
                 first_line_use(mystr, len, buf_first);
         }

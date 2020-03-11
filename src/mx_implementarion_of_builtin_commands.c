@@ -1,5 +1,5 @@
 #include "header.h"
-#include <stdio.h>
+
 
 // void mx_struct_flag_env(char *av, t_builtin_command *command, char *flag) {
 // 	for (int j = 1; av[j] ; j++) {
@@ -139,8 +139,10 @@ bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command
 	// 	mx_valid_flag_echo(command, arg, ac);
 	// 	return true;
 	// } 
-	// else if (strcmp(builtin_str[1], arg[0]) == 0 && strlen(arg[0]) == 3)
-	// 	mx_valid_flag_env(command, arg, ac);
+	else if (strcmp(builtin_str[1], arg[0]) == 0 && strlen(arg[0]) == 3) {
+		mx_valid_flag_env(arg, ac);
+        return true;
+    }
 	else if (strcmp(builtin_str[3], arg[0]) == 0 && strlen(arg[0]) == 5) {
 		mx_which(arg, 0);
         return true;
