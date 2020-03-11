@@ -254,5 +254,8 @@ int mx_get_peid(int n, t_pid_name *pid_arr);
 void mx_push_back_export(t_export **export_list, char *name, char *val);
 void mx_delete_export(t_export **export_list);
 void mx_command_export(t_builtin_command *command, char **arg, int ac);
+bool mx_find_in_export(char *str, t_export **export_list, char *change);
+void mx_push_back_var(t_var **var_list, char *name, char *val);
+void mx_valid_flag_env(char **arg, int ac);
 
 #endif

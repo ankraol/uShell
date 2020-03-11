@@ -21,12 +21,11 @@ static void sort_list(t_export **lst) {
 }
 
 static void print_list(t_export *export_list) {
-    while (export_list)
-    {
+ 
+    while (export_list) {
         printf("%s=%s\n", export_list->name, export_list->value);
         export_list = export_list->next;
     }
-    
 }
 
 static int check_str(char *str) {
@@ -53,15 +52,36 @@ static int check_str(char *str) {
     return 0;
 }
 
-static void find_in_var(char *str, t_var *varList){
-    while(varList) {
-        if (strcmp(varList->name, str) == 0) {
-            printf("SUCCCCCKKKK\n");
-            return;
+static bool find_in_var(char *str, t_var **varList, char *change){
+    while(*varList) {
+        if (strcmp((*varList)->name, str) == 0) {
+            if (change != NULL) {
+                free((*varList)->meaning);
+                (*varList)->meaning = strdup(change);
+            }
+            return true;
         }
-        varList = varList->next;
+        *varList = (*varList)->next;
     }
+    return false;
 }
+
+// static void general(t_builtin_command *command, char **arr_val) {
+//     if (arr_val[1] != NULL) {
+//         if (find_in_var(arr_val[0], &command->var, arr_val[1]) == false)
+//             mx_push_back_var(&command->var, arr_val[0], arr_val[1]);
+//         if (mx_find_in_export(arr_val[0], &command->export_ar, arr_val[1]) == false)
+//             mx_push_back_export(&command->export_ar, arr_val[0], arr_val[1]);
+//         setenv(arr_val[0], arr_val[1], 1);
+//     }
+//     else {
+//         if (find_in_var(arr_val[0], &command->var, NULL) == false)
+//             mx_push_back_export(&command->export_ar, arr_val[0], "''");
+//         else
+//             mx_push_back_export(&command->export_ar,
+//                                 arr_val[0], command->var->meaning);
+//     }
+// }
 
 void mx_command_export(t_builtin_command *command, char **arg, int ac) {
     char **arr_val;
@@ -73,22 +93,25 @@ void mx_command_export(t_builtin_command *command, char **arg, int ac) {
     else {
         for (int i = 1; i < ac; i++)
         {
-            arr_val = mx_strsplit(arg[i], '=');
-            //printf("VAL = %s\n", arr_val[0]);
+            arr_val = mx_strsplit(arg[i], '='); 
             if (check_str(arr_val[0]) == 0) {
                 if(arr_val[1] != NULL) {
-                    //check in the var_list and delete
-                    find_in_var(arr_val[0], command->var);
-                    //check in the list if this val is already created
-                    mx_push_back_export(&command->export_ar, arr_val[0], arr_val[1]);
-                    //add to env
+                   //general(command, arr_val);
+                    if (find_in_var(arr_val[0], &command->var, arr_val[1]) == false)
+                        mx_push_back_var(&command->var, arr_val[0], arr_val[1]);
+                    if (mx_find_in_export(arr_val[0], &command->export_ar, arr_val[1]) == false)
+                        mx_push_back_export(&command->export_ar, arr_val[0], arr_val[1]);
+                    setenv(arr_val[0], arr_val[1], 1);
                 }
                 else {
-                    //check in val_list
-                    //if no - add_to_export
-                    // if yes add_to export and env
+                    if (find_in_var(arr_val[0], &command->var, NULL) == false)
+                        mx_push_back_export(&command->export_ar, arr_val[0], "''");
+                    else
+                        mx_push_back_export(&command->export_ar,
+                                            arr_val[0], command->var->meaning);
                 }
-            } 
+            }
+         mx_del_strarr(&arr_val);
         }
     }
 }

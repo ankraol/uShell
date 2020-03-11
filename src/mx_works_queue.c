@@ -1,19 +1,19 @@
 #include "header.h"
 
-static void muteChar(bool *sQ, bool *dQ, bool *iSs, char *line, int i) {
-    if (line[i] == 96 && line[i - 1] != 92 && (*sQ) == false && (*dQ) == false) {
-        if ((*iSs) == false)
-            *iSs = true;
+static void muteChar(bool *sQ, bool *dQ, bool *a, char *l, int i) {
+    if (l[i] == 96 && l[i - 1] != 92 && (*sQ) == false && (*dQ) == false) {
+        if ((*a) == false)
+            *a = true;
         else
-            *iSs = false;
+            *a = false;
     }
-    else if (line[i] == 34 && line[i - 1] != 92 && (*iSs) == false && (*sQ) == false) {
+    else if (l[i] == 34 && l[i - 1] != 92 && (*a) == false && (*sQ) == false) {
         if ((*dQ) == false)
             *dQ = true;
         else
             *dQ = false;
     }
-    else if (line[i] == 39 && (*iSs) == false && (*dQ) == false) {
+    else if (l[i] == 39 && (*a) == false && (*dQ) == false) {
         if ((*sQ) == false)
             *sQ = true;
         else
@@ -43,29 +43,25 @@ static bool onlySpaces(char *line, int st, int end) {
     return true;
 }
 
-static void quotesCheck(bool *ap, bool *iSsq, bool *iSdq, char *command, int i) {
-    if (command[i] == 34 && command[i - 1] != 92
-        && (*ap) == false && (*iSsq) == false)
-        {
-            if ((*iSdq) == false)
-                *iSdq = true;
-            else
-                *iSdq = false;
-        }
-        else if (command[i] == 39 && (*iSdq) == false && (*ap) == false) {
-            if ((*iSsq) == false)
-                *iSsq = true;
-            else
-                *iSsq = false;
-        }
-        else if (command[i] == 96 && command[i - 1] != 92
-            && (*iSsq) == false && (*iSdq) == false)
-            {
-                if ((*ap) == false)
-                    *ap = true;
-                else
-                    *ap = false;
-            }
+static void quotesCheck(bool *ap, bool *sQ, bool *d, char *c, int i) {
+    if (c[i] == 34 && c[i - 1] != 92 && (*ap) == false && (*sQ) == false) {
+        if ((*d) == false)
+            *d = true;
+        else
+            *d = false;
+    }
+    else if (c[i] == 39 && (*d) == false && (*ap) == false) {
+        if ((*sQ) == false)
+            *sQ = true;
+        else
+            *sQ = false;
+    }
+    else if (c[i] == 96 && c[i - 1] != 92 && (*sQ) == false && (*d) == false) {
+        if ((*ap) == false)
+            *ap = true;
+        else
+            *ap = false;
+    }
 }
 
 static char *commandCut(char *line, int start, int end) {
@@ -126,43 +122,24 @@ static t_list *jobsSplit(char *line) {
     for (; line[i] != '\0'; i++) {
         muteChar(&sQ, &dQ, &iSs, line, i);
         if (sQ == false && dQ == false && iSs == false && line[i] == ';') {
-            // printf("PART ONE\n");
             pushBack(&jobs, line, start, i);
             start = i + 1;
         }
     }
-    // printf("PART TWO\n");
     pushBack(&jobs, line, start, i);
     return jobs;
 }
 
-// static void listPrint(t_queue *list) {
-    // t_queue *p = list;
-// 
-    // for (; p; p = (*p).next) {
-        // printf("command-%s,operand-%c\n", (*p).command, (*p).op);
-    // }
-// 
-// }
-
 t_queue **mx_works_queue(char *line) {
     int size = worksCount(line);
-    // char **jobs = mx_strsplit(line, ';');
     t_list *jobs = jobsSplit(line);
     t_queue **list = (t_queue **)malloc(sizeof(t_queue *) * (size + 1));
     int i = 0;
 
     for (t_list *p = jobs; p && i < size; p = (*p).next, i++) {
         list[i] = NULL;
-        // printf("jobSplit => %s\n", (*p).command);
         mx_logicOp((*p).command, &list[i]);
     }
     list[size] = NULL;
-
-    // for (int i = 0; i < size; i++) {
-        // list[i] = NULL;
-        // mx_logicOp(jobs[i], &list[i]);
-    // }
-    // list[size] = NULL;
     return list;
 }

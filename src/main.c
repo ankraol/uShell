@@ -37,14 +37,23 @@ unsigned char *mx_read_line(bool *trig, t_history_name **history) {
     return mystr;
 }
 
+
 static void build_export(t_export **export_list) {
     extern char **environ;
     char **full_val = NULL;
     
     if (environ != NULL) {
         for (int i = 0; environ[i] != NULL; i++) {
+            //printf("env = %s\n", environ[i]);
             full_val = mx_strsplit(environ[i], '=');
-            mx_push_back_export(export_list, full_val[0], full_val[1]);
+
+            // printf("****************full val[0] == %s\n", full_val[0]);
+            // printf("****************full val[1] == %s\n", full_val[1]);
+            if (full_val[0] != NULL)
+                mx_push_back_export(export_list, full_val[0], full_val[1]);
+            // printf("\n\n***");
+            // printf("%s---%s\n", (*export_list)->name, (*export_list)->value);
+            // printf("\n\n***");
             mx_del_strarr(&full_val);
         }
     }
@@ -76,8 +85,8 @@ void ush_loop(void) {
 
     
     my_command.export_ar = NULL;
-    build_export(&my_command.export_ar);
-    //print_list(my_command.export_ar);
+    build_export(&(my_command.export_ar));
+    //print_list(&(my_command.export_ar));
 
 
 

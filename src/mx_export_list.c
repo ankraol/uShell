@@ -3,8 +3,15 @@
  static t_export *creat_export(char *name, char *val) {
     t_export *export_list = (t_export *)malloc(sizeof(t_export));
 
-    export_list->name = strdup(name);
-    export_list->value = strdup(val);
+    if (strcmp(name, "SHLVL") == 0)
+        printf("\n\n*START*\n\n");
+    export_list->name = mx_strdup(name);
+    //    if (strcmp(export_list->name, "SHLVL") == 0)
+    //     printf("\n\n********************START********************\n\n");
+    if (val != NULL)
+        export_list->value = mx_strdup(val);
+    else 
+        export_list->value = mx_strnew(1);
     export_list->next = NULL;
 
     return export_list;
