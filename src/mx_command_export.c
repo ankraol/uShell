@@ -66,22 +66,22 @@ static bool find_in_var(char *str, t_var **varList, char *change){
     return false;
 }
 
-// static void general(t_builtin_command *command, char **arr_val) {
-//     if (arr_val[1] != NULL) {
-//         if (find_in_var(arr_val[0], &command->var, arr_val[1]) == false)
-//             mx_push_back_var(&command->var, arr_val[0], arr_val[1]);
-//         if (mx_find_in_export(arr_val[0], &command->export_ar, arr_val[1]) == false)
-//             mx_push_back_export(&command->export_ar, arr_val[0], arr_val[1]);
-//         setenv(arr_val[0], arr_val[1], 1);
-//     }
-//     else {
-//         if (find_in_var(arr_val[0], &command->var, NULL) == false)
-//             mx_push_back_export(&command->export_ar, arr_val[0], "''");
-//         else
-//             mx_push_back_export(&command->export_ar,
-//                                 arr_val[0], command->var->meaning);
-//     }
-// }
+static void general(t_builtin_command *command, char **arr_val) {
+    if (arr_val[1] != NULL) {
+        if (find_in_var(arr_val[0], &command->var, arr_val[1]) == false)
+            mx_push_back_var(&command->var, arr_val[0], arr_val[1]);
+        if (!mx_find_in_export(arr_val[0], &command->export_ar, arr_val[1]))
+            mx_push_back_export(&command->export_ar, arr_val[0], arr_val[1]);
+        setenv(arr_val[0], arr_val[1], 1);
+    }
+    else {
+        if (find_in_var(arr_val[0], &command->var, NULL) == false)
+            mx_push_back_export(&command->export_ar, arr_val[0], "''");
+        else
+            mx_push_back_export(&command->export_ar,
+                                arr_val[0], command->var->meaning);
+    }
+}
 
 void mx_command_export(t_builtin_command *command, char **arg, int ac) {
     char **arr_val;
@@ -95,21 +95,7 @@ void mx_command_export(t_builtin_command *command, char **arg, int ac) {
         {
             arr_val = mx_strsplit(arg[i], '='); 
             if (check_str(arr_val[0]) == 0) {
-                if(arr_val[1] != NULL) {
-                   //general(command, arr_val);
-                    if (find_in_var(arr_val[0], &command->var, arr_val[1]) == false)
-                        mx_push_back_var(&command->var, arr_val[0], arr_val[1]);
-                    if (mx_find_in_export(arr_val[0], &command->export_ar, arr_val[1]) == false)
-                        mx_push_back_export(&command->export_ar, arr_val[0], arr_val[1]);
-                    setenv(arr_val[0], arr_val[1], 1);
-                }
-                else {
-                    if (find_in_var(arr_val[0], &command->var, NULL) == false)
-                        mx_push_back_export(&command->export_ar, arr_val[0], "''");
-                    else
-                        mx_push_back_export(&command->export_ar,
-                                            arr_val[0], command->var->meaning);
-                }
+                   general(command, arr_val);
             }
          mx_del_strarr(&arr_val);
         }
