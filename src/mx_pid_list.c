@@ -6,8 +6,7 @@
     pid_list->pid = pid;
     pid_list->name = strdup(name);
     pid_list->number = num;
-    pid_list->next = NULL;
-    // printf("CCCHHHEK\n");
+    pid_list->next = NULL; 
 
     return pid_list;
  }

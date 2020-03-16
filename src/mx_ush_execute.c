@@ -23,6 +23,7 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
         printf("ARGUMENTS FOR COMMAND == %s\n", argv[1]);
         printf("COMMAND == %s\n", argv[0]);
         char *path = mx_read_env(argv[0]);
+        printf("Checkk\n");
         //printf("PATH == %s\n", path);
         int status;
 

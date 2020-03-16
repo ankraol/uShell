@@ -77,9 +77,11 @@ static void general(t_builtin_command *command, char **arr_val) {
     else {
         if (find_in_var(arr_val[0], &command->var, NULL) == false)
             mx_push_back_export(&command->export_ar, arr_val[0], "''");
-        else
+        else {
             mx_push_back_export(&command->export_ar,
                                 arr_val[0], command->var->meaning);
+            setenv(arr_val[0], command->var->meaning, 1);
+        }
     }
 }
 

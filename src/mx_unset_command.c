@@ -1,5 +1,11 @@
 #include "header.h"
 
+static void delete(char **name, char **val, t_export **list) {
+    free(*name);
+    free(*val);
+    free((*list));
+}
+
 static void variable_out(char *command, t_export **list) {
     t_export *buf = *list;
     t_export *temp = NULL;
@@ -7,18 +13,14 @@ static void variable_out(char *command, t_export **list) {
     if (buf != NULL) {
         if (strcmp(command, (*list)->name) == 0) {
             temp = (*list)->next;
-            free((*list)->value);
-            free((*list)->name);
-            free((*list));
+            delete(&((*list)->value), &((*list)->name), list);
             (*list) = temp;
             return;
         }
         while (buf->next) {
             if (strcmp(command, buf->next->name) == 0) {
                 temp = buf->next->next;
-                free(buf->next->value);
-                free(buf->next->name);
-                free(buf->next);
+                delete(&(buf->next->value), &(buf->next->name), &(buf->next));
                 buf->next = temp;
                 return;
             }
@@ -30,7 +32,7 @@ static void variable_out(char *command, t_export **list) {
 
 void mx_unset_command(t_builtin_command *command, int ac, char **arg) {
     if (ac == 1)
-        mx_printerr(" unset: not enough arguments\n");
+        mx_printerr("unset: not enough arguments\n");
 
     else {
         for (int i = 1; i < ac; i++) {

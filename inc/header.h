@@ -84,7 +84,10 @@ typedef struct s_path_builtin {
     char *oldpwd;
 }               t_path_builtin;
 
-
+typedef struct s_env {
+    char *name;
+    struct s_env *next;
+}               t_env;
 
 
 bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command *command);
@@ -258,5 +261,8 @@ bool mx_find_in_export(char *str, t_export **export_list, char *change);
 void mx_push_back_var(t_var **var_list, char *name, char *val);
 void mx_valid_flag_env(char **arg, int ac);
 void mx_unset_command(t_builtin_command *command, int ac, char **arg);
+void mx_variable_out(char *command, t_env **list);
+void mx_delete_env(t_env **env_list);
+void mx_push_front_env(t_env **pid_env, char *name);
 
 #endif

@@ -72,9 +72,9 @@ static t_reddir *pipe_check(char *command) {
                     i -= 1;
                 mx_command_cut(command, start, i, &tasks[q]);
                 // printf("command%d - %s\n", q, tasks[q].task);
-                if (tasks[q].input)
+                //if (tasks[q].input)
                     // printf("input - %s\n", tasks[q].input->file);
-                if (tasks[q].output)
+                //if (tasks[q].output)
                     // printf("output - %s\n", tasks[q].output->file);
                 tasks[q].op = '|';
                 for (; command[i] == ' ' || command[i] == '|'; i++);
@@ -86,9 +86,9 @@ static t_reddir *pipe_check(char *command) {
     tasks[q].output = NULL;
     mx_command_cut(command, start, i, &tasks[q]);
     // printf("command%d - %s\n", q, tasks[q].task);
-    if (tasks[q].input)
+    //if (tasks[q].input)
         // printf("input - %s\n", tasks[q].input->file);
-     if (tasks[q].output)
+    // if (tasks[q].output)
         // printf("output - %s\n", tasks[q].output->file);
     tasks[q].op = '-';
     return tasks;
