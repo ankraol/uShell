@@ -1,16 +1,10 @@
 #include "header.h"
 
 
-int mx_count_elem(char **av) {
-    int i = 0;
-
-    while (av[i])
-        i++;
-    return i;
-}
 
 
-int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_command) {
+
+int mx_ush_execute_env(char *command, t_builtin_command *my_command) {
     pid_t pid;
     pid_t wpid;
     int number = 0;
@@ -28,10 +22,7 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
         //printf("PATH == %s\n", path);
         int status;
 
-        
-        bool builtin = mx_valid_command(argv, mx_count_elem(argv), pwd, my_command);
-        
-        if (!builtin) {
+
         path = mx_read_env(argv[0], NULL, my_command);
         if (path == NULL) {
             mx_printerr("ush: command not found: ");
@@ -105,6 +96,5 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
     }
     tcsetpgrp(1, getpid());
     return 0;
-    }
-    return 0;
+
 }

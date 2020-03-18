@@ -66,6 +66,7 @@ FILES = main \
 	mx_unset_command \
 	mx_env_list \
 	mx_env_list_find \
+	mx_ush_execute_env \
 	
 INC_H = $(addprefix "inc/", $(HEADER))
 

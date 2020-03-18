@@ -8,7 +8,7 @@ static void redirect(int oldfd, int newfd) {
     }
 }
 
-void mx_fd_change(t_reddir *command, int pos, int in_fd, bool extInput) {
+void mx_fd_change(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_command *my_command) {
     t_path *p = command[pos].output;
     char **task = NULL;
     char *path = NULL;
@@ -31,7 +31,7 @@ void mx_fd_change(t_reddir *command, int pos, int in_fd, bool extInput) {
                 redirect(0, in_fd);
                 redirect(1, output);
                 task = mx_tokens(command[pos].task, ' ');
-                path = mx_read_env(task[0]);
+                path = mx_read_env(task[0], NULL, my_command);
                 if (execvp(path, task) == -1) {
                     printf("TASK = %s\n", command[pos].task);
                     perror("lsh");

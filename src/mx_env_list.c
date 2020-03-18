@@ -4,14 +4,24 @@ static t_env *creat_env(char *name) {
     t_env *env_list = (t_env *)malloc(sizeof(t_env));
 
     env_list->name = strdup(name);
+    env_list->next = NULL;
+
     return env_list;
  }
 
 
-void mx_push_front_env(t_env **pid_env, char *name) {
+void mx_push_back_env(t_env **pid_env, char *name) {
     t_env *front = creat_env(name);
-    front->next = *pid_env;
-    *pid_env = front;
+    t_env *buf = *pid_env;
+
+    if (buf == NULL) {
+        *pid_env = front;
+        return;
+    }
+    while(buf->next != NULL)
+        buf = buf->next;
+
+    buf->next = front;
 
 }
 

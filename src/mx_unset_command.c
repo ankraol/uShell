@@ -36,6 +36,8 @@ void mx_unset_command(t_builtin_command *command, int ac, char **arg) {
 
     else {
         for (int i = 1; i < ac; i++) {
+            if (strcmp(arg[i], "PATH") == 0)
+                command->unset_path = true;
             variable_out(arg[i], &command->export_ar);
             if (getenv(arg[i]) != 0)
                 unsetenv(arg[i]);

@@ -7,7 +7,7 @@ static void redirect(int oldfd, int newfd) {
     }
 }
 
-int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput) {
+int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_command *my_command) {
     int status = 0;
     char **task = NULL;
     char *path = NULL;
@@ -18,7 +18,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput) {
     if (command[pos].op == '-') {
         if (command[pos].output) {
             // printf("EXTERNAL OUTPUT && NO TERMINAL OUT\n");
-            mx_fd_change(command, pos, in_fd, extInput);
+            mx_fd_change(command, pos, in_fd, extInput, my_command);
         }
         else {
             // printf("TERMINAL OUT\n");
@@ -29,7 +29,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput) {
                 close(in_fd);
                 // redirect(in_fd, 0);
                 task = mx_strsplit(command[pos].task, ' ');
-                path = mx_read_env(task[0]);
+                path = mx_read_env(task[0], NULL, my_command);
                 if (execvp(path, task) == -1) {
                     // printf("TASK -> %s\n", task[0]);
                     perror("psh");
@@ -44,7 +44,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput) {
     else if (command[pos].op == '|'){
         if (command[pos].output) {
             // printf("EXTERNAL OUTPUT && PIPE\n");
-            mx_fd_change(command, pos, in_fd, extInput);
+            mx_fd_change(command, pos, in_fd, extInput, my_command);
         }
         int fd[2];
         pipe(fd);
@@ -53,7 +53,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput) {
             redirect(in_fd, 0);
             redirect(fd[1], 1); /* write to fd[1] */
             task = mx_strsplit(command[pos].task, ' ');
-            path = mx_read_env(task[0]);
+            path = mx_read_env(task[0], NULL, my_command);
             if (execvp(path, task) == -1) {
                 // printf("TASK -> %s\n", task[0]);
                 perror("ush");
@@ -64,7 +64,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput) {
                 close(fd[1]);
             if (in_fd != 0)
                 close(in_fd); /* unused */
-            mx_pipe_rec(command, pos + 1, fd[0], extInput);
+            mx_pipe_rec(command, pos + 1, fd[0], extInput, my_command);
         }
     }
     return status;

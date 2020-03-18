@@ -140,7 +140,7 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
 
     if (tasks[0].op == '|' || tasks[0].output || tasks[0].input) {
         if (tasks[0].op == '|' || tasks[0].output) {
-            status = mx_pipe_rec(tasks, 0, 0, extInput);
+            status = mx_pipe_rec(tasks, 0, 0, extInput, my_command);
         }
         for (int i = 0; tasks[i - 1].op != '-'; i++) {
             if (tasks[i].input) {
@@ -150,7 +150,7 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
                     if (input == -1)
                         perror("ush");
                     extInput = true;
-                    mx_pipe_rec(tasks, i, input, extInput);
+                    mx_pipe_rec(tasks, i, input, extInput, my_command);
                     extInput = false;
                     close(input);
                 }

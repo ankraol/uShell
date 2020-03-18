@@ -75,6 +75,7 @@ typedef struct s_builtin_command {
     t_pid_name *pid_ar;
     t_export *export_ar;
     t_alias *alias_list;
+    bool unset_path;
 }               t_builtin_command;
 
 
@@ -180,7 +181,7 @@ int mx_count_words(const char *str, char c);
 char *mx_strnew(const int size);
 char **mx_strsplit(const char *s, char c);
 int mx_strlen(const char *s);
-char *mx_read_env(char *file);
+char *mx_read_env(char *file, char *path, t_builtin_command *my_command);
 void mx_del_strarr(char ***arr);
 
 char *mx_strjoin_two( char *s1,  char *s2);
@@ -193,13 +194,13 @@ void mx_strdel(char **str);
 int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command);
 
 
-int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput);
+int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_command *my_command);
 int mx_ush_execute(char *argv, t_path_builtin *pwd, t_builtin_command *my_command);
 
 
 char *mx_itoa(int number);
 
-void mx_fd_change(t_reddir *command, int pos, int in_fd, bool extInput);
+void mx_fd_change(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_command *my_command);
 void mx_command_cut(char *command, int s, int f, t_reddir *tasks);
 char *mx_file_to_str(const char *file);
 void mx_printstr(const char *s);
@@ -259,10 +260,11 @@ void mx_delete_export(t_export **export_list);
 void mx_command_export(t_builtin_command *command, char **arg, int ac);
 bool mx_find_in_export(char *str, t_export **export_list, char *change);
 void mx_push_back_var(t_var **var_list, char *name, char *val);
-void mx_valid_flag_env(char **arg, int ac);
+void mx_valid_flag_env(char **arg, int ac, t_builtin_command *command);
 void mx_unset_command(t_builtin_command *command, int ac, char **arg);
 void mx_variable_out(char *command, t_env **list);
 void mx_delete_env(t_env **env_list);
-void mx_push_front_env(t_env **pid_env, char *name);
+void mx_push_back_env(t_env **pid_env, char *name);
+int mx_ush_execute_env(char *command, t_builtin_command *my_command);
 
 #endif

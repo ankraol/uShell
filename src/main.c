@@ -62,9 +62,9 @@ void ush_loop(void) {
 
     t_path_builtin pwd; 
     t_builtin_command my_command;
-    extern char **environ;
-    //char **full_val = NULL;
+    //extern char **environ;
 
+    my_command.unset_path = false;
     my_command.var = NULL;
     my_command.alias_list = NULL;
 

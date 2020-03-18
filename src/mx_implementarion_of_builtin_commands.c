@@ -140,7 +140,7 @@ bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command
 	// 	return true;
 	// } 
 	else if (strcmp(builtin_str[1], arg[0]) == 0 && strlen(arg[0]) == 3) {
-		mx_valid_flag_env(arg, ac);
+		mx_valid_flag_env(arg, ac, command);
         return true;
     }
 	else if (strcmp(builtin_str[3], arg[0]) == 0 && strlen(arg[0]) == 5) {
