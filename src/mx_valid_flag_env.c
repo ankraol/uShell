@@ -3,7 +3,6 @@
 static void print_list(t_env *export_list) {
  
     while (export_list) {
-        
         printf("%s\n", export_list->name);
         export_list = export_list->next;
     }
@@ -20,10 +19,32 @@ static void build_env(t_env **env_list) {
     }
 }
 
+static char **create_env_arr(t_env *export_list) {
+    t_env *buf = export_list;
+    int i = 0;
+    char **arr = NULL;
+
+    while(buf) {
+        i++;
+        buf = buf->next;
+    }
+    if (i == 0)
+        return NULL;
+    arr = (char **)malloc(sizeof(char *) * (i+1));
+    i = 0;
+    while (export_list) {
+        arr[i] = strdup(export_list->name);
+        i++;
+        export_list = export_list->next;
+    }
+    arr[i+1] = NULL;
+    return arr;
+}
+
 void mx_valid_flag_env(char **arg, int ac, t_builtin_command *command) {
     extern char **environ;
     char **full_val = NULL;
-    //char **new_env = NULL;
+    char **new_env = NULL;
     t_env *env_list = NULL;
     char *path = NULL;
     int i = 0;
@@ -35,6 +56,7 @@ void mx_valid_flag_env(char **arg, int ac, t_builtin_command *command) {
     bool i_access = true;
     bool be_command = false;
     bool find_program = false;
+
 
     if (ac == 1 && environ != NULL) {
         for (int i = 0; environ[i] != NULL; i++) {
@@ -118,11 +140,12 @@ void mx_valid_flag_env(char **arg, int ac, t_builtin_command *command) {
             }
         if (!find_program)
             print_list(env_list);
-        else { 
+        else {
+            new_env = create_env_arr(env_list);
             printf("THIS is PROGRAM\n");
             if (path != NULL)
                 printf("%s\n", path);
-            mx_ush_execute_env(arg[i-1], command);
+            mx_ush_execute_env(arg[i-1], command, new_env, path);
         }
             
         }

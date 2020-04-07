@@ -27,6 +27,8 @@ char *mx_read_env(char *file, char *path, t_builtin_command *my_command) {
             if (path != NULL) {
                 last_path = mx_strjoin(path, "/");
                 last_path = mx_strjoin_two(last_path, file);
+                if (lstat(last_path, &sb) < 0)
+                    return NULL;
                 printf("READ_ENV2\n");
             }
             else {

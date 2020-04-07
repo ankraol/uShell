@@ -4,7 +4,8 @@
 
 
 
-int mx_ush_execute_env(char *command, t_builtin_command *my_command) {
+int mx_ush_execute_env(char *command, t_builtin_command *my_command,
+                       char **new_env, char *path) {
     pid_t pid;
     pid_t wpid;
     int number = 0;
@@ -17,17 +18,18 @@ int mx_ush_execute_env(char *command, t_builtin_command *my_command) {
         // mx_substitute(argv);
         printf("ARGUMENTS FOR COMMAND == %s\n", argv[1]);
         printf("COMMAND == %s\n", argv[0]);
-        char *path = NULL;
+        
         printf("Checkk\n");
         //printf("PATH == %s\n", path);
         int status;
 
 
-        path = mx_read_env(argv[0], NULL, my_command);
+        path = mx_read_env(argv[0], path, my_command);
         if (path == NULL) {
-            mx_printerr("ush: command not found: ");
+            mx_printerr("env: ");
             mx_printerr(command);
-            mx_printerr("\n");
+            mx_printerr(": No such file or directory\n");
+;
             return 1;
         }
         
@@ -43,10 +45,12 @@ int mx_ush_execute_env(char *command, t_builtin_command *my_command) {
            // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
            //     fflush(stdout);
             //mx_printstr("start");
-            if (execvp(path, argv) == -1)
-                perror("ushi");
-            // if (execve(path, argv, NULL) == -1)
+            // if (execvp(path, argv) == -1)
             //     perror("ushi");
+            if (execve(path, argv, new_env) == -1)
+                mx_printerr("env: ");
+                mx_printerr(command);
+                mx_printerr(": No such file or directory\n");
 
             exit(1);
         }

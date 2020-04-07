@@ -18,6 +18,7 @@
 #include <limits.h>
 #include <sys/stat.h>
 #include <ctype.h>
+#include <pwd.h>
 
 
 
@@ -94,12 +95,17 @@ typedef struct s_env {
 bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command *command);
 void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac,
     t_path_builtin *pwd, int *err);
-void mx_cd_logic(char **file, t_builtin_command *command, int *err,
-    t_path_builtin *pwd);
+char *mx_cd_logic(char **file, t_builtin_command *command, int *err, t_path_builtin *pwd);
 void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err,
     t_path_builtin *pwd);
-//char **mx_create_file(char **av, int ac, int count_files, char **file);
+char *mx_make_logic_path(char **tmp2, char *tmp, char *tmp1);
 void mx_valid_flag_echo(t_builtin_command *command, char **arg, int ac);
+void mx_change_path(char **tmp2);
+char **my_strsplit(const char *s, char c);
+void mx_cd_two_args(char **file, t_builtin_command *command, t_path_builtin *pwd, int *err);
+bool mx_zero_arr(char **str);
+void mx_change_pwd(char *tmp1, t_path_builtin *pwd, t_builtin_command *command, int *err, char **file);
+int mx_str_count(char **str);
 
 /*************************************************************************/
 
@@ -110,6 +116,7 @@ typedef struct s_queue t_queue;
 typedef struct s_path t_path;
 typedef struct s_reddir t_reddir;
 typedef struct s_list t_list;
+typedef struct s_alias t_alias;
 
 struct s_alias {
     char *name;
@@ -265,6 +272,6 @@ void mx_unset_command(t_builtin_command *command, int ac, char **arg);
 void mx_variable_out(char *command, t_env **list);
 void mx_delete_env(t_env **env_list);
 void mx_push_back_env(t_env **pid_env, char *name);
-int mx_ush_execute_env(char *command, t_builtin_command *my_command);
-
+int mx_ush_execute_env(char *command, t_builtin_command *my_command,
+                       char **new_env, char *path);
 #endif

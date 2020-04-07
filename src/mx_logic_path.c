@@ -45,7 +45,7 @@ void mx_change_path(char **tmp2) {
 	for (int i = 0; tmp2[i]; i++) { 
 		if (strcmp(tmp2[i], "..") == 0) {
 			memset(tmp2[i], '\0', strlen(tmp2[i]));
-			for (int j = i; j > 0 ; j--) {
+			for (int j = i; j >= 0 ; j--) {
 				if (tmp2[j][0] != 0) {
 					memset(tmp2[j], '\0', strlen(tmp2[j]));
 					break ;
@@ -55,57 +55,40 @@ void mx_change_path(char **tmp2) {
 	}
 }
 
-void mx_fill_logic_path(char **tmp2, char *str, t_path_builtin *pwd) {
-	for (int i = 0; tmp2[i]; i++) {
-		if (tmp2[i][0] != '\0') {
-			str = mx_strjoin(pwd->pwdL, "/");
-			if (pwd->pwdL != NULL)
-				mx_strdel(&pwd->pwdL);
-			pwd->pwdL = mx_strjoin(str, tmp2[i]);
-			mx_strdel(&str);
-		}
-	}
-}
-
-void mx_new_l_pwd(t_path_builtin *pwd, char **file) {
-	char *tmp;
-	if (strcmp(file[0], "/") == 0) {
-		mx_strdel(&pwd->pwdL);
-		pwd->pwdL = strdup("/");
-	}
+char *mx_new_l_pwd(char **file, char *path, t_path_builtin *pwd) {
+	if (strcmp(file[0], "/") == 0)
+		path = mx_strdup("/");
 	else {
-		if (file[0][0] == '/')
-			tmp = strdup("/");
-		else 
-			tmp = mx_strjoin(pwd->pwdL, "/");
+        char *tmp = NULL;
+
+        if (file[0][0] != '/')
+            tmp = mx_strjoin(pwd->pwdL, "/");
 		char *tmp1 = mx_strjoin(tmp, file[0]);
 		char **tmp2 = my_strsplit(tmp1, '/');
-	
+
 		mx_strdel(&tmp);
 		mx_strdel(&tmp1);
 		mx_change_path(tmp2);
-		mx_strdel(&pwd->pwdL);
-		mx_fill_logic_path(tmp2, tmp, pwd);
+        if (mx_zero_arr(tmp2))
+            path = mx_make_logic_path(tmp2, tmp, path);
+        else
+            path = mx_strdup("/");
 		mx_del_strarr(&tmp2);
 	}
-	//printf("pwd->pwdL == %s\n", pwd->pwdL);
+    return path;
 }
 
-void mx_cd_logic(char **file, t_builtin_command *command, int *err, t_path_builtin *pwd) {
+char *mx_cd_logic(char **file, t_builtin_command *command, int *err, t_path_builtin *pwd) {
 	char *link_name = mx_strnew(1024);
-	
-	if (*err != 1) {
-		if (!(command->cd->flag_P)) {
-			free(pwd->oldpwd);
-			pwd->oldpwd = strdup(pwd->pwdL);
-		}
-		mx_new_l_pwd(pwd, file);
-	}
+    char *path = NULL;
 
+    path = mx_new_l_pwd(file, path, pwd);
 	if (readlink(file[0], link_name, 1024) >= 0) {
 		if (command->cd->flag_s) {
 			fprintf(stderr, "cd: not a directory: %s\n", file[0]);
 			*err = 1;
+            return NULL;
 		}	
 	}
+    return path;
 }
