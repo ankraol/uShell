@@ -91,6 +91,15 @@ typedef struct s_env {
     struct s_env *next;
 }               t_env;
 
+typedef struct s_env_flag {
+    bool flag_priority;
+    bool flag_u;
+    bool flag_p;
+    bool i_access;
+    bool be_command;
+    bool find_program;
+    char *pa;
+}               t_env_flag;
 
 bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command *command);
 void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac,
@@ -274,4 +283,6 @@ void mx_delete_env(t_env **env_list);
 void mx_push_back_env(t_env **pid_env, char *name);
 int mx_ush_execute_env(char *command, t_builtin_command *my_command,
                        char **new_env, char *path);
+void mx_env_two(char **arg, int ac, t_builtin_command *command);
+void mx_env_one();
 #endif

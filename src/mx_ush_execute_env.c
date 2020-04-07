@@ -47,6 +47,8 @@ int mx_ush_execute_env(char *command, t_builtin_command *my_command,
             //mx_printstr("start");
             // if (execvp(path, argv) == -1)
             //     perror("ushi");
+            if (new_env == NULL)
+                printf("NULL");
             if (execve(path, argv, new_env) == -1)
                 mx_printerr("env: ");
                 mx_printerr(command);

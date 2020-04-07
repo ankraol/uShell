@@ -68,7 +68,8 @@ FILES = main \
 	mx_env_list_find \
 	mx_ush_execute_env \
 	mx_cd_two_args \
-	
+	mx_comand_env_one \
+
 INC_H = $(addprefix "inc/", $(HEADER))
 
 ROOT_C = $(addsuffix ".c", $(FILES))
