@@ -42,14 +42,12 @@ int mx_get_peid_name(char *name, t_pid_name *pid_arr) {
         pid_buf = (*pid_ar)->next;
         free((*pid_ar));
         (*pid_ar) = pid_buf;
-        }
+    }
 }
 
 
 void mx_fg_command(t_builtin_command *command, char **arg, int ac) {
 
-    // for (int i = 0; i < ac; i++)
-    //     printf("%s\n", arg[i]);
     if (ac == 1) {
         if (command->pid_ar != NULL)
             mx_wait_cont(&(command)->pid_ar, command->pid_ar->pid);
