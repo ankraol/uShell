@@ -5,10 +5,11 @@
 
 
 int mx_ush_execute_env(char *command, t_builtin_command *my_command,
-                       char **new_env, char *path) {
+                       char **new_env, char *path_env) {
     pid_t pid;
     pid_t wpid;
     int number = 0;
+    char *path = NULL;
     //t_pid_name *buf = *pid_ar;
 
     // if (mx_substitute(command) == 1) {
@@ -24,7 +25,7 @@ int mx_ush_execute_env(char *command, t_builtin_command *my_command,
         int status;
 
 
-        path = mx_read_env(argv[0], path, my_command);
+        path = mx_read_env(argv[0], path_env, my_command);
         if (path == NULL) {
             mx_printerr("env: ");
             mx_printerr(command);
