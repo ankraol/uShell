@@ -69,6 +69,9 @@ FILES = main \
 	mx_ush_execute_env \
 	mx_cd_two_args \
 	mx_comand_env_one \
+	mx_comand_env_two \
+	mx_comand_env_three \
+	mx_comand_env_four \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
