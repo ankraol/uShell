@@ -29,6 +29,17 @@ typedef struct s_pid_name t_pid_name;
 typedef struct s_env t_env;
 typedef struct s_export t_export;
 typedef struct s_alias t_alias;
+//typedef struct s_history_name t_history_name;
+
+extern char **environ;
+
+typedef struct s_history_name {
+    unsigned char *name;
+    int n_byte;
+    int n_len;
+    struct s_history_name *next;
+    struct s_history_name *previous;
+}                 t_history_name;
 
 struct s_var {
     char *name;
@@ -77,6 +88,9 @@ typedef struct s_builtin_command {
     t_export *export_ar;
     t_alias *alias_list;
     bool unset_path;
+    FILE *file;
+    t_history_name *history;
+    t_history_name *his;
 }               t_builtin_command;
 
 
@@ -157,13 +171,7 @@ struct s_reddir {
     t_path *output;
 };
 
-typedef struct s_history_name {
-    unsigned char *name;
-    int n_byte;
-    int n_len;
-    struct s_history_name *next;
-    struct s_history_name *previous;
-}               t_history_name;
+
 
 typedef struct s_len_name {
     unsigned char ch[4];
@@ -231,23 +239,24 @@ void mx_push_back_history(t_history_name **history, unsigned char *str,
                           t_len_name *len);
 void mx_delete_history(t_history_name **history);
 t_len_name *mx_creat_len();
-void mx_main_cycle_key(t_history_name **history, unsigned char **mystr, 
+void mx_main_cycle_key(t_builtin_command *my_command, unsigned char **mystr, 
                         t_len_name *len, char *buf_first);
 void mx_get_width(int *col);
-void mx_one_cycle(unsigned char **mystr, t_len_name *len, unsigned char *buf);
-void mx_two_cycle(unsigned char **mystr, t_len_name *len);
-void mx_three_cycle(unsigned char **mystr, t_len_name *len);
+void mx_one_cycle(unsigned char **mystr, t_len_name *len, unsigned char *buf,
+                 FILE *file);
+void mx_two_cycle(unsigned char **mystr, t_len_name *len, FILE *file);
+void mx_three_cycle(unsigned char **mystr, t_len_name *len, FILE *file);
 void mx_four_cycle(unsigned char **mystr, t_len_name *len, char **buf_first,
-                   t_history_name **his);
+                   t_builtin_command *my_co);
 void mx_byte_check_add(unsigned char *ch, int *delte_len, int *delta_byte,
                        int start);
 void mx_byte_check_back(unsigned char *str, int *len, int *minus, int n);
-void mx_arrow_left(unsigned char **mystr, t_len_name *len);
-void mx_arrow_right(unsigned char **mystr, t_len_name *len);
+void mx_arrow_left(unsigned char **mystr, t_len_name *len, FILE *file);
+void mx_arrow_right(unsigned char **mystr, t_len_name *len, FILE *file);
 void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
-                 t_history_name **his);
+                t_builtin_command *my_co);
 void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
-                   t_history_name **his);
+                   t_builtin_command *my_co);
 void mx_add_to_str(unsigned char **str, t_len_name **le);
 char *mx_parameter_exp(char *command, t_var *varList);
 void mx_aliasList(char *command, t_alias **aliasList);

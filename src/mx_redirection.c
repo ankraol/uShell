@@ -196,7 +196,7 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
                 }
         }
         else {
-            tasks[0].task = mx_aliasSearch(tasks[0].task, my_command->alias_list);
+           // tasks[0].task = mx_aliasSearch(tasks[0].task, my_command->alias_list);
 
             // printf("TASK -> %s\n", tasks[0].task);
             status = mx_ush_execute(tasks[0].task, pwd, my_command);

@@ -14,13 +14,14 @@ static void exit_func(t_history_name **history, unsigned char *mystr,
     }
 }
 
-unsigned char *mx_read_line(bool *trig, t_history_name **history) {
+unsigned char *mx_read_line(bool *trig, t_builtin_command *my_command) {
     struct termios savetty;
     struct termios tty;
     t_len_name *len = mx_creat_len();
     unsigned char *mystr = (unsigned char *)malloc(sizeof(char) * 1);
     char *buf_first = NULL;
 
+    
     mystr[0] = '\0';
     tcgetattr (0, &tty);
     savetty = tty;
@@ -28,15 +29,29 @@ unsigned char *mx_read_line(bool *trig, t_history_name **history) {
     tty.c_cc[VMIN] = 1;
     tcsetattr (0, TCSAFLUSH, &tty);
     mx_get_width(&(len->col));
-    mx_printstr("u$h> ");
-    mx_main_cycle_key(history, &mystr, len, buf_first);
+    //mx_printstr("u$h> ");
+    //fopen("/dev/tty", "w");
+    fprintf(my_command->file, "u$h> ");
+    fflush(my_command->file);
+    mx_main_cycle_key(my_command, &mystr, len, buf_first);
     tcsetattr (0, TCSAFLUSH, &savetty);
-    exit_func(history, mystr, len, buf_first);
+    exit_func(&(my_command->history), mystr, len, buf_first);
     *trig = len->trig;
     free(len); 
     return mystr;
 }
 
+void mx_mysetenv() {
+    struct passwd *pw = getpwuid(getuid());
+    char *pwd = getcwd(NULL, 0);
+    setenv("HOME", pw->pw_dir, 0);
+    setenv("LOGNAME", getlogin(), 0);
+    setenv("PWD", pwd, 0);
+    setenv("OLDPWD",pwd, 0);
+    setenv("SHLVL", "1", 0);
+    setenv("_", "/usr/bin/env", 0);
+    free(pwd);
+}
 
 static void build_export(t_export **export_list) {
     extern char **environ;
@@ -54,15 +69,15 @@ static void build_export(t_export **export_list) {
 
 void ush_loop(void) {
     unsigned char *line;
-    int status = 2;
-    t_queue **work = NULL;
-    t_queue *p = NULL;
+   int status = 2;
+   t_queue **work = NULL;
+   t_queue *p = NULL;
     bool trig = false;
-    t_history_name *history = NULL;
+
 
     t_path_builtin pwd; 
     t_builtin_command my_command;
-    //extern char **environ;
+
 
     my_command.unset_path = false;
     my_command.var = NULL;
@@ -75,17 +90,20 @@ void ush_loop(void) {
     my_command.cd = (t_cd *)malloc(sizeof(t_cd));
     memset(my_command.cd, 0, sizeof(t_cd));
     (&my_command)->pid_ar = NULL;
+    mx_mysetenv();
 
-    
+    (&my_command)->history = NULL;
+    my_command.his = NULL;
     my_command.export_ar = NULL;
+    my_command.file = fopen("/dev/tty", "w");
     build_export(&(my_command.export_ar));
-    //print_list(&(my_command.export_ar));
+
 
 
 
     while (trig == false) {
         // mx_printstr("u$h> ");
-        line = mx_read_line(&trig, &history);
+        line = mx_read_line(&trig, &my_command);
         if (line[0] != '\0') {
             work = mx_works_queue((char *)line);
             for (int i = 0; work[i]; i++) {
@@ -144,8 +162,8 @@ int main(void) {
     // signal(SIGTTOU, hdl);
     // signal(SIGQUIT, hdl);
 
-    fprintf(stdout, "%d\n", getpid());
-    fflush(stdout);
+   // fprintf(stdout, "%d\n", getpid());
+   // fflush(stdout);
 
     ush_loop();
     //system("leaks -q ush");

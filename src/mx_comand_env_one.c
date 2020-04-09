@@ -73,6 +73,7 @@ void mx_env_two(char **arg, int ac, t_builtin_command *command) {
 
     build_env(&env_list);
     for (i = 1; i < ac; i++) {
+        // printf("*****%s*****\n", arg[i]);
         if (env_flag->find_program)
             break;
         for (int j = 0; arg[i][j] != '\0'; j++) {
