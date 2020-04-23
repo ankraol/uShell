@@ -130,6 +130,21 @@ static t_list *jobsSplit(char *line) {
     return jobs;
 }
 
+void jobs_delete(t_list **jobs) {
+    t_list *p1 = *jobs;
+    t_list *p2 = *jobs;
+
+    for (; p1->next; p1 = p1->next);
+    while (p1 != *jobs) {
+        mx_strdel(&p1->command);
+        for (; p2->next != p1; p2 = p2->next);
+        free(p1);
+        p1 = p2;
+        p2 = *jobs;
+    }
+    free(*jobs);
+}
+
 t_queue **mx_works_queue(char *line) {
     int size = worksCount(line);
     t_list *jobs = jobsSplit(line);
@@ -141,5 +156,7 @@ t_queue **mx_works_queue(char *line) {
         mx_logicOp((*p).command, &list[i]);
     }
     list[size] = NULL;
+    jobs_delete(&jobs);
+    // system("leaks -q ush");
     return list;
 }

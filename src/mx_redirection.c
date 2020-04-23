@@ -61,6 +61,7 @@ static t_reddir *pipe_check(char *command) {
     bool iSsq = false;
     bool iSsub = false;
 
+    system("leaks -q ush");
     for (; command[i] != '\0'; i++) {
         quoteCheck(&iSsq, &iSdq, &iSsub, command, i);
         if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'
@@ -91,6 +92,7 @@ static t_reddir *pipe_check(char *command) {
     // if (tasks[q].output)
         // printf("output - %s\n", tasks[q].output->file);
     tasks[q].op = '-';
+    system("leaks -q ush");
     return tasks;
 }
 
@@ -124,6 +126,42 @@ static bool iSvar(char *task) {
             return false;
     }
     return false;
+}
+
+void deletePath(t_path **path) {
+    t_path *p1 = *path;
+    t_path *p2 = *path;
+
+    for (; p1->next; p1 = p1->next);
+    while (p1 != *path) {
+        for (; p2->next != p1; p2 = p2->next);
+        mx_strdel(&p1->file);
+        free(p1);
+        p1 = p2;
+        p2 = *path;
+    }
+    mx_strdel(&(*path)->file);
+    free(*path);
+    *path = NULL;
+}
+
+void deleteTasks(t_reddir **tasks) {
+    int i = 0;
+
+    for ( ; (*tasks)[i].op != '-'; i++) {
+        mx_strdel(&(*tasks)[i].task);
+        if ((*tasks)[i].output)
+            deletePath(&(*tasks)[i].output);
+        if ((*tasks)[i].input)
+            deletePath(&(*tasks)[i].input);
+    }
+    mx_strdel(&(*tasks)[i].task);
+    if ((*tasks)[i].output)
+        deletePath(&(*tasks)[i].output);
+    if ((*tasks)[i].input)
+        deletePath(&(*tasks)[i].input);
+    free(*tasks);
+    *tasks = NULL;
 }
 
 int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command) {
@@ -203,6 +241,8 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
         }
 
     }
+    deleteTasks(&tasks);
+    // system("leaks -q ush");
     // printAlias(*varList);
     return status;
 }

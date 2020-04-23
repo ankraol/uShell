@@ -106,14 +106,18 @@ void ush_loop(void) {
         line = mx_read_line(&trig, &my_command);
         if (line[0] != '\0') {
             work = mx_works_queue((char *)line);
+            // system("leaks -q ush");
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
                     // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
                     (*p).command = mx_parameter_exp((*p).command, my_command.var);
+                    // system("leaks -q ush");
                     // printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &pwd, &my_command);
+                    system("leaks -q ush");
                     status = mx_redirection((*p).command, &pwd, &my_command);
+                    system("leaks -q ush");
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                         {

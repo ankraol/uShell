@@ -111,5 +111,7 @@ char *mx_substitute(char *command, t_path_builtin *pwd, t_builtin_command *my_co
         // printf("command - %s\n", mainCommand);
         return mainCommand;
     }
+    mx_strdel(&mainCommand);
+    mx_strdel(&line);
     return command;
 }

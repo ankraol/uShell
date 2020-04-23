@@ -122,6 +122,7 @@ void mx_logicOp(char *line, t_queue **list) {
 
     if (extraSpaces(line) == true) {
         newLine = deleteExtraSpaces(line);
+        mx_strdel(&line);
     }
     else
         newLine = line;
@@ -139,5 +140,6 @@ void mx_logicOp(char *line, t_queue **list) {
             }
     }
     pushBack(list, newLine, start, i);
+    mx_strdel(&newLine);
 }
 

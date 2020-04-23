@@ -19,6 +19,7 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
     // if (mx_substitute(command) == 1) {
         // char **argv = mx_tokens(command, ' ');
         printf("FIRST = %s\n", command);
+        // system("leaks -q ush");
         char **argv = mx_tokenSplit(command);
         // mx_substitute(argv);
         printf("ARGUMENTS FOR COMMAND == %s\n", argv[1]);
@@ -38,6 +39,7 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
             mx_printerr("ush: command not found: ");
             mx_printerr(command);
             mx_printerr("\n");
+            mx_del_strarr(&argv);
             return 1;
         }
         
@@ -57,7 +59,7 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
                 perror("ushi");
             // if (execve(path, argv, NULL) == -1)
             //     perror("ushi");
-
+            mx_del_strarr(&argv);
             exit(1);
         }
         else
@@ -67,6 +69,7 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
             wpid = waitpid(pid, &status, WUNTRACED);
             if (WIFEXITED(status)) {
                 tcsetpgrp(1, getpid());
+                mx_del_strarr(&argv);
                 return 0;
             }
             else if (WIFSTOPPED(status)) {//ctrl+Z
@@ -77,6 +80,7 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
                 printf("%d\n", number);
                 mx_push_back_pid(&my_command->pid_ar, wpid, argv[0], number);
                 tcsetpgrp(1, getpid());
+                mx_del_strarr(&argv);
                 return 1;
             //    sleep(2);
             //    kill (wpid, SIGCONT);
@@ -99,13 +103,16 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
             //     //printf("%d", WTERMSIG(status));
             //     mx_printstr("status<0");
             tcsetpgrp(1, getpid());
+                mx_del_strarr(&argv);
                  return status;
              }
         // }
 
     }
     tcsetpgrp(1, getpid());
+    mx_del_strarr(&argv);
     return 0;
     }
+    mx_del_strarr(&argv);
     return 0;
 }
