@@ -39,7 +39,7 @@ static char *tokenCut(char *command, int start, int end) {
     bool dQ = false;
 
     for (int i = start; i < end; i++) {
-        if (command[i] == 92 && command[i + 1] == 92)
+        if (command[i] == 92 && command[i + 1] == 92 && sQ == false && dQ == false)
             for (int c = 0; command[i + 1] == 92 && c < 4; i++, c++);
         else if (command[i] == 34 && command[i - 1] != 92 && sQ == false) {
             // printf("DOUBLE QUOTES HERE %d\n", i);
