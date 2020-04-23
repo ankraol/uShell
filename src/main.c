@@ -107,7 +107,7 @@ void ush_loop(void) {
             // printAlias(aliasList);
         }
         free(line);
-        //system("leaks -q ush");
+        // system("leaks -q ush");
     }
 }
 

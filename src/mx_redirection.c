@@ -128,7 +128,7 @@ static bool iSvar(char *task) {
 
 int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command) {
 
-    // printf("redirection -> %s\n", command);
+    printf("redirection -> %s\n", command);
     t_reddir *tasks = pipe_check(command);
     int status = 2;
     int input;
@@ -196,9 +196,9 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
                 }
         }
         else {
-            tasks[0].task = mx_aliasSearch(tasks[0].task, my_command->alias_list);
+            // tasks[0].task = mx_aliasSearch(tasks[0].task, my_command->alias_list);
 
-            // printf("TASK -> %s\n", tasks[0].task);
+            printf("TASK -> %s\n", tasks[0].task);
             status = mx_ush_execute(tasks[0].task, pwd, my_command);
         }
 
