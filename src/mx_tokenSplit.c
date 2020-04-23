@@ -38,18 +38,12 @@ static char *tokenCut(char *command, int start, int end) {
     bool sQ = false;
     bool dQ = false;
 
-
-    // printf("START HERE - %c %c %c \n", command[start], command[start + 1], command[start + 2]);
-    // if (command[start] == 34 || command[start] == 39)
-        // start += 1;
-    // if (command[end - 1] == 34 || command[end - 1] == 39)
-        // end -= 1;
     for (int i = start; i < end; i++) {
         if (command[i] == 92 && command[i + 1] == 92)
             for (int c = 0; command[i + 1] == 92 && c < 4; i++, c++);
         else if (command[i] == 34 && command[i - 1] != 92 && sQ == false) {
             // printf("DOUBLE QUOTES HERE %d\n", i);
-            i++;
+            //i++;
             if (dQ == false)
                 dQ = true;
             else
@@ -57,7 +51,7 @@ static char *tokenCut(char *command, int start, int end) {
         }
         else if (command[i] == 39 && dQ == false) {
             // printf("SINGLE QUOTES HERE %d\n", i);
-            i++;
+            //i++;
             if (sQ == false)
                 sQ = true;
             else
@@ -81,7 +75,7 @@ static char *tokenCut(char *command, int start, int end) {
     }
     token[j] = '\0';
     token = realloc(token, strlen(token) + 1);
-    // printf("THAT`S WHAT WE HAVE - %s\n", token);
+    printf("THAT`S WHAT WE HAVE - %s\n", token);
     return token;
 }
 
@@ -100,13 +94,13 @@ char **mx_tokenSplit(char *command) {
             quotesCheck(&iSsq, &iSdq, command, i);
         else if (command[i] == ' ' && iSsq == false && iSdq == false) {
             tokens[q] = tokenCut(command, start, i);
-            // printf("TOKEN %d - %s\n",q + 1,  tokens[q]);
+            printf("TOKEN %d - %s\n",q + 1,  tokens[q]);
             start = i + 1;
             q++;
         }
     }
     tokens[q] = tokenCut(command, start, i);
-    // printf("TOKEN %d - %s\n",q + 1,  tokens[q]);
+    printf("TOKEN %d - %s\n",q + 1,  tokens[q]);
     tokens[q + 1] = NULL;
     return tokens;
 }
