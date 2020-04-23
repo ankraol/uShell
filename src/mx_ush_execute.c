@@ -28,7 +28,8 @@ int mx_ush_execute(char *command, t_path_builtin *pwd, t_builtin_command *my_com
         //printf("PATH == %s\n", path);
         int status;
 
-        
+        for(int i = 0; argv[i] != NULL; i++)
+            printf("----%s---\n", argv[i]);
         bool builtin = mx_valid_command(argv, mx_count_elem(argv), pwd, my_command);
         
         if (!builtin) {

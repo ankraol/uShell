@@ -9,10 +9,7 @@ void mx_struct_flag_cd(char *av, t_builtin_command *command, char *flag, int *er
 		else if (av[j] > 47 && av[j] < 58)
 			fprintf(stderr, "cd: no such entry in dir stack\n");
 		else {
-			fprintf(stderr, "cd: no such file or directory: ");
-			char c = av[j];
-			fprintf(stderr, "%c" ,c);
-			fprintf(stderr, "\n");
+			fprintf(stderr, "cd: no such file or directory: -%c\n", av[j]);
 			*err = 1;
 		}
 	}
@@ -27,13 +24,13 @@ char **mx_create_file(char **av, int ac, int count_files, char **file) {
 		if (flag_priority == true) {			
 			if (av[i][0] != '-') {
 				flag_priority = false;
-				file[g++] = strdup(av[i]);
+				file[g++] = mx_strdup(av[i]);
 			}
 			if (av[i][0] == '-' && av[i][1] == '-')
 				flag_priority = false;
 		}
 		else if (!flag_priority) {
-			file[g++] = strdup(av[i]);
+			file[g++] = mx_strdup(av[i]);
 			flag_priority = false;
 		}
 	}
@@ -48,64 +45,57 @@ void mx_swap_str(char **str1, char **str2) {
 	*str2 = tmp;
 }
 
-void mx_command_cd(char **file, int *err, t_builtin_command *command, t_path_builtin *pwd) {
-	if (command->cd->arg_min) {
-		if (command->cd->flag_P) {
-			mx_swap_str(&pwd->oldpwd, &pwd->pwdP);
-			printf("%s\n", pwd->pwdP);
-		}
-		else {
-			mx_swap_str(&pwd->oldpwd, &pwd->pwdL);
-			printf("%s\n", pwd->pwdL);
-		}
-	}
-	 if (chdir(pwd->pwdL) != 0) {
-		fprintf(stderr, "cd: no such file or directory: %s\n", file[0]);
-		*err = 1;
-	}
-	if (!(command->cd->arg_min)) {
-		if (command->cd->flag_P) {
-			free(pwd->oldpwd);
-			pwd->oldpwd = strdup(pwd->pwdP);
-		}
-		free(pwd->pwdP);
-		pwd->pwdP = mx_strnew(PATH_MAX);
-		getcwd(pwd->pwdP, PATH_MAX);
-	}
+void mx_home(t_builtin_command *command, t_path_builtin *pwd) {
+    struct passwd *pw = getpwuid(getuid());
+
+    if (command->cd->flag_P) {
+        mx_strdel(&pwd->oldpwd);
+        pwd->oldpwd = mx_strdup(pwd->pwdP);
+    }
+    else {
+        mx_strdel(&pwd->oldpwd);
+        pwd->oldpwd = mx_strdup(pwd->pwdL);
+    }
+    mx_strdel(&pwd->pwdP);
+    pwd->pwdP = mx_strdup(pw->pw_dir);
+    mx_strdel(&pwd->pwdL);
+    pwd->pwdL = mx_strdup(pw->pw_dir);
+    chdir(pw->pw_dir);
+}
+
+void mx_cd_flag_min(t_path_builtin *pwd, t_builtin_command *command) {
+    chdir(pwd->oldpwd);
+    if (command->cd->flag_P) {
+        mx_swap_str(&pwd->oldpwd, &pwd->pwdP);
+        pwd->pwdP = getcwd(NULL, 0);
+        mx_strdel(&pwd->pwdL);
+        pwd->pwdL = mx_strdup(pwd->pwdP);
+    }
+    else {
+        mx_swap_str(&pwd->oldpwd, &pwd->pwdL);
+        mx_strdel(&pwd->pwdP);
+        pwd->pwdP = getcwd(NULL, 0);
+    }
 }
 
 void mx_falid_files(char **file, int count_files, t_builtin_command *command,
 	t_path_builtin *pwd, int *err) {
 
-	if (count_files > 2) {
-		fprintf(stderr, "cd: too many arguments\n");
-		*err = 1;
-	}
-	else if (count_files == 2) {
-		fprintf(stderr, "cd: string not in pwd: ");
-		fprintf(stderr, "%s\n", file[0]);
-		*err = 1;
-	}
-	else if (!(command->cd->arg_min) && (count_files == 0 || strcmp(file[0], "~") == 0)) {
-		if (command->cd->flag_P) {
-			free(pwd->oldpwd);
-			pwd->oldpwd = strdup(pwd->pwdP);
-		}
-		else {
-			free(pwd->oldpwd);
-			pwd->oldpwd = strdup(pwd->pwdL);
-		}
-		free(pwd->pwdP);
-		pwd->pwdP = strdup(getenv("HOME"));
-		free(pwd->pwdL);
-		pwd->pwdL = strdup(getenv("HOME"));
-		chdir(getenv("HOME"));
-	}
-	else if (command->cd->arg_min)
-		mx_command_cd(&pwd->oldpwd, err, command, pwd);
+    if (count_files > 2) {
+        fprintf(stderr, "cd: too many arguments\n");
+        *err = 1;
+    }
+    else if (count_files == 2)
+        mx_cd_two_args(file, command, pwd, err);
+    else if (command->cd->arg_min)
+        mx_cd_flag_min(pwd, command);
+    else if (!(command->cd->arg_min) && (count_files == 0 || strcmp(file[0], "~") == 0))
+        mx_home(command, pwd);
 	else {
-		mx_cd_logic(file, command, err, pwd);
-		mx_command_cd(file, err, command, pwd);
+		char *path = mx_cd_logic(file, command, err, pwd);
+		printf("***************PATH == %s\n",path);
+		if (path != NULL)
+            mx_change_pwd(path, pwd, command, err, file);
 	}
 }
 
@@ -115,8 +105,7 @@ void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, t_path_bui
 	int count_files = 0;
 	char **file = NULL;
 
-	// command->cd = (t_cd *)malloc(sizeof(t_cd));
-	// memset(command->cd, 0, sizeof(t_cd));
+	memset(command->cd, 0, sizeof(t_cd));
 	for(int i = 1; i < ac; i++) {
 		if (flag_priority == true) {
 			if (arg[i][0] == '-' && arg[i][1] != '-')
