@@ -61,7 +61,7 @@ static t_reddir *pipe_check(char *command) {
     bool iSsq = false;
     bool iSsub = false;
 
-    system("leaks -q ush");
+    // system("leaks -q ush");
     for (; command[i] != '\0'; i++) {
         quoteCheck(&iSsq, &iSdq, &iSsub, command, i);
         if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'
@@ -92,7 +92,7 @@ static t_reddir *pipe_check(char *command) {
     // if (tasks[q].output)
         // printf("output - %s\n", tasks[q].output->file);
     tasks[q].op = '-';
-    system("leaks -q ush");
+    // system("leaks -q ush");
     return tasks;
 }
 

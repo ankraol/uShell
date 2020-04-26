@@ -39,11 +39,11 @@ static char *tokenCut(char *command, int start, int end) {
     bool dQ = false;
 
     for (int i = start; i < end; i++) {
-        if (command[i] == 92 && command[i + 1] == 92 && sQ == false && dQ == false)
+        if (command[i] == 92 && command[i + 1] == 92)
             for (int c = 0; command[i + 1] == 92 && c < 4; i++, c++);
         else if (command[i] == 34 && command[i - 1] != 92 && sQ == false) {
             // printf("DOUBLE QUOTES HERE %d\n", i);
-            //i++;
+            i++;
             if (dQ == false)
                 dQ = true;
             else
@@ -51,7 +51,7 @@ static char *tokenCut(char *command, int start, int end) {
         }
         else if (command[i] == 39 && dQ == false) {
             // printf("SINGLE QUOTES HERE %d\n", i);
-            //i++;
+            i++;
             if (sQ == false)
                 sQ = true;
             else
