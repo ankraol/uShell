@@ -1,5 +1,10 @@
 #include "header.h"
 
+ void mx_set_signal() {
+    signal(SIGTTIN, SIG_DFL);
+    signal(SIGTTOU, SIG_DFL);
+    setpgid(0, 0);
+}
 
 int mx_count_elem(char **av) {
     int i = 0;

@@ -41,7 +41,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_
             }
         }
     }
-    else if (command[pos].op == '|'){
+    else if (command[pos].op == '|') {
         if (command[pos].output) {
             // printf("EXTERNAL OUTPUT && PIPE\n");
             mx_fd_change(command, pos, in_fd, extInput, my_command);

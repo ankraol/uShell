@@ -23,6 +23,7 @@
 
 
 
+
 /*************************************************************************/
 typedef struct s_var t_var;
 typedef struct s_pid_name t_pid_name;
@@ -301,4 +302,5 @@ bool mx_flag_command(char *var, int j, t_env_flag *env_flag,
 bool mx_glag_p_u(t_env **env_list, t_env_flag *env_flag, char **path, 
                 char *var);
 char *mx_no_path(char *file, t_builtin_command *my_command);
+void mx_set_signal();
 #endif

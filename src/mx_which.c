@@ -1,6 +1,6 @@
 #include "header.h"
 
-bool mx_is_commad(char *fullname, int flags) {
+static bool mx_is_commad(char *fullname, int flags) {
     struct stat st;
 
     if (stat(fullname, &st) != -1) { // finded
@@ -47,7 +47,7 @@ static int get_flags(int *i, char **argv) {
 1 - return true;
 0 - dont return;
 */
-static int mx_check_buildin(char *command, int flags, bool *finded) {
+static int check_buildin(char *command, int flags, bool *finded) {
     if (mx_is_buildin(command)) {
         if ((flags & 2) == 2)
             return 1;
@@ -64,18 +64,18 @@ static bool check_command(char *command, char **pathes, int flags) {
     char *fullname = 0;
     bool finded = false;
 
-    if (mx_check_buildin(command, flags, &finded) == 1)
+    if (check_buildin(command, flags, &finded) == 1)
         return true;
     if (command[0] == '/') {
         if (mx_is_commad(mx_strdup(command), flags))
-                return true;
+            return true;
     }
     else {
-        for(int i = 0; pathes[i]; i++) {
+        if (pathes == NULL)
+            return false;
+        for (int i = 0; pathes[i]; i++) {
             fullname = mx_strjoin2(mx_strjoin(pathes[i], "/"), command);
             if (mx_is_commad(fullname, flags)) {
-                if ((flags & 1) == 0)
-                    return true;
                 finded = true;
             }
         }
@@ -101,18 +101,21 @@ static bool check_commands(char **commands, char** pathes, int start_index,
 }
 
 void mx_which(char **argv, int err) {
-    //char *path = getenv("PATH");
-    char **pathes = mx_strsplit(getenv("PATH"), ':');
+    char **pathes = NULL;
     int i_args = 0;
     int flags = get_flags(&i_args, argv);
     int finded = false;
-    
+
+    if (getenv("PATH") != NULL)
+        pathes = mx_strsplit(getenv("PATH"), ':');
     if (flags == -1) {
-        mx_del_strarr(&pathes);
+        if (pathes != NULL)
+            mx_del_strarr(&pathes);
         err = 0;
         return;
     }
     finded = check_commands(argv, pathes, i_args, flags);
     finded ? (err = 0) : (err = 1);
-    mx_del_strarr(&pathes);
+    if (pathes != NULL)
+        mx_del_strarr(&pathes);
 }
