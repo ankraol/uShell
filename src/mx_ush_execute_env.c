@@ -1,107 +1,71 @@
 #include "header.h"
 
 
+static void del_all(char ***argv, char **path) {
+    if (*argv != NULL)
+        mx_del_strarr(argv);
+    if (*path != NULL)
+        mx_strdel(path);
+}
+
+static void mistake(char *command, char ***argv, char **path) {
+    mx_printerr("env: ");
+    mx_printerr(command);
+    mx_printerr(": No such file or directory\n");
+    del_all(argv, path);
+}
+
+static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
+                    char **argv) {
+    int number = 0;
+    pid_t wpid;
+    int status = 0;
+
+    setpgid(pid, pid);
+    tcsetpgrp(1, pid);
+    wpid = waitpid(pid, &status, WUNTRACED);
+    if (WIFEXITED(status))
+        *val_ret = 0;
+    else if (WIFSTOPPED(status)) {//ctrl+Z
+        number = mx_get_pid_num(&my_command->pid_ar);
+        mx_push_back_pid(&my_command->pid_ar, wpid, argv[0], number);
+        *val_ret = 146;
+    }
+    else if (WTERMSIG(status)) //ctrl+C
+        *val_ret = 130;
+    else if (status != 0)
+        *val_ret = 1;
+}
 
 
+static bool path_check(char **path, char *command, char ***argv) {
+    if (*path == NULL) {
+        mistake(command, argv, path);
+        return true;
+    }
+    return false;
+}
 
 int mx_ush_execute_env(char *command, t_builtin_command *my_command,
                        char **new_env, char *path_env) {
     pid_t pid;
-    pid_t wpid;
-    int number = 0;
-    char *path = NULL;
-    //t_pid_name *buf = *pid_ar;
+    char **argv = mx_tokenSplit(command);
+    int val_ret = 0;
+    char *path = mx_read_env(argv[0], path_env, my_command);
 
-    // if (mx_substitute(command) == 1) {
-        // char **argv = mx_tokens(command, ' ');
-        printf("FIRST = %s\n", command);
-        char **argv = mx_tokenSplit(command);
-        // mx_substitute(argv);
-        printf("ARGUMENTS FOR COMMAND == %s\n", argv[1]);
-        printf("COMMAND == %s\n", argv[0]);
-        
-        printf("Checkk\n");
-        //printf("PATH == %s\n", path);
-        int status;
-
-
-        path = mx_read_env(argv[0], path_env, my_command);
-        if (path == NULL) {
-            mx_printerr("env: ");
-            mx_printerr(command);
-            mx_printerr(": No such file or directory\n");
-;
+    if (path_check(&path, command, &argv))
+        return 1;
+    pid = fork();
+    if (pid == 0) {
+        mx_set_signal();
+        if (execve(path, argv, new_env) == -1) {
+            mistake(command, &argv, &path);
             return 1;
         }
-        
-        pid = fork();
-        // mx_push_back_pid(pid_ar, getpid());
-            //  fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-            //         fflush(stdout);
-        if (pid == 0) {
-            signal(SIGTTIN, SIG_DFL);
-            signal(SIGTTOU, SIG_DFL);
-            setpgid(0, 0);
-            //mx_push_back_pid(pid_ar, getpid());
-           // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-           //     fflush(stdout);
-            //mx_printstr("start");
-            // if (execvp(path, argv) == -1)
-            //     perror("ushi");
-            if (new_env == NULL)
-                printf("NULL");
-            if (execve(path, argv, new_env) == -1)
-                mx_printerr("env: ");
-                mx_printerr(command);
-                mx_printerr(": No such file or directory\n");
-
-            exit(1);
-        }
-        else
-        {
-            setpgid(pid, pid);
-            tcsetpgrp(1, pid);
-            wpid = waitpid(pid, &status, WUNTRACED);
-            if (WIFEXITED(status)) {
-                tcsetpgrp(1, getpid());
-                return 0;
-            }
-            else if (WIFSTOPPED(status)) {//ctrl+Z
-                 //fprintf(stdout, "%d\n", wpid);
-                //fflush(stdout);
-                mx_printstr("and now stop");
-                number = mx_get_pid_num(&my_command->pid_ar);
-                printf("%d\n", number);
-                mx_push_back_pid(&my_command->pid_ar, wpid, argv[0], number);
-                tcsetpgrp(1, getpid());
-                return 1;
-            //    sleep(2);
-            //    kill (wpid, SIGCONT);
-            //    wpid = waitpid(pid, &status, WUNTRACED);
-            // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-            //     fflush(stdout);
-                // (*pid_ar) = (*pid_ar)->next;
-                // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-                // fflush(stdout);
-                // mx_printstr("and now stop2");
-            }
-             else if (WTERMSIG(status)) { //ctrl+C
-                 mx_printstr("and now term");
-                 sleep(2);
-                 tcsetpgrp(1, getpid());
-            //     fprintf(stdout, "%d\n", getpid());
-            //     fflush(stdout);
-             }
-             if (status != 0) {
-            //     //printf("%d", WTERMSIG(status));
-            //     mx_printstr("status<0");
-            tcsetpgrp(1, getpid());
-                 return status;
-             }
-        // }
-
     }
+    else
+        parent(pid, &val_ret, my_command, argv);
     tcsetpgrp(1, getpid());
-    return 0;
-
+    del_all(&argv, &path);
+    return val_ret;
 }
