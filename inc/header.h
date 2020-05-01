@@ -92,6 +92,7 @@ typedef struct s_builtin_command {
     FILE *file;
     t_history_name *history;
     t_history_name *his;
+    bool execute;
 }               t_builtin_command;
 
 
@@ -114,6 +115,7 @@ typedef struct s_env_flag {
     bool be_command;
     bool find_program;
     char *pa;
+    int index;
 }               t_env_flag;
 
 bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command *command);
@@ -286,21 +288,22 @@ void mx_delete_export(t_export **export_list);
 void mx_command_export(t_builtin_command *command, char **arg, int ac);
 bool mx_find_in_export(char *str, t_export **export_list, char *change);
 void mx_push_back_var(t_var **var_list, char *name, char *val);
-void mx_valid_flag_env(char **arg, int ac, t_builtin_command *command);
+void mx_valid_flag_env(char **arg, int ac, t_builtin_command *command, t_path_builtin *pwd);
 void mx_unset_command(t_builtin_command *command, int ac, char **arg);
 void mx_variable_out(char *command, t_env **list);
 void mx_delete_env(t_env **env_list);
 void mx_push_back_env(t_env **pid_env, char *name);
 int mx_ush_execute_env(char *command, t_builtin_command *my_command,
-                       char **new_env, char *path);
-void mx_env_two(char **arg, int ac, t_builtin_command *command);
+                       char **new_env, char *path, t_path_builtin *pwd);
+void mx_env_two(char **arg, int ac, t_builtin_command *command, t_path_builtin *pwd);
 void mx_env_one();
 void mx_execute_command(t_builtin_command *command, t_env **env_list, 
-                        t_env_flag *env_flag, char *program);
+                        t_env_flag *env_flag, char **program, t_path_builtin *pwd);
 bool mx_flag_command(char *var, int j, t_env_flag *env_flag, 
                     t_env **env_list);
 bool mx_glag_p_u(t_env **env_list, t_env_flag *env_flag, char **path, 
                 char *var);
 char *mx_no_path(char *file, t_builtin_command *my_command);
 void mx_set_signal();
+int mx_count_elem(char **av);
 #endif

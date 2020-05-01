@@ -12,38 +12,48 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_
     char **task = NULL;
     char *path = NULL;
     pid_t pid;
+    pid_t wpid;
+    int val_ret = 0;
+    int number = 0;
 
 
-    // fprintf(stdout, "%s\n", command[pos].task);
     if (command[pos].op == '-') {
         if (command[pos].output) {
-            // printf("EXTERNAL OUTPUT && NO TERMINAL OUT\n");
             mx_fd_change(command, pos, in_fd, extInput, my_command);
         }
         else {
-            // printf("TERMINAL OUT\n");
             pid = fork();
             if (pid == 0) {
                 close(0);
                 dup(in_fd);
                 close(in_fd);
-                // redirect(in_fd, 0);
                 task = mx_strsplit(command[pos].task, ' ');
                 path = mx_read_env(task[0], NULL, my_command);
                 if (execvp(path, task) == -1) {
-                    // printf("TASK -> %s\n", task[0]);
                     perror("psh");
                 }
             }
             else
             {
-                status = waitpid(pid, &status, WUNTRACED);
+                wpid = waitpid(pid, &status, WUNTRACED);
+                if (WIFEXITED(status))
+                    val_ret = 0;
+                else if (WIFSTOPPED(status)) {//ctrl+Z
+                    number = mx_get_pid_num(&my_command->pid_ar);
+                    mx_push_back_pid(&my_command->pid_ar, wpid, "test", number);
+                    val_ret = 146;
+                }
+                else if (WTERMSIG(status)) {//ctrl+C
+                    val_ret = 130;
+                    mx_printstr("\n");
+                }
+                else if (status != 0)
+                    val_ret = 1;
             }
         }
     }
     else if (command[pos].op == '|') {
         if (command[pos].output) {
-            // printf("EXTERNAL OUTPUT && PIPE\n");
             mx_fd_change(command, pos, in_fd, extInput, my_command);
         }
         int fd[2];
@@ -55,7 +65,6 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_
             task = mx_strsplit(command[pos].task, ' ');
             path = mx_read_env(task[0], NULL, my_command);
             if (execvp(path, task) == -1) {
-                // printf("TASK -> %s\n", task[0]);
                 perror("ush");
             }
         }

@@ -19,8 +19,6 @@ char *mx_strjoin_two( char *s1,  char *s2) {
     else if (!s1) {
         res = mx_strnew(mx_strlen(s2));
         res = mx_strcat(res, s2);
-        //mx_strdel(&s2);
-       
     }
     else if (!s2) {
         res = mx_strnew(mx_strlen(s1));

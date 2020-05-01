@@ -13,7 +13,7 @@ static bool be_find_comad(char *var, int j, t_env_flag *env_flag,
         printf("FIND_COMMAND--%d\n", j);
         return true;
     }
-    if (var[j+1] == '\0' && !(env_flag->flag_u) 
+    if (var[j+1] == '\0' && !(env_flag->flag_u)
         && !(env_flag->flag_p) && env_flag->flag_priority) {
             env_flag->flag_priority = false;
             printf("Flag_priority\n");

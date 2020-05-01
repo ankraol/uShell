@@ -33,24 +33,32 @@ static char **create_env_arr(t_env *export_list) {
     return arr;
 }
 
+static char *build_prog(int index, char **arr) {
+    char *prog  = NULL;
 
+    if (arr[index+1] != NULL) {
+        for (int i = index; arr[i] != NULL; i++) {
+            if (prog != NULL)
+                prog = mx_strjoin_two(prog, " ");
+            prog = mx_strjoin_two(prog, arr[i]);
+        }
+    }
+    else 
+        prog = strdup(arr[index]);
+    return prog;
+}
 void mx_execute_command(t_builtin_command *command, t_env **env_list, 
-                        t_env_flag *env_flag, char *program) {
+                        t_env_flag *env_flag, char **program, t_path_builtin *pwd) {
     char **new_env = NULL;
+    char *prog = NULL;
     
     if (!(env_flag->find_program))
         print_list(*env_list);
     else {
-        printf("befor_arr\n");
         new_env = create_env_arr(*env_list);
-        if (new_env == NULL)
-            printf("NULL");
-        // for (int v= 0; new_env[v] != NULL; v++)
-        //     printf("**%s**\n", new_env[v]);
-        printf("THIS is PROGRAM - %s\n", program);
-        if (env_flag->pa != NULL)
-            printf("%s\n", env_flag->pa );
-        mx_ush_execute_env(program, command, new_env, env_flag->pa );
+        command->execute = false;
+        prog = build_prog(env_flag->index, program);
+        mx_ush_execute_env(prog, command, new_env, env_flag->pa, pwd);
     }
     mx_delete_env(env_list);
     if (env_flag->pa != NULL)
@@ -58,4 +66,6 @@ void mx_execute_command(t_builtin_command *command, t_env **env_list,
     free(env_flag);
     if (new_env != NULL)
         mx_del_strarr(&new_env);
+    if (prog != NULL)
+        mx_strdel(&prog);
 }

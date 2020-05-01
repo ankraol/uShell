@@ -9,7 +9,7 @@ static void exit_func(t_history_name **history, unsigned char *mystr,
         if (malloc_size(mystr))
             free(mystr);
         free(len);
-        //system("leaks -q ush");
+        system("leaks -q ush");
         exit(0);
     }
 }
@@ -29,8 +29,6 @@ unsigned char *mx_read_line(bool *trig, t_builtin_command *my_command) {
     tty.c_cc[VMIN] = 1;
     tcsetattr (0, TCSAFLUSH, &tty);
     mx_get_width(&(len->col));
-    //mx_printstr("u$h> ");
-    //fopen("/dev/tty", "w");
     fprintf(my_command->file, "u$h> ");
     fflush(my_command->file);
     mx_main_cycle_key(my_command, &mystr, len, buf_first);
@@ -102,7 +100,7 @@ void ush_loop(void) {
 
 
     while (trig == false) {
-        // mx_printstr("u$h> ");
+ 
         line = mx_read_line(&trig, &my_command);
         if (line[0] != '\0') {
             work = mx_works_queue((char *)line);

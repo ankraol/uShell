@@ -230,14 +230,16 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
                 && tasks[0].task[2] == 'p' && tasks[0].task[3] == 'o'
                 && tasks[0].task[4] == 'r' && tasks[0].task[5] == 't')
                 {
-                    status = mx_ush_execute(tasks[0].task, pwd, my_command);
+                    my_command->execute = true;
+                    status = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL, pwd);
                 }
         }
         else {
            // tasks[0].task = mx_aliasSearch(tasks[0].task, my_command->alias_list);
 
             printf("TASK -> %s\n", tasks[0].task);
-            status = mx_ush_execute(tasks[0].task, pwd, my_command);
+            my_command->execute = true;
+            status = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL, pwd);
         }
 
     }
