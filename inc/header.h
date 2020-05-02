@@ -78,7 +78,14 @@ typedef struct s_echo {
     bool flag_E;
 }               t_echo;
 
+typedef struct s_path_builtin {
+    char *pwdP;
+    char *pwdL;
+    char *oldpwd;
+}               t_path_builtin;
+
 typedef struct s_builtin_command {
+    t_path_builtin *path;
     t_cd *cd;
     t_env *env;
     t_which *which;
@@ -93,14 +100,8 @@ typedef struct s_builtin_command {
     t_history_name *history;
     t_history_name *his;
     bool execute;
+    char *path_for_ex;
 }               t_builtin_command;
-
-
-typedef struct s_path_builtin {
-    char *pwdP;
-    char *pwdL;
-    char *oldpwd;
-}               t_path_builtin;
 
 typedef struct s_env {
     char *name;
@@ -118,19 +119,17 @@ typedef struct s_env_flag {
     int index;
 }               t_env_flag;
 
-bool mx_valid_command(char **arg, int ac, t_path_builtin *pwd, t_builtin_command *command);
-void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac,
-    t_path_builtin *pwd, int *err);
-char *mx_cd_logic(char **file, t_builtin_command *command, int *err, t_path_builtin *pwd);
-void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err,
-    t_path_builtin *pwd);
+int mx_valid_command(char **arg, int ac, t_builtin_command *command);
+void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, int *err);
+char *mx_cd_logic(char **file, t_builtin_command *command, int *err);
+void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err);
 char *mx_make_logic_path(char **tmp2, char *tmp, char *tmp1);
 void mx_valid_flag_echo(t_builtin_command *command, char **arg, int ac);
 void mx_change_path(char **tmp2);
 char **my_strsplit(const char *s, char c);
-void mx_cd_two_args(char **file, t_builtin_command *command, t_path_builtin *pwd, int *err);
+void mx_cd_two_args(char **file, t_builtin_command *command, int *err);
 bool mx_zero_arr(char **str);
-void mx_change_pwd(char *tmp1, t_path_builtin *pwd, t_builtin_command *command, int *err, char **file);
+void mx_change_pwd(char *tmp1, t_builtin_command *command, int *err, char **file);
 int mx_str_count(char **str);
 
 /*************************************************************************/
@@ -218,11 +217,11 @@ char *mx_strcat(char *restrict s1, const char *restrict s2);
 void mx_strdel(char **str);
 
 
-int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command);
+int mx_redirection(char *command, t_builtin_command *my_command);
 
 
 int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_command *my_command);
-int mx_ush_execute(char *argv, t_path_builtin *pwd, t_builtin_command *my_command);
+int mx_ush_execute(char *argv, t_builtin_command *my_command);
 
 
 char *mx_itoa(int number);
@@ -235,7 +234,7 @@ t_queue **mx_works_queue(char *line);
 char **mx_tokens(char *line, char sp);
 int mx_strcmp(const char *s1, unsigned const char *s2);
 void mx_logicOp(char *line, t_queue **list);
-char *mx_substitute(char *command,t_path_builtin *pwd, t_builtin_command *my_command);
+char *mx_substitute(char *command, t_builtin_command *my_command);
 
 
 void mx_push_back_history(t_history_name **history, unsigned char *str,
@@ -288,22 +287,26 @@ void mx_delete_export(t_export **export_list);
 void mx_command_export(t_builtin_command *command, char **arg, int ac);
 bool mx_find_in_export(char *str, t_export **export_list, char *change);
 void mx_push_back_var(t_var **var_list, char *name, char *val);
-void mx_valid_flag_env(char **arg, int ac, t_builtin_command *command, t_path_builtin *pwd);
+void mx_valid_flag_env(char **arg, int ac, t_builtin_command *command);
 void mx_unset_command(t_builtin_command *command, int ac, char **arg);
 void mx_variable_out(char *command, t_env **list);
 void mx_delete_env(t_env **env_list);
 void mx_push_back_env(t_env **pid_env, char *name);
 int mx_ush_execute_env(char *command, t_builtin_command *my_command,
-                       char **new_env, char *path, t_path_builtin *pwd);
-void mx_env_two(char **arg, int ac, t_builtin_command *command, t_path_builtin *pwd);
+                       char **new_env, char *path);
+void mx_env_two(char **arg, int ac, t_builtin_command *command);
 void mx_env_one();
-void mx_execute_command(t_builtin_command *command, t_env **env_list, 
-                        t_env_flag *env_flag, char **program, t_path_builtin *pwd);
+void mx_execute_command(t_builtin_command *command, t_env **env_list,
+                        t_env_flag *env_flag, char **program);
 bool mx_flag_command(char *var, int j, t_env_flag *env_flag, 
                     t_env **env_list);
 bool mx_glag_p_u(t_env **env_list, t_env_flag *env_flag, char **path, 
                 char *var);
 char *mx_no_path(char *file, t_builtin_command *my_command);
 void mx_set_signal();
-int mx_count_elem(char **av);
+int mx_count_elem(char **arr);
+void mx_mistake(char *command, char ***argv, char **path);
+int mx_child(char *command, t_builtin_command *my_command, char **new_env,
+             char ***argv);
+void mx_del_all(char ***argv, char **path);
 #endif

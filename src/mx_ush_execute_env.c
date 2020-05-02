@@ -1,7 +1,7 @@
 #include "header.h"
 
 
-static void del_all(char ***argv, char **path) {
+void mx_del_all(char ***argv, char **path) {
     if (*argv != NULL)
         mx_del_strarr(argv);
     if (*path != NULL)
@@ -11,11 +11,11 @@ static void del_all(char ***argv, char **path) {
 
 
 
-static void mistake(char *command, char ***argv, char **path) {
+void mx_mistake(char *command, char ***argv, char **path) {
     mx_printerr("env: ");
     mx_printerr(command);
     mx_printerr(": No such file or directory\n");
-    del_all(argv, path);
+    mx_del_all(argv, path);
 }
 
 static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
@@ -67,50 +67,36 @@ static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
 
 static bool path_check(char **path, char *command, char ***argv) {
     if (*path == NULL) {
-        mistake(command, argv, path);
+        mx_mistake(command, argv, path);
         return true;
     }
     return false;
 }
+void last_func(char ***argv, char **str) {
+    tcsetpgrp(1, getpid());
+    mx_del_all(argv, str);
+}
 
 int mx_ush_execute_env(char *command, t_builtin_command *my_command,
-                       char **new_env, char *path_env, t_path_builtin *pwd) {
+                       char **new_env, char *path_env) {
     pid_t pid;
-    printf("Comnad %s Comand \n", command);
     char **argv = mx_tokenSplit(command);
     int val_ret = 0;
-    char *path = mx_read_env(argv[0], path_env, my_command);
-    bool builtin = false;
 
+    my_command->path_for_ex = mx_read_env(argv[0], path_env, my_command);
     if (my_command->execute == true)
-        builtin = mx_valid_command(argv, mx_count_elem(argv), pwd, my_command);
-    if (!builtin) {
-        if (path_check(&path, command, &argv))
+        val_ret = mx_valid_command(argv, mx_count_elem(argv), my_command);
+    if (val_ret != 0) {
+        if (path_check(&(my_command->path_for_ex), command, &argv))
             return 1;
         pid = fork();
         if (pid == 0) {
-            mx_set_signal();
-            if (my_command->execute == false) {
-                // set_env(new_env);
-                // if (mx_valid_command(argv, mx_count_elem(argv), pwd, my_command))
-                //     exit(0);
-                if (execve(path, argv, new_env) == -1) {
-                    mistake(command, &argv, &path);
-                    return 1;
-                }
-            }
-            if (my_command->execute == true) {
-                if (execvp(path, argv) == -1) {
-                    mistake(command, &argv, &path);
-                    return 1;
-                }
-            }
-
+            if (mx_child(command, my_command, new_env, &argv) == 1)
+                return 1;
         }
         else
             parent(pid, &val_ret, my_command, argv);
     }
-    tcsetpgrp(1, getpid());
-    del_all(&argv, &path);
+    last_func(&argv, &(my_command->path_for_ex));
     return val_ret;
 }

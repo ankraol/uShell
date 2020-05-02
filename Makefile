@@ -14,7 +14,6 @@ FILES = main \
 	mx_strjoin \
 	mx_strcat \
 	mx_pipe_rec \
-	mx_ush_execute \
 	mx_itoa \
 	mx_redirection \
 	mx_fd_change \
@@ -51,7 +50,6 @@ FILES = main \
 	mx_which \
 	mx_printerr \
 	mx_printchar \
-	mx_strjoin2 \
 	mx_strdup \
 	mx_strcpy \
 	mx_is_buildin \

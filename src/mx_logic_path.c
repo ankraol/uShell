@@ -55,14 +55,14 @@ void mx_change_path(char **tmp2) {
 	}
 }
 
-char *mx_new_l_pwd(char **file, char *path, t_path_builtin *pwd) {
+char *mx_new_l_pwd(char **file, char *path,  t_builtin_command *command) {
 	if (strcmp(file[0], "/") == 0)
 		path = mx_strdup("/");
 	else {
         char *tmp = NULL;
 
         if (file[0][0] != '/')
-            tmp = mx_strjoin(pwd->pwdL, "/");
+            tmp = mx_strjoin(command->path->pwdL, "/");
 		char *tmp1 = mx_strjoin(tmp, file[0]);
 		char **tmp2 = my_strsplit(tmp1, '/');
 
@@ -78,11 +78,11 @@ char *mx_new_l_pwd(char **file, char *path, t_path_builtin *pwd) {
     return path;
 }
 
-char *mx_cd_logic(char **file, t_builtin_command *command, int *err, t_path_builtin *pwd) {
+char *mx_cd_logic(char **file, t_builtin_command *command, int *err) {
 	char *link_name = mx_strnew(1024);
     char *path = NULL;
 
-    path = mx_new_l_pwd(file, path, pwd);
+    path = mx_new_l_pwd(file, path, command);
 	if (readlink(file[0], link_name, 1024) >= 0) {
 		if (command->cd->flag_s) {
 			fprintf(stderr, "cd: not a directory: %s\n", file[0]);

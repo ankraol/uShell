@@ -48,7 +48,7 @@ static char *build_prog(int index, char **arr) {
     return prog;
 }
 void mx_execute_command(t_builtin_command *command, t_env **env_list, 
-                        t_env_flag *env_flag, char **program, t_path_builtin *pwd) {
+                        t_env_flag *env_flag, char **program) {
     char **new_env = NULL;
     char *prog = NULL;
     
@@ -58,7 +58,7 @@ void mx_execute_command(t_builtin_command *command, t_env **env_list,
         new_env = create_env_arr(*env_list);
         command->execute = false;
         prog = build_prog(env_flag->index, program);
-        mx_ush_execute_env(prog, command, new_env, env_flag->pa, pwd);
+        mx_ush_execute_env(prog, command, new_env, env_flag->pa);
     }
     mx_delete_env(env_list);
     if (env_flag->pa != NULL)

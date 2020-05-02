@@ -164,7 +164,7 @@ void deleteTasks(t_reddir **tasks) {
     *tasks = NULL;
 }
 
-int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_command) {
+int mx_redirection(char *command,t_builtin_command *my_command) {
 
     printf("redirection -> %s\n", command);
     t_reddir *tasks = pipe_check(command);
@@ -231,7 +231,7 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
                 && tasks[0].task[4] == 'r' && tasks[0].task[5] == 't')
                 {
                     my_command->execute = true;
-                    status = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL, pwd);
+                    status = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL);
                 }
         }
         else {
@@ -239,7 +239,7 @@ int mx_redirection(char *command, t_path_builtin *pwd, t_builtin_command *my_com
 
             printf("TASK -> %s\n", tasks[0].task);
             my_command->execute = true;
-            status = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL, pwd);
+            status = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL);
         }
 
     }

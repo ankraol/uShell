@@ -67,7 +67,7 @@ bool mx_flag_priority(t_env_flag *env_flag, t_env **env_list, char var) {
 
 
 
-void mx_env_two(char **arg, int ac, t_builtin_command *command, t_path_builtin *pwd) {
+void mx_env_two(char **arg, int ac, t_builtin_command *command) {
     t_env *env_list = NULL;
     int i = 0;
     t_env_flag *env_flag = mx_creat_flag();
@@ -77,7 +77,7 @@ void mx_env_two(char **arg, int ac, t_builtin_command *command, t_path_builtin *
         if (env_flag->find_program)
             break;
         for (int j = 0; arg[i][j] != '\0'; j++) {
-            if (mx_glag_p_u(&env_list, env_flag, &(env_flag->pa), &(arg[i][j])))
+            if (mx_glag_p_u(&env_list, env_flag, &(env_flag->pa),&(arg[i][j])))
                 break;
             if (env_flag->flag_priority == true)
                 if (!mx_flag_priority(env_flag, &env_list, arg[i][j]))
@@ -87,5 +87,5 @@ void mx_env_two(char **arg, int ac, t_builtin_command *command, t_path_builtin *
         }
     }
     env_flag->index = i - 1;
-    mx_execute_command(command, &env_list, env_flag, arg, pwd);
+    mx_execute_command(command, &env_list, env_flag, arg);
 }

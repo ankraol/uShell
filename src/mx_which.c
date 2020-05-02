@@ -74,7 +74,7 @@ static bool check_command(char *command, char **pathes, int flags) {
         if (pathes == NULL)
             return false;
         for (int i = 0; pathes[i]; i++) {
-            fullname = mx_strjoin2(mx_strjoin(pathes[i], "/"), command);
+            fullname = mx_strjoin_two(mx_strjoin(pathes[i], "/"), command);
             if (mx_is_commad(fullname, flags)) {
                 finded = true;
             }
