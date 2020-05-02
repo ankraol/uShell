@@ -11,9 +11,7 @@ bool mx_is_buildin(char *str) {
         || (strcmp(str, "export") == 0)
         || (strcmp(str, "unset") == 0)
         || (strcmp(str, "fg") == 0)
-        || (strcmp(str, "exit") == 0)
-        || (strcmp(str, "jobs") == 0)
-        || (strcmp(str, "history") == 0))
+        || (strcmp(str, "exit") == 0))
         return true;
     return false;
 }

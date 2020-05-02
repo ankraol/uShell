@@ -9,10 +9,10 @@ static void exit_func(t_history_name **history, unsigned char *mystr,
         if (malloc_size(mystr))
             free(mystr);
         free(len);
+        printf("\nTEST EXIT/\n");
         //system("leaks -q ush");
         exit(0);
     }
-   // if (mystr[0] == 4)
 }
 
 unsigned char *mx_read_line(bool *trig, t_builtin_command *my_command) {

@@ -57,6 +57,8 @@ void mx_add_to_str(unsigned char **str, t_len_name **le) {
     int buf_plus = 0;
     unsigned char *buf_str = NULL;
 
+    if ((*le)->ch[0] == 4 && *str[0] != 0)
+        return;
     mx_byte_check_add((*le)->ch, &len, &plus, 0);
     forth(le, &plus, &len);
     if ((*le)->n_cursor_b == (*le)->n_bute) {

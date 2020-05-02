@@ -38,11 +38,12 @@ void mx_main_cycle_key(t_builtin_command *my_command, unsigned char **mystr,
                 mx_two_cycle(mystr, len, my_command->file);
                 break;
             }
-            else if (len->ch[0] != 27 && len->ch[0] != 4)
+            else if (len->ch[0] != 27)
                 mx_add_to_str(mystr, &len);
             mx_three_cycle(mystr, len, my_command->file);
         }
         mx_four_cycle(mystr, len, &buf_first, my_command);
+        //printf("%-----d-----\n", *mystr[0]);
         
         //system("leaks -q ush");
     }
