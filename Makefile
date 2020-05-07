@@ -21,7 +21,6 @@ FILES = main \
 	mx_file_to_str \
 	mx_printstr \
 	mx_works_queue \
-	mx_tokens \
 	mx_strcmp \
 	mx_logicOp \
 	mx_substitute \
@@ -71,6 +70,9 @@ FILES = main \
 	mx_comand_env_three \
 	mx_comand_env_four \
 	mx_read_env_two \
+	mx_aliasList_func \
+	mx_tokenSplit_one \
+	mx_parameter_exp_one \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

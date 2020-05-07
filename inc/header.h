@@ -231,7 +231,7 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks);
 char *mx_file_to_str(const char *file);
 void mx_printstr(const char *s);
 t_queue **mx_works_queue(char *line);
-char **mx_tokens(char *line, char sp);
+//char **mx_tokens(char *line, char sp);
 int mx_strcmp(const char *s1, unsigned const char *s2);
 void mx_logicOp(char *line, t_queue **list);
 char *mx_substitute(char *command, t_builtin_command *my_command);
@@ -309,4 +309,7 @@ void mx_mistake(char *command, char ***argv, char **path);
 int mx_child(char *command, t_builtin_command *my_command, char **new_env,
              char ***argv);
 void mx_del_all(char ***argv, char **path);
+char *mx_nameCut(char *command, int *start);
+char *mx_tokenCut(char *command, int start, int end);
+bool mx_parExt(char *command);
 #endif
