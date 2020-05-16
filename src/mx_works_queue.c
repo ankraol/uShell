@@ -113,15 +113,16 @@ static void pushBack(t_list **jobs, char *line, int start, int end) {
 
 static t_list *jobsSplit(char *line) {
     t_list *jobs = NULL;
-    bool sQ = false;
-    bool dQ = false;
-    bool iSs = false;
+    t_muteChar mute;
     int start = 0;
     int i = 0;
 
+    mute.dQ = false;
+    mute.sQ = false;
+    mute.iSs = false;
     for (; line[i] != '\0'; i++) {
-        muteChar(&sQ, &dQ, &iSs, line, i);
-        if (sQ == false && dQ == false && iSs == false && line[i] == ';') {
+        muteChar(&mute.sQ, &mute.dQ, &mute.iSs, line, i);
+        if (mute.sQ == false && mute.dQ == false && mute.iSs == false && line[i] == ';') {
             pushBack(&jobs, line, start, i);
             start = i + 1;
         }
@@ -157,6 +158,5 @@ t_queue **mx_works_queue(char *line) {
     }
     list[size] = NULL;
     jobs_delete(&jobs);
-    // system("leaks -q ush");
     return list;
 }

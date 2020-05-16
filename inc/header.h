@@ -140,6 +140,13 @@ typedef struct s_path t_path;
 typedef struct s_reddir t_reddir;
 typedef struct s_list t_list;
 typedef struct s_alias t_alias;
+typedef struct s_muteChar t_muteChar;
+
+struct s_muteChar {
+    bool sQ;
+    bool dQ;
+    bool iSs;
+};
 
 struct s_alias {
     char *name;
