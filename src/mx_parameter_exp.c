@@ -7,38 +7,40 @@ static bool iStilda(char *command) {
     return false;
 }
 
-static bool parExt(char *command) {
-    bool sQ = false;
-    bool dQ = false;
 
-    for (int i = 0; command[i] != '\0'; i++) {
-        if (command[i] == 123 && command[i - 1] == 36 && command[i - 2] != 92
-            && sQ == false)
-            {
-                return true;
-            }
-            else if (command[i] == 39 && dQ == false) {
-                if (sQ == false)
-                    sQ = true;
-                else
-                    sQ = false;
-            }
-            else if (command[i] == 34 && command[i - 1] != 92 && sQ == false) {
-                if (dQ == false)
-                    dQ = true;
-                else
-                    dQ = false;
-            }
-            else if (command[i] == 36 && (command[i + 1] != ' ' || command[i + 1] != '\0')
-                && sQ == false && command[i - 1] != 92)
-                {
-                    return true;
-                }
-            else if (command[i] == 126 && sQ == false && dQ == false && command[i - 1] != 92)
-                return true;
-    }
-    return false;
-}
+
+// static bool parExt(char *command) {
+//     bool sQ = false;
+//     bool dQ = false;
+
+//     for (int i = 0; command[i] != '\0'; i++) {
+//         if (command[i] == 123 && command[i - 1] == 36 && command[i - 2] != 92
+//             && sQ == false)
+//             {
+//                 return true;
+//             }
+//         else if (command[i] == 39 && dQ == false) {
+//             if (sQ == false)
+//                 sQ = true;
+//             else
+//                 sQ = false;
+//         }
+//         else if (command[i] == 34 && command[i - 1] != 92 && sQ == false) {
+//             if (dQ == false)
+//                 dQ = true;
+//             else
+//                 dQ = false;
+//         }
+//         else if (command[i] == 36 && (command[i + 1] != ' ' || command[i + 1] != '\0')
+//             && sQ == false && command[i - 1] != 92)
+//             {
+//                 return true;
+//             }
+//         else if (command[i] == 126 && sQ == false && dQ == false && command[i - 1] != 92)
+//             return true;
+//     }
+//     return false;
+// }
 
 static char *checkSame(char *command, char *replace) {
     int slashCount = 0;
@@ -116,7 +118,7 @@ char *mx_parameter_exp(char *command, t_var *varList) {
     int start = 0;
     int i = 0;
 
-    if (parExt(command) == false) {
+    if (mx_parExt(command) == false) {
         printf("command without expansion - %s\n", command);
         return command;
     }

@@ -31,7 +31,7 @@ static char *find_in_dir(char **bin_arr, char *file) {
     if (flag == 0)
         return NULL;
     last_path = mx_strjoin(bin_arr[i], "/");
-    last_path = mx_strjoin_two(last_path, file);    
+    last_path = mx_strjoin_two(last_path, file);
     return last_path;
 }
 

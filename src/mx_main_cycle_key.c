@@ -33,7 +33,8 @@ void mx_main_cycle_key(t_builtin_command *my_command, unsigned char **mystr,
             mx_one_cycle(mystr, len, len->buf, my_command->file);
             if (check_for_byte(len) == true)
                 mx_back_to_str(mystr, &len);
-            else if (len->ch[0] ==  10 || len->ch[0] == '\0') {
+            else if ((len->ch[0] ==  10 || len->ch[0] == '\0') || 
+                    (len->ch[0] == 4 && *mystr[0] == 0)) {
                 mx_two_cycle(mystr, len, my_command->file);
                 break;
             }
@@ -42,6 +43,8 @@ void mx_main_cycle_key(t_builtin_command *my_command, unsigned char **mystr,
             mx_three_cycle(mystr, len, my_command->file);
         }
         mx_four_cycle(mystr, len, &buf_first, my_command);
+        //printf("%-----d-----\n", *mystr[0]);
+        
         //system("leaks -q ush");
     }
     push_and_free(&(my_command->history), mystr, len, buf_first);

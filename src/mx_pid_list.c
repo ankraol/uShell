@@ -16,7 +16,7 @@ void mx_push_back_pid(t_pid_name **pid_list, int pid, char *name, int num) {
     t_pid_name *front = creat_pid(pid, name, num);
     front->next = *pid_list;
     *pid_list = front;
-
+    mx_printstr("\n");
 }
 
 int mx_get_pid_num(t_pid_name **pid_list) {

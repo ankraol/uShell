@@ -1,10 +1,14 @@
  #include "header.h"
 
 void mx_two_cycle(unsigned char **mystr, t_len_name *len, FILE *file) {
-    if (len->ch[0] != '\n') 
+    if (len->ch[0] != '\n' || len->ch[0] == 4)
         len->trig = true;
     fprintf(file, "%s\n", *mystr);
     fflush(file);
+    if (len->ch[0] == 4) {
+        *mystr[0] = 4;
+        *mystr[1] = 0;
+    }
 }
 
 void mx_three_cycle(unsigned char **mystr, t_len_name *len, FILE *file) {

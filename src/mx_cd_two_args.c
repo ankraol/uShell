@@ -22,7 +22,7 @@ char *mx_make_logic_path(char **tmp2, char *tmp, char *tmp1) {
     return tmp1;
 }
 
-void mx_change_pwd(char *tmp1, t_path_builtin *pwd, t_builtin_command *command, int *err, char **file) {
+void mx_change_pwd(char *tmp1, t_builtin_command *command, int *err, char **file) {
     if (chdir(tmp1) != 0) {
         if (mx_str_count(file) == 2)
             fprintf(stderr, "cd: no such file or directory: %s\n", file[1]);
@@ -31,23 +31,23 @@ void mx_change_pwd(char *tmp1, t_path_builtin *pwd, t_builtin_command *command, 
         *err = 1;
     }
     else if (command->cd->flag_P) {
-        mx_strdel(&pwd->oldpwd);
-        pwd->oldpwd = mx_strdup(pwd->pwdP);
-        mx_strdel(&pwd->pwdL);
-        pwd->pwdL = getcwd(NULL, 0);
+        mx_strdel(&command->path->oldpwd);
+        command->path->oldpwd = mx_strdup(command->path->pwdP);
+        mx_strdel(&command->path->pwdL);
+        command->path->pwdL = getcwd(NULL, 0);
     }
     else {
-        mx_strdel(&pwd->oldpwd);
-        pwd->oldpwd = mx_strdup(pwd->pwdL);
-        mx_strdel(&pwd->pwdL);
-        pwd->pwdL = mx_strdup(tmp1);
+        mx_strdel(&command->path->oldpwd);
+        command->path->oldpwd = mx_strdup(command->path->pwdL);
+        mx_strdel(&command->path->pwdL);
+        command->path->pwdL = mx_strdup(tmp1);
     }
-    mx_strdel(&pwd->pwdP);
-    pwd->pwdP = getcwd(NULL, 0);
+    mx_strdel(&command->path->pwdP);
+    command->path->pwdP = getcwd(NULL, 0);
 }
 
-void mx_cd_two_args(char **file, t_builtin_command *command, t_path_builtin *pwd, int *err) {
-    if (strcmp(file[0], pwd->pwdP) == 0 || strcmp(pwd->pwdL, file[0]) == 0) {
+void mx_cd_two_args(char **file, t_builtin_command *command, int *err) {
+    if (strcmp(file[0], command->path->pwdP) == 0 || strcmp(command->path->pwdL, file[0]) == 0) {
         char *tmp = mx_strjoin(file[0], "/");
         char *tmp1 = mx_strjoin(tmp, file[1]);
         char **tmp2 = my_strsplit(tmp1, '/');
@@ -59,7 +59,7 @@ void mx_cd_two_args(char **file, t_builtin_command *command, t_path_builtin *pwd
             tmp1 = mx_make_logic_path(tmp2, tmp, tmp1);
         else
             tmp1 = mx_strdup("/");
-        mx_change_pwd(tmp1, pwd, command, err, file);
+        mx_change_pwd(tmp1, command, err, file);
         mx_strdel(&tmp1);
     }
     else {

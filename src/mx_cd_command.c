@@ -21,7 +21,7 @@ char **mx_create_file(char **av, int ac, int count_files, char **file) {
 	int g = 0;
 
 	for(int i = 1; i < ac; i++) {
-		if (flag_priority == true) {			
+		if (flag_priority == true) {
 			if (av[i][0] != '-') {
 				flag_priority = false;
 				file[g++] = mx_strdup(av[i]);
@@ -45,61 +45,59 @@ void mx_swap_str(char **str1, char **str2) {
 	*str2 = tmp;
 }
 
-void mx_home(t_builtin_command *command, t_path_builtin *pwd) {
+void mx_home(t_builtin_command *command) {
     struct passwd *pw = getpwuid(getuid());
 
     if (command->cd->flag_P) {
-        mx_strdel(&pwd->oldpwd);
-        pwd->oldpwd = mx_strdup(pwd->pwdP);
+        mx_strdel(&command->path->oldpwd);
+        command->path->oldpwd = mx_strdup(command->path->pwdP);
     }
     else {
-        mx_strdel(&pwd->oldpwd);
-        pwd->oldpwd = mx_strdup(pwd->pwdL);
+        mx_strdel(&command->path->oldpwd);
+        command->path->oldpwd = mx_strdup(command->path->pwdL);
     }
-    mx_strdel(&pwd->pwdP);
-    pwd->pwdP = mx_strdup(pw->pw_dir);
-    mx_strdel(&pwd->pwdL);
-    pwd->pwdL = mx_strdup(pw->pw_dir);
+    mx_strdel(&command->path->pwdP);
+    command->path->pwdP = mx_strdup(pw->pw_dir);
+    mx_strdel(&command->path->pwdL);
+    command->path->pwdL = mx_strdup(pw->pw_dir);
     chdir(pw->pw_dir);
 }
 
-void mx_cd_flag_min(t_path_builtin *pwd, t_builtin_command *command) {
-    chdir(pwd->oldpwd);
+void mx_cd_flag_min(t_builtin_command *command) {
+    chdir(command->path->oldpwd);
     if (command->cd->flag_P) {
-        mx_swap_str(&pwd->oldpwd, &pwd->pwdP);
-        pwd->pwdP = getcwd(NULL, 0);
-        mx_strdel(&pwd->pwdL);
-        pwd->pwdL = mx_strdup(pwd->pwdP);
+        mx_swap_str(&command->path->oldpwd, &command->path->pwdP);
+        command->path->pwdP = getcwd(NULL, 0);
+        mx_strdel(&command->path->pwdL);
+        command->path->pwdL = mx_strdup(command->path->pwdP);
     }
     else {
-        mx_swap_str(&pwd->oldpwd, &pwd->pwdL);
-        mx_strdel(&pwd->pwdP);
-        pwd->pwdP = getcwd(NULL, 0);
+        mx_swap_str(&command->path->oldpwd, &command->path->pwdL);
+        mx_strdel(&command->path->pwdP);
+        command->path->pwdP = getcwd(NULL, 0);
     }
 }
 
-void mx_falid_files(char **file, int count_files, t_builtin_command *command,
-	t_path_builtin *pwd, int *err) {
+void mx_falid_files(char **file, int count_files, t_builtin_command *command, int *err) {
 
     if (count_files > 2) {
         fprintf(stderr, "cd: too many arguments\n");
         *err = 1;
     }
     else if (count_files == 2)
-        mx_cd_two_args(file, command, pwd, err);
+        mx_cd_two_args(file, command, err);
     else if (command->cd->arg_min)
-        mx_cd_flag_min(pwd, command);
+        mx_cd_flag_min(command);
     else if (!(command->cd->arg_min) && (count_files == 0 || strcmp(file[0], "~") == 0))
-        mx_home(command, pwd);
+        mx_home(command);
 	else {
-		char *path = mx_cd_logic(file, command, err, pwd);
-		printf("***************PATH == %s\n",path);
+		char *path = mx_cd_logic(file, command, err);
 		if (path != NULL)
-            mx_change_pwd(path, pwd, command, err, file);
+            mx_change_pwd(path, command, err, file);
 	}
 }
 
-void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, t_path_builtin *pwd, int *err) {
+void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, int *err) {
 	char flag[] = "sP";
 	bool flag_priority = true;
 	int count_files = 0;
@@ -123,7 +121,7 @@ void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, t_path_bui
 			count_files++;
 	}
 	file = mx_create_file(arg, ac, count_files, file);
-	mx_falid_files(file, count_files, command, pwd, err);
+	mx_falid_files(file, count_files, command, err);
 }
 
 

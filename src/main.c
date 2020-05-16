@@ -2,13 +2,14 @@
 
 static void exit_func(t_history_name **history, unsigned char *mystr, 
                       t_len_name *len, char *buf_first) {
-    if (mx_strcmp("exit", mystr) == 0) {
+    if (mx_strcmp("exit", mystr) == 0 || mystr[0] == 4) {
         mx_delete_history(history);
         if (malloc_size(buf_first))
             free(buf_first);
         if (malloc_size(mystr))
             free(mystr);
         free(len);
+        printf("\nTEST EXIT/\n");
         //system("leaks -q ush");
         exit(0);
     }
@@ -21,7 +22,6 @@ unsigned char *mx_read_line(bool *trig, t_builtin_command *my_command) {
     unsigned char *mystr = (unsigned char *)malloc(sizeof(char) * 1);
     char *buf_first = NULL;
 
-    
     mystr[0] = '\0';
     tcgetattr (0, &tty);
     savetty = tty;
@@ -29,8 +29,6 @@ unsigned char *mx_read_line(bool *trig, t_builtin_command *my_command) {
     tty.c_cc[VMIN] = 1;
     tcsetattr (0, TCSAFLUSH, &tty);
     mx_get_width(&(len->col));
-    //mx_printstr("u$h> ");
-    //fopen("/dev/tty", "w");
     fprintf(my_command->file, "u$h> ");
     fflush(my_command->file);
     mx_main_cycle_key(my_command, &mystr, len, buf_first);
@@ -75,7 +73,7 @@ void ush_loop(void) {
     bool trig = false;
 
 
-    t_path_builtin pwd; 
+//    t_path_builtin pwd;
     t_builtin_command my_command;
 
 
@@ -83,14 +81,21 @@ void ush_loop(void) {
     my_command.var = NULL;
     my_command.alias_list = NULL;
 
-    pwd.pwdP = getcwd(NULL, 0);
-    pwd.pwdL = getcwd(NULL, 0);
-    pwd.oldpwd = getcwd(NULL, 0);
+    my_command.path = (t_path_builtin *)malloc(sizeof(t_path_builtin));
+    my_command.path->pwdP = getcwd(NULL, 0);
+    my_command.path->pwdL = getcwd(NULL, 0);
+    my_command.path->oldpwd = getcwd(NULL, 0);
 
     my_command.cd = (t_cd *)malloc(sizeof(t_cd));
     memset(my_command.cd, 0, sizeof(t_cd));
+
+    my_command.echo = (t_echo *)malloc(sizeof(t_echo));
+    memset(my_command.echo, 0, sizeof(t_echo));
+
     (&my_command)->pid_ar = NULL;
     mx_mysetenv();
+
+
 
     (&my_command)->history = NULL;
     my_command.his = NULL;
@@ -110,9 +115,14 @@ void ush_loop(void) {
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
+                    // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
                     (*p).command = mx_parameter_exp((*p).command, my_command.var);
-                    (*p).command = mx_substitute((*p).command, &pwd, &my_command);
-                    status = mx_redirection((*p).command, &pwd, &my_command);
+                    // system("leaks -q ush");
+                    // printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
+                    (*p).command = mx_substitute((*p).command, &my_command);
+                   // system("leaks -q ush");
+                    status = mx_redirection((*p).command, &my_command);
+                   // system("leaks -q ush");
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                         {
@@ -120,6 +130,8 @@ void ush_loop(void) {
                         }
                 }
             }
+            // printf("NAME -> %s\n", aliasList->name);
+            // printAlias(aliasList);
         }
         free(line);
         // system("leaks -q ush");

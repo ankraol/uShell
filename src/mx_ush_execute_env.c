@@ -1,107 +1,102 @@
 #include "header.h"
 
 
+void mx_del_all(char ***argv, char **path) {
+    if (*argv != NULL)
+        mx_del_strarr(argv);
+    if (*path != NULL)
+        mx_strdel(path);
+}
 
 
+
+
+void mx_mistake(char *command, char ***argv, char **path) {
+    mx_printerr("env: ");
+    mx_printerr(command);
+    mx_printerr(": No such file or directory\n");
+    mx_del_all(argv, path);
+}
+
+static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
+                    char **argv) {
+    int number = 0;
+    pid_t wpid;
+    int status = 0;
+
+    setpgid(pid, pid);
+    tcsetpgrp(1, pid);
+    wpid = waitpid(pid, &status, WUNTRACED);
+    if (WIFEXITED(status))
+        *val_ret = 0;
+    else if (WIFSTOPPED(status)) {//ctrl+Z
+        number = mx_get_pid_num(&my_command->pid_ar);
+        mx_push_back_pid(&my_command->pid_ar, wpid, argv[0], number);
+        *val_ret = 146;
+    }
+    else if (WTERMSIG(status)) {//ctrl+C
+        *val_ret = 130;
+        mx_printstr("\n");
+    }
+    else if (status != 0)
+        *val_ret = 1;
+}
+
+// static void set_env(char **new_env) {
+//     extern char **environ;
+//     char **full_val = NULL;
+
+//     if (environ != NULL) {
+//         for (int i = 0; environ[i] != NULL; i++) {
+//             full_val = mx_strsplit(environ[i], '=');
+//             if (full_val[0] != NULL)
+//                 unsetenv(full_val[0]);
+//             mx_del_strarr(&full_val);
+//         }
+//     }
+//     if (new_env != NULL) {
+//         for (int i = 0; new_env[i] != NULL; i++) {
+//             full_val = mx_strsplit(new_env[i], '=');
+//             if (full_val[0] != NULL)
+//                 setenv(full_val[0], full_val[1], 1);
+//             mx_del_strarr(&full_val);
+//         }
+//     }
+// }
+
+
+static bool path_check(char **path, char *command, char ***argv) {
+    if (*path == NULL) {
+        mx_mistake(command, argv, path);
+        return true;
+    }
+    return false;
+}
+void last_func(char ***argv, char **str) {
+    tcsetpgrp(1, getpid());
+    mx_del_all(argv, str);
+}
 
 int mx_ush_execute_env(char *command, t_builtin_command *my_command,
                        char **new_env, char *path_env) {
     pid_t pid;
-    pid_t wpid;
-    int number = 0;
-    char *path = NULL;
-    //t_pid_name *buf = *pid_ar;
+    char **argv = mx_tokenSplit(command);
+    int val_ret = 0;
 
-    // if (mx_substitute(command) == 1) {
-        // char **argv = mx_tokens(command, ' ');
-        printf("FIRST = %s\n", command);
-        char **argv = mx_tokenSplit(command);
-        // mx_substitute(argv);
-        printf("ARGUMENTS FOR COMMAND == %s\n", argv[1]);
-        printf("COMMAND == %s\n", argv[0]);
-        
-        printf("Checkk\n");
-        //printf("PATH == %s\n", path);
-        int status;
-
-
-        path = mx_read_env(argv[0], path_env, my_command);
-        if (path == NULL) {
-            mx_printerr("env: ");
-            mx_printerr(command);
-            mx_printerr(": No such file or directory\n");
-;
+    my_command->path_for_ex = mx_read_env(argv[0], path_env, my_command);
+    if (my_command->execute == true)
+        val_ret = mx_valid_command(argv, mx_count_elem(argv), my_command);
+    if (val_ret != 0) {
+        if (path_check(&(my_command->path_for_ex), command, &argv))
             return 1;
-        }
-        
         pid = fork();
-        // mx_push_back_pid(pid_ar, getpid());
-            //  fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-            //         fflush(stdout);
         if (pid == 0) {
-            signal(SIGTTIN, SIG_DFL);
-            signal(SIGTTOU, SIG_DFL);
-            setpgid(0, 0);
-            //mx_push_back_pid(pid_ar, getpid());
-           // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-           //     fflush(stdout);
-            //mx_printstr("start");
-            // if (execvp(path, argv) == -1)
-            //     perror("ushi");
-            if (new_env == NULL)
-                printf("NULL");
-            if (execve(path, argv, new_env) == -1)
-                mx_printerr("env: ");
-                mx_printerr(command);
-                mx_printerr(": No such file or directory\n");
-
-            exit(1);
+            if (mx_child(command, my_command, new_env, &argv) == 1)
+                return 1;
         }
         else
-        {
-            setpgid(pid, pid);
-            tcsetpgrp(1, pid);
-            wpid = waitpid(pid, &status, WUNTRACED);
-            if (WIFEXITED(status)) {
-                tcsetpgrp(1, getpid());
-                return 0;
-            }
-            else if (WIFSTOPPED(status)) {//ctrl+Z
-                 //fprintf(stdout, "%d\n", wpid);
-                //fflush(stdout);
-                mx_printstr("and now stop");
-                number = mx_get_pid_num(&my_command->pid_ar);
-                printf("%d\n", number);
-                mx_push_back_pid(&my_command->pid_ar, wpid, argv[0], number);
-                tcsetpgrp(1, getpid());
-                return 1;
-            //    sleep(2);
-            //    kill (wpid, SIGCONT);
-            //    wpid = waitpid(pid, &status, WUNTRACED);
-            // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-            //     fflush(stdout);
-                // (*pid_ar) = (*pid_ar)->next;
-                // fprintf(stdout, "-----%d------\n", (*pid_ar)->pid);
-                // fflush(stdout);
-                // mx_printstr("and now stop2");
-            }
-             else if (WTERMSIG(status)) { //ctrl+C
-                 mx_printstr("and now term");
-                 sleep(2);
-                 tcsetpgrp(1, getpid());
-            //     fprintf(stdout, "%d\n", getpid());
-            //     fflush(stdout);
-             }
-             if (status != 0) {
-            //     //printf("%d", WTERMSIG(status));
-            //     mx_printstr("status<0");
-            tcsetpgrp(1, getpid());
-                 return status;
-             }
-        // }
-
+            parent(pid, &val_ret, my_command, argv);
     }
-    tcsetpgrp(1, getpid());
-    return 0;
-
+    last_func(&argv, &(my_command->path_for_ex));
+    return val_ret;
 }

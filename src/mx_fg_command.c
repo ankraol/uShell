@@ -23,7 +23,7 @@ int mx_get_peid_name(char *name, t_pid_name *pid_arr) {
 }
 
  void mx_wait_cont(t_pid_name **pid_ar, int n_pid) {
-    t_pid_name *pid_buf = NULL;;
+    t_pid_name *pid_buf = NULL;
     int status_pid;
     pid_t wpid;
 
