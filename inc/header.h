@@ -30,9 +30,16 @@ typedef struct s_pid_name t_pid_name;
 typedef struct s_env t_env;
 typedef struct s_export t_export;
 typedef struct s_alias t_alias;
+typedef struct s_inc t_inc;
 //typedef struct s_history_name t_history_name;
 
 extern char **environ;
+
+struct s_inc {
+    int a;
+    int b;
+    int c;
+};
 
 typedef struct s_history_name {
     unsigned char *name;

@@ -166,7 +166,7 @@ void deleteTasks(t_reddir **tasks) {
 
 int mx_redirection(char *command,t_builtin_command *my_command) {
 
-    printf("redirection -> %s\n", command);
+    // printf("redirection -> %s\n", command);
     t_reddir *tasks = pipe_check(command);
     int status = 2;
     int input;

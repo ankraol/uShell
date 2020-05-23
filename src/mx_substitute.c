@@ -8,68 +8,127 @@
     // return false;
 // }
 
-char *mx_substitute(char *command, t_builtin_command *my_command) {
-    bool ap = false;
-    bool iSbr = false;
-    bool extr = false;
 
+static char *subLine(char **mainCommand, char *command, t_builtin_command *my_command, t_inc *index) {
+    t_muteChar trig;
     char *line = (char *)malloc(sizeof(char) * strlen(command));
-    char *mainCommand = (char *)malloc(sizeof(char) * strlen(command) * 50);
-    int j = 0;
-    int k = 0;
-    int i = 0;
 
-    // fprintf(stdout, "command in CHECK FOR SUBSTITUTION %s\n", command);
-    for (; command[i] != '\0'; i++) {
-        if (command[i] == 96 && command[i - 1] != 92 && iSbr == false) {
-            if (ap == false) {
-                ap = true;
+    memset(&trig, 0, sizeof(t_muteChar));
+    
+    for (; command[(*index).c] != '\0'; (*index).c++) {
+        printf("%d\n", (*index).c);
+        if (command[(*index).c] == 96 && command[(*index).c - 1] != 92 && trig.dQ == false) {
+            if (trig.sQ == false) {
+                trig.sQ = true;
             }
             else {
-                // printf("I`M DONE WITH IT\n");
                 break;
             }
         }
-        else if (command[i - 1] == 36 && command[i] == 40 && ap == false) {
-            if (iSbr == false)
-                iSbr = true;
+        else if (command[(*index).c - 1] == 36 && command[(*index).c] == 40 && trig.sQ == false) {
+            if (trig.dQ == false) {
+                trig.dQ = true;
+            }
             else {
-                extr = true;
-                line[j] = command[i];
-                j++;
+                trig.iSs = true;
+                line[(*index).a] = command[(*index).c];
+                (*index).a++;
             }
         }
-        else if (command[i] == 41) {
-            if (extr == true)
-                extr = false;
-            else {
-                // printf("I`M DONE WITH IT\n");
+        else if (command[(*index).c] == 41) {
+            if (trig.iSs == true)
+                trig.iSs = false;
+            else
                 break;
+        }
+        else if (trig.sQ == false && trig.dQ == false) {
+            if (command[(*index).c] != 36) {
+                (*mainCommand)[(*index).b] = command[(*index).c];
+                (*index).b++;
             }
         }
-        else if (ap == false && iSbr == false) {
-            if (command[i] != 36) {
-                mainCommand[k] = command[i];
-                k++;
-            }
+        else if (trig.sQ == true || trig.dQ == true) {
+                line[(*index).a] = command[(*index).c];
+                (*index).a++;
         }
-        else if (ap == true || iSbr == true) {
-                line[j] = command[i];
-                j++;
-        }
+        printf("%c\n", command[(*index).c]);
     }
-    // printf("count for line = %d count for maincommand = %d general count = %d\n", j, k, i);
-    line[j] = '\0';
-    mainCommand[k] = ' ';
+    printf("endof cycle");
+    line[(*index).a] = '\0';
+    *mainCommand[(*index).b] = ' ';
     line = realloc(line, strlen(line) + 1);
     line = mx_aliasSearch(line, my_command->alias_list);
+    printf("command in stat func %s\n", *mainCommand);
+    return line;
+}
+
+char *mx_substitute(char *command, t_builtin_command *my_command) {
+    // bool ap = false;
+    // bool iSbr = false;
+    // bool extr = false;
+
+    // char *line = (char *)malloc(sizeof(char) * strlen(command));
+    t_inc index;
+    char *mainCommand = (char *)malloc(sizeof(char) * strlen(command) * 50);
+    char *line = NULL;
+    // int j = 0;
+    // int k = 0;
+    // int i = 0;
+    memset(&index, 0, sizeof(t_inc));
+    line = subLine(&mainCommand, command, my_command, &index);
+    // printf("main command - %s\n", mainCommand);
+    // printf("im here");
+    // fprintf(stdout, "command in CHECK FOR SUBSTITUTION %s\n", command);
+    // for (; command[i] != '\0'; i++) {
+    //     if (command[i] == 96 && command[i - 1] != 92 && iSbr == false) {
+    //         if (ap == false) {
+    //             ap = true;
+    //         }
+    //         else {
+    //             // printf("I`M DONE WITH IT\n");
+    //             break;
+    //         }
+    //     }
+    //     else if (command[i - 1] == 36 && command[i] == 40 && ap == false) {
+    //         if (iSbr == false)
+    //             iSbr = true;
+    //         else {
+    //             extr = true;
+    //             line[j] = command[i];
+    //             j++;
+    //         }
+    //     }
+    //     else if (command[i] == 41) {
+    //         if (extr == true)
+    //             extr = false;
+    //         else {
+    //             // printf("I`M DONE WITH IT\n");
+    //             break;
+    //         }
+    //     }
+    //     else if (ap == false && iSbr == false) {
+    //         if (command[i] != 36) {
+    //             mainCommand[k] = command[i];
+    //             k++;
+    //         }
+    //     }
+    //     else if (ap == true || iSbr == true) {
+    //             line[j] = command[i];
+    //             j++;
+    //     }
+    // }
+    // // printf("count for line = %d count for maincommand = %d general count = %d\n", j, k, i);
+    // line[j] = '\0';
+    // mainCommand[k] = ' ';
+    // line = realloc(line, strlen(line) + 1);
+    // line = mx_aliasSearch(line, my_command->alias_list);
     // printf("line - %s\n", line);
 
     int fd[2];
     t_queue **work = NULL;
     t_queue *p = NULL;
     int status = 0;
-    if (j > 0) {
+    if (index.a > 0) {
         pipe(fd);
         pid_t pid = fork();
         if (pid == 0) {
@@ -96,17 +155,17 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
         }
         char c;
         // int i = k + 1;
-        for(k += 1; read(fd[0], &c, 1); k++) {
+        for(index.b += 1; read(fd[0], &c, 1); index.b++) {
             if (c == '\n')
                 c = ' ';
-            mainCommand[k] = c;
+            mainCommand[index.b] = c;
         }
         close(fd[0]);
-        for (i += 1; command[i] != '\0'; i++) {
-            mainCommand[k] = command[i];
-            k++;
+        for (index.c += 1; command[index.c] != '\0'; index.c++) {
+            mainCommand[index.b] = command[index.c];
+            index.b++;
         }
-        mainCommand[k] = '\0';
+        mainCommand[index.b] = '\0';
         mainCommand = realloc(mainCommand, strlen(mainCommand) + 1);
         // printf("command - %s\n", mainCommand);
         return mainCommand;
