@@ -222,10 +222,10 @@ int mx_redirection(char *command,t_builtin_command *my_command) {
             printAlias(my_command->alias_list);
         }
         else if (iSvar(tasks[0].task) == true) {
-            printf("COMMAND TASK = %s\n", tasks[0].task);
+            //printf("COMMAND TASK = %s\n", tasks[0].task);
             mx_varList(tasks[0].task, &my_command->var);
             printVar(my_command->var);
-            printf("COMMAND TASK = %s\n", tasks[0].task);
+            //printf("COMMAND TASK = %s\n", tasks[0].task);
             if (tasks[0].task[0] == 'e' && tasks[0].task[1] == 'x'
                 && tasks[0].task[2] == 'p' && tasks[0].task[3] == 'o'
                 && tasks[0].task[4] == 'r' && tasks[0].task[5] == 't')
@@ -237,7 +237,7 @@ int mx_redirection(char *command,t_builtin_command *my_command) {
         else {
            // tasks[0].task = mx_aliasSearch(tasks[0].task, my_command->alias_list);
 
-            printf("TASK -> %s\n", tasks[0].task);
+            //printf("TASK -> %s\n", tasks[0].task);
             my_command->execute = true;
             status = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL);
         }

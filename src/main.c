@@ -120,7 +120,7 @@ void ush_loop(void) {
                     // system("leaks -q ush");
                     printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &my_command);
-                    printf("everything is ok");
+                    printf("everything is ok ---- %s\n", (*p).command);
                    // system("leaks -q ush");
                     status = mx_redirection((*p).command, &my_command);
                    // system("leaks -q ush");

@@ -16,7 +16,8 @@ static char *subLine(char **mainCommand, char *command, t_builtin_command *my_co
     memset(&trig, 0, sizeof(t_muteChar));
     
     for (; command[(*index).c] != '\0'; (*index).c++) {
-        printf("%d\n", (*index).c);
+        //printf("strat\n");
+        //printf("%d\n", (*index).c);
         if (command[(*index).c] == 96 && command[(*index).c - 1] != 92 && trig.dQ == false) {
             if (trig.sQ == false) {
                 trig.sQ = true;
@@ -51,14 +52,15 @@ static char *subLine(char **mainCommand, char *command, t_builtin_command *my_co
                 line[(*index).a] = command[(*index).c];
                 (*index).a++;
         }
-        printf("%c\n", command[(*index).c]);
+        //printf("%c\n", command[(*index).c]);
+        //printf("%d\n", (*index).b);
     }
-    printf("endof cycle");
+    //printf("endof cycle");
     line[(*index).a] = '\0';
-    *mainCommand[(*index).b] = ' ';
+    (*mainCommand)[(*index).b] = ' ';
     line = realloc(line, strlen(line) + 1);
     line = mx_aliasSearch(line, my_command->alias_list);
-    printf("command in stat func %s\n", *mainCommand);
+    //printf("command in stat func %s\n", *mainCommand);
     return line;
 }
 
@@ -75,7 +77,10 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
     // int k = 0;
     // int i = 0;
     memset(&index, 0, sizeof(t_inc));
+    //printf("in sub\n");
     line = subLine(&mainCommand, command, my_command, &index);
+    //printf("MAIN COM = %s\n", mainCommand);
+    //printf("after\n");
     // printf("main command - %s\n", mainCommand);
     // printf("im here");
     // fprintf(stdout, "command in CHECK FOR SUBSTITUTION %s\n", command);
@@ -167,7 +172,7 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
         }
         mainCommand[index.b] = '\0';
         mainCommand = realloc(mainCommand, strlen(mainCommand) + 1);
-        // printf("command - %s\n", mainCommand);
+        //printf("MAIN command - %s\n", mainCommand);
         return mainCommand;
     }
     mx_strdel(&mainCommand);

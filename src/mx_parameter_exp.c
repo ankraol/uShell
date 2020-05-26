@@ -119,7 +119,7 @@ char *mx_parameter_exp(char *command, t_var *varList) {
     int i = 0;
 
     if (mx_parExt(command) == false) {
-        printf("command without expansion - %s\n", command);
+        //printf("command without expansion - %s\n", command);
         return command;
     }
     else
@@ -195,6 +195,6 @@ char *mx_parameter_exp(char *command, t_var *varList) {
     }
     newLine = realloc(newLine, strlen(newLine) + 1);
     }
-    printf("NEWLINE - %s\n", newLine);
+    //printf("NEWLINE - %s\n", newLine);
     return newLine;
 }
