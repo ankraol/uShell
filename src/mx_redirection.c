@@ -9,41 +9,52 @@ static bool isAlias(char *command) {
     return false;
 }
 
-static void quoteCheck(bool *sQ, bool *dQ, bool *iSs, char *command, int i) {
-        if (command[i] == 96 && command[i - 1] != 92 && (*sQ) == false
-            && (*dQ) == false)
-            {
-                if ((*iSs) == false)
-                    *iSs = true;
-                else
-                    *iSs = false;
-            }
-        else if (command[i] == 34 && command[i - 1] != 92 && (*sQ) == false
-            && (*iSs) == false)
-            {
-                if ((*dQ) == false)
-                    *dQ = true;
-                else
-                    *dQ = false;
-            }
-        else if (command[i] == 39 && (*dQ) == false && (*iSs) == false) {
-            if ((*sQ) == false)
-                *sQ = true;
+    // bool brr[] = {false, false, false};
+
+    // bool iSdq = false; brr[0]
+    // bool iSsq = false; brr[1]
+    // bool iSsub = false; brr[2]
+
+    //&iSsq, &iSdq, &iSsub
+    //brr[1], brr[0], brr[2]
+
+    //bool *sQ, bool *dQ, bool *iSs
+
+static void quoteCheck(char *c, int i, bool br[]) {
+    if (c[i] == 96 && c[i - 1] != 92 && (br[1]) == false && (br[0]) == false) {
+            if (br[2] == false)
+                br[2] = true;
             else
-                *sQ = false;
+                br[2] = false;
         }
+    else if (c[i] == 34 && c[i - 1] != 92 && br[1] == false
+            && (br[2]) == false)
+        {
+            if (br[0] == false)
+                br[0] = true;
+            else
+                br[0] = false;
+        }
+    else if (c[i] == 39 && br[0] == false && br[2] == false) {
+        if (br[1] == false)
+            br[1] = true;
+        else
+            br[1] = false;
+    }
 }
 
 static int dir_count(char *command) {
     int count = 0;
-    bool iSdq = false;
-    bool iSsq = false;
-    bool iSs = false;
+    bool br[] = {false, false, false};
+
+    //bool iSdq = false;
+    //bool iSsq = false;
+    //bool iSs = false;
 
     for (int i = 0; command[i] != '\0'; i++) {
-        quoteCheck(&iSsq, &iSdq, &iSs, command, i);
+        quoteCheck(command, i, br);
         if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'
-            && iSdq == false && iSsq  == false && iSs == false)
+            && br[0] == false && br[1]  == false && br[2] == false)
             {
                 count++;
             }
@@ -51,48 +62,45 @@ static int dir_count(char *command) {
     return count;
 }
 
-static t_reddir *pipe_check(char *command) {
-    int size = dir_count(command);
-    t_reddir *tasks = (t_reddir *)malloc(sizeof(t_reddir) * (size + 2));
-    int start = 0;
-    int q = 0;
-    int i = 0;
-    bool iSdq = false;
-    bool iSsq = false;
-    bool iSsub = false;
+static bool for_pipe_chek(char *cm, int *arr, bool *brr) {
+    if (cm[arr[2]] == '|' && cm[arr[2] + 1] != '|' && cm[arr[2] - 1] != '|'
+            && brr[0] == false && brr[1] == false && brr[2] == false)
+        {
+            return true;
+        }
+    return false;
+}
 
-    // system("leaks -q ush");
-    for (; command[i] != '\0'; i++) {
-        quoteCheck(&iSsq, &iSdq, &iSsub, command, i);
-        if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'
-            && iSdq == false && iSsq == false && iSsub == false)
-            {
-                tasks[q].input = NULL;
-                tasks[q].output = NULL;
-                if (command[i - 1] == ' ')
-                    i -= 1;
-                mx_command_cut(command, start, i, &tasks[q]);
-                // printf("command%d - %s\n", q, tasks[q].task);
-                //if (tasks[q].input)
-                    // printf("input - %s\n", tasks[q].input->file);
-                //if (tasks[q].output)
-                    // printf("output - %s\n", tasks[q].output->file);
-                tasks[q].op = '|';
-                for (; command[i] == ' ' || command[i] == '|'; i++);
-                start = i;
-                q++;
-            }
+static void for_pipe_check_one(t_reddir *tasks, char *cm, int *arr, bool fl) {
+    tasks->input = NULL;
+    tasks->output = NULL;
+
+    if (fl) {
+        mx_command_cut(cm, arr[0], arr[2], tasks);
+        tasks->op = '-';
     }
-    tasks[q].input = NULL;
-    tasks[q].output = NULL;
-    mx_command_cut(command, start, i, &tasks[q]);
-    // printf("command%d - %s\n", q, tasks[q].task);
-    //if (tasks[q].input)
-        // printf("input - %s\n", tasks[q].input->file);
-    // if (tasks[q].output)
-        // printf("output - %s\n", tasks[q].output->file);
-    tasks[q].op = '-';
-    // system("leaks -q ush");
+}
+
+static t_reddir *pipe_check(char *cm) {
+    int size = dir_count(cm);
+    t_reddir *tasks = (t_reddir *)malloc(sizeof(t_reddir) * (size + 2));
+    int arr[] = {0, 0, 0};
+    bool brr[] = {false, false, false};
+
+    for (; cm[arr[2]] != '\0'; arr[2]++) {
+        quoteCheck(cm, arr[2], brr);
+        if (for_pipe_chek(cm, arr, brr)) {
+            for_pipe_check_one(&tasks[arr[1]], cm, arr, false);
+            if (cm[arr[2] - 1] == ' ')
+                (arr[2]) -= 1;
+            mx_command_cut(cm, arr[0], arr[2], &tasks[arr[1]]);
+            tasks[arr[1]].op = '|';
+            for (; cm[arr[2]] == ' ' || cm[arr[2]] == '|'; arr[2]++);
+            arr[0] = arr[2];
+            (arr[1])++;
+        }
+    }
+    for_pipe_check_one(&tasks[arr[1]], cm, arr, true);
     return tasks;
 }
 
@@ -164,87 +172,98 @@ void deleteTasks(t_reddir **tasks) {
     *tasks = NULL;
 }
 
-int mx_redirection(char *command,t_builtin_command *my_command) {
-
-    // printf("redirection -> %s\n", command);
-    t_reddir *tasks = pipe_check(command);
-    int status = 2;
+static void for_redir_one(t_reddir *tasks, t_builtin_command *my_command) {
     int input;
     bool extInput = false;
     t_path *p = NULL;
-    char *str = NULL;
-    int size = 0;
-    int output = 0;
 
-    if (tasks[0].op == '|' || tasks[0].output || tasks[0].input) {
-        if (tasks[0].op == '|' || tasks[0].output) {
-            status = mx_pipe_rec(tasks, 0, 0, extInput, my_command);
-        }
-        for (int i = 0; tasks[i - 1].op != '-'; i++) {
-            if (tasks[i].input) {
-                p = tasks[i].input;
-                for (; p;  p = p->next) {
-                    input = open(p->file, O_RDONLY);
-                    if (input == -1)
-                        perror("ush");
-                    extInput = true;
-                    mx_pipe_rec(tasks, i, input, extInput, my_command);
-                    extInput = false;
-                    close(input);
-                }
-            }
-        }
-        for (int i = 0; tasks[i - 1].op != '-'; i++) {
-            if (tasks[i].output != NULL) {
-                if (tasks[i].output->next) {
-                    // printf("EXTRA EXTERNAL OUTPUT\n");
-                    str = mx_file_to_str(tasks[i].output->file);
-                    size = strlen(str);
-                    p = tasks[i].output->next;
-                    for (; p;  p = p->next) {
-                        output = open(p->file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_ISUID);
-                        if (output == -1) {
-                            perror("ush");
-                        }
-                        else {
-                            write(output, str, size);
-                        }
-                        close(output);
-                    }
-                }
+    for (int i = 0; tasks[i - 1].op != '-'; i++) {
+        if (tasks[i].input) {
+            p = tasks[i].input;
+            for (; p;  p = p->next) {
+                input = open(p->file, O_RDONLY);
+                if (input == -1)
+                    perror("ush: ");
+                extInput = true;
+                mx_pipe_rec(tasks, i, input, extInput, my_command);
+                extInput = false;
+                close(input);
             }
         }
     }
+}
+
+static void for_redir_two_one(char *str, int size, t_path *p) {
+    int output;
+
+    output = open(p->file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_ISUID);
+    if (output == -1)
+        perror("ush");
+    else
+        write(output, str, size);
+    close(output);
+}
+
+static void for_redir_two(t_reddir *tasks) {
+    t_path *p = NULL;
+    char *str = NULL;
+    int size = 0;
+
+    for (int i = 0; tasks[i - 1].op != '-'; i++) {
+        if (tasks[i].output != NULL) {
+            if (tasks[i].output->next) {
+                str = mx_file_to_str(tasks[i].output->file);
+                size = strlen(str);
+                p = tasks[i].output->next;
+                for (; p;  p = p->next)
+                    for_redir_two_one(str, size, p);
+                mx_strdel(&str);
+            }
+        }
+    }
+}
+
+static void for_redir_three(t_reddir *tasks, t_builtin_command *my_command,
+                            int *stat) {
+    mx_varList(tasks[0].task, &my_command->var);
+    printVar(my_command->var);
+    if (tasks[0].task[0] == 'e' && tasks[0].task[1] == 'x'
+        && tasks[0].task[2] == 'p' && tasks[0].task[3] == 'o'
+        && tasks[0].task[4] == 'r' && tasks[0].task[5] == 't')
+        {
+            my_command->execute = true;
+            *stat = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL);
+        }
+}
+
+static void for_redir_four(t_reddir *tasks, t_builtin_command *my_command, 
+                            int *stat) {
+    bool extInput = false;
+
+    if ((tasks[0].op == '|' || tasks[0].output) && !tasks[0].input)
+        *stat = mx_pipe_rec(tasks, 0, 0, extInput, my_command);
+    for_redir_one(tasks, my_command);
+    for_redir_two(tasks);
+}
+
+int mx_redirection(char *command, t_builtin_command *my_command) {
+    t_reddir *tasks = pipe_check(command);
+    int status = 2;
+
+    if (tasks[0].op == '|' || tasks[0].output || tasks[0].input)
+        for_redir_four(tasks, my_command, &status);
     else {
         if (isAlias(tasks[0].task) == true) {
-            // printf("ALIAS HERE\n");
             mx_aliasList(tasks[0].task, &my_command->alias_list);
             printAlias(my_command->alias_list);
         }
-        else if (iSvar(tasks[0].task) == true) {
-            //printf("COMMAND TASK = %s\n", tasks[0].task);
-            mx_varList(tasks[0].task, &my_command->var);
-            printVar(my_command->var);
-            //printf("COMMAND TASK = %s\n", tasks[0].task);
-            if (tasks[0].task[0] == 'e' && tasks[0].task[1] == 'x'
-                && tasks[0].task[2] == 'p' && tasks[0].task[3] == 'o'
-                && tasks[0].task[4] == 'r' && tasks[0].task[5] == 't')
-                {
-                    my_command->execute = true;
-                    status = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL);
-                }
-        }
+        else if (iSvar(tasks[0].task) == true)
+            for_redir_three(tasks, my_command, &status);
         else {
-           // tasks[0].task = mx_aliasSearch(tasks[0].task, my_command->alias_list);
-
-            //printf("TASK -> %s\n", tasks[0].task);
             my_command->execute = true;
             status = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL);
         }
-
     }
     deleteTasks(&tasks);
-    // system("leaks -q ush");
-    // printAlias(*varList);
     return status;
 }
