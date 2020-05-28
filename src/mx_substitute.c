@@ -18,6 +18,7 @@ static char *subLine(char **mainCommand, char *command, t_builtin_command *my_co
     for (; command[(*index).c] != '\0'; (*index).c++) {
         //printf("strat\n");
         //printf("%d\n", (*index).c);
+        // fprintf(stdout, " -%c- ", command[(*index).c]);
         if (command[(*index).c] == 96 && command[(*index).c - 1] != 92 && trig.dQ == false) {
             if (trig.sQ == false) {
                 trig.sQ = true;
@@ -68,7 +69,6 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
     // bool ap = false;
     // bool iSbr = false;
     // bool extr = false;
-
     // char *line = (char *)malloc(sizeof(char) * strlen(command));
     t_inc index;
     char *mainCommand = (char *)malloc(sizeof(char) * strlen(command) * 50);
@@ -79,6 +79,7 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
     memset(&index, 0, sizeof(t_inc));
     //printf("in sub\n");
     line = subLine(&mainCommand, command, my_command, &index);
+    // fprintf(stdout, "-%s-", mainCommand);
     //printf("MAIN COM = %s\n", mainCommand);
     //printf("after\n");
     // printf("main command - %s\n", mainCommand);
@@ -160,22 +161,29 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
         }
         char c;
         // int i = k + 1;
-        for(index.b += 1; read(fd[0], &c, 1); index.b++) {
+        // index.b += 1
+        for(; read(fd[0], &c, 1); index.b++) {
             if (c == '\n')
                 c = ' ';
+            // fprintf(stdout, "-%c-", c);
             mainCommand[index.b] = c;
         }
         close(fd[0]);
-        for (index.c += 1; command[index.c] != '\0'; index.c++) {
+        for (index.c += 1; command[index.c] != '\0' && command[index.c - 1] != '\0'; index.c++) {
             mainCommand[index.b] = command[index.c];
+            fprintf(stdout, ". %c .", command[index.c]);
             index.b++;
         }
-        mainCommand[index.b] = '\0';
+        if (mainCommand[index.b - 1] == ' ')
+            mainCommand[index.b - 1] = '\0';
+        else
+            mainCommand[index.b] = '\0';
         mainCommand = realloc(mainCommand, strlen(mainCommand) + 1);
         //printf("MAIN command - %s\n", mainCommand);
         return mainCommand;
     }
-    mx_strdel(&mainCommand);
-    mx_strdel(&line);
+    
+    // mx_strdel(&mainCommand);
+    // mx_strdel(&line);
     return command;
 }
