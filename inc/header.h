@@ -326,4 +326,6 @@ void mx_del_all(char ***argv, char **path);
 char *mx_nameCut(char *command, int *start);
 char *mx_tokenCut(char *command, int start, int end);
 bool mx_parExt(char *command);
+char *mx_subLine(char **mainCommand, char *command, t_builtin_command *my_command, t_inc *index);
+
 #endif

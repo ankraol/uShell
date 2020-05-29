@@ -73,6 +73,7 @@ FILES = main \
 	mx_aliasList_func \
 	mx_tokenSplit_one \
 	mx_parameter_exp_one \
+	mx_subLine \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

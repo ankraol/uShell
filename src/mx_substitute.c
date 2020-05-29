@@ -1,69 +1,53 @@
 #include "header.h"
 
-// static bool iSsub(char *command) {
-    // for (int i = 0; command[i] != '\0'; i++) {
-        // if (command[i] == 96)
-            // return true;
-    // }
-    // return false;
-// }
+// static char *subLine(char **mainCommand, char *command, t_builtin_command *my_command, t_inc *index) {
+//     t_muteChar trig;
+//     char *line = (char *)malloc(sizeof(char) * strlen(command));
 
-
-static char *subLine(char **mainCommand, char *command, t_builtin_command *my_command, t_inc *index) {
-    t_muteChar trig;
-    char *line = (char *)malloc(sizeof(char) * strlen(command));
-
-    memset(&trig, 0, sizeof(t_muteChar));
+//     memset(&trig, 0, sizeof(t_muteChar));
     
-    for (; command[(*index).c] != '\0'; (*index).c++) {
-        //printf("strat\n");
-        //printf("%d\n", (*index).c);
-        // fprintf(stdout, " -%c- ", command[(*index).c]);
-        if (command[(*index).c] == 96 && command[(*index).c - 1] != 92 && trig.dQ == false) {
-            if (trig.sQ == false) {
-                trig.sQ = true;
-            }
-            else {
-                break;
-            }
-        }
-        else if (command[(*index).c - 1] == 36 && command[(*index).c] == 40 && trig.sQ == false) {
-            if (trig.dQ == false) {
-                trig.dQ = true;
-            }
-            else {
-                trig.iSs = true;
-                line[(*index).a] = command[(*index).c];
-                (*index).a++;
-            }
-        }
-        else if (command[(*index).c] == 41) {
-            if (trig.iSs == true)
-                trig.iSs = false;
-            else
-                break;
-        }
-        else if (trig.sQ == false && trig.dQ == false) {
-            if (command[(*index).c] != 36) {
-                (*mainCommand)[(*index).b] = command[(*index).c];
-                (*index).b++;
-            }
-        }
-        else if (trig.sQ == true || trig.dQ == true) {
-                line[(*index).a] = command[(*index).c];
-                (*index).a++;
-        }
-        //printf("%c\n", command[(*index).c]);
-        //printf("%d\n", (*index).b);
-    }
-    //printf("endof cycle");
-    line[(*index).a] = '\0';
-    (*mainCommand)[(*index).b] = ' ';
-    line = realloc(line, strlen(line) + 1);
-    line = mx_aliasSearch(line, my_command->alias_list);
-    //printf("command in stat func %s\n", *mainCommand);
-    return line;
-}
+//     for (; command[(*index).c] != '\0'; (*index).c++) {
+//         if (command[(*index).c] == 96 && command[(*index).c - 1] != 92 && trig.dQ == false) {
+//             if (trig.sQ == false) {
+//                 trig.sQ = true;
+//             }
+//             else {
+//                 break;
+//             }
+//         }
+//         else if (command[(*index).c - 1] == 36 && command[(*index).c] == 40 && trig.sQ == false) {
+//             if (trig.dQ == false) {
+//                 trig.dQ = true;
+//             }
+//             else {
+//                 trig.iSs = true;
+//                 line[(*index).a] = command[(*index).c];
+//                 (*index).a++;
+//             }
+//         }
+//         else if (command[(*index).c] == 41) {
+//             if (trig.iSs == true)
+//                 trig.iSs = false;
+//             else
+//                 break;
+//         }
+//         else if (trig.sQ == false && trig.dQ == false) {
+//             if (command[(*index).c] != 36) {
+//                 (*mainCommand)[(*index).b] = command[(*index).c];
+//                 (*index).b++;
+//             }
+//         }
+//         else if (trig.sQ == true || trig.dQ == true) {
+//                 line[(*index).a] = command[(*index).c];
+//                 (*index).a++;
+//         }
+//     }
+//     line[(*index).a] = '\0';
+//     (*mainCommand)[(*index).b] = ' ';
+//     line = realloc(line, strlen(line) + 1);
+//     line = mx_aliasSearch(line, my_command->alias_list);
+//     return line;
+// }
 
 char *mx_substitute(char *command, t_builtin_command *my_command) {
     // bool ap = false;
@@ -78,7 +62,7 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
     // int i = 0;
     memset(&index, 0, sizeof(t_inc));
     //printf("in sub\n");
-    line = subLine(&mainCommand, command, my_command, &index);
+    line = mx_subLine(&mainCommand, command, my_command, &index);
     // fprintf(stdout, "-%s-", mainCommand);
     //printf("MAIN COM = %s\n", mainCommand);
     //printf("after\n");
