@@ -110,6 +110,7 @@ void ush_loop(void) {
         // mx_printstr("u$h> ");
         line = mx_read_line(&trig, &my_command);
         if (line[0] != '\0') {
+            printf("BEFORE WORK SPLIT - %s\n", line);
             work = mx_works_queue((char *)line);
             // system("leaks -q ush");
             for (int i = 0; work[i]; i++) {
