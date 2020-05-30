@@ -326,6 +326,28 @@ void mx_del_all(char ***argv, char **path);
 char *mx_nameCut(char *command, int *start);
 char *mx_tokenCut(char *command, int start, int end);
 bool mx_parExt(char *command);
-char *mx_subLine(char **mainCommand, char *command, t_builtin_command *my_command, t_inc *index);
+char *mx_subLine(char **mainCommand, char *command,
+                 t_builtin_command *my_command, t_inc *index);
+void mx_command_cut_four(char *command, int *arr, bool *brr, t_path **output);
+bool mx_isSpace(char *command, int i);
+void mx_command_cut_five(t_path **output, char *command, int *arr, int s);
+void mx_command_cut_six(int *arr, char *com, t_path **output, bool *brr);
+void mx_command_seven(int *arr, t_path **input);
+void mx_command_eight(int *arr, t_path **output);
+void mx_command_cut_ten(t_reddir *tasks, int *arr, char *com, bool *brr);
+void mx_command_cut_nine(t_reddir *tasks, int *arr, int s, int f);
+void mx_command_cut_eleven(t_path **output, char *command, int *arr,
+                            bool *brr);
+void mx_command_cut_twelve(t_path **output, char *command, int *arr,
+                            bool *brr);
+t_path *mx_create_list(char *command, int *i, int f, int s);
+void mx_command_cut_two(char *com, int *arr, bool *brr);
+void mx_quotesCheck(bool *sQ, bool *dQ, char *command, int i);
+void mx_command_cut_three(t_path **output, char *command, int *arr, int s);
+void mx_command_cut_one(t_reddir *tasks, int *arr, char *command,
+                                bool *brr);
+void mx_command_cut_thirteen(t_path **output, char *command, int *arr,
+                             bool *brr);
+bool mx_command_cut_fourteen( char *command, int *arr, bool *brr);
 
 #endif

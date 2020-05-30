@@ -74,6 +74,10 @@ FILES = main \
 	mx_tokenSplit_one \
 	mx_parameter_exp_one \
 	mx_subLine \
+	mx_command_cut_four \
+	mx_command_cut_five \
+	mx_command_cut_nine \
+	mx_command_cut_therteen \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
