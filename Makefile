@@ -79,6 +79,7 @@ FILES = main \
 	mx_command_cut_five \
 	mx_command_cut_nine \
 	mx_command_cut_therteen \
+	mx_cycleOne \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

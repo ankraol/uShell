@@ -1,30 +1,7 @@
 #include "header.h"
 
-static int cycleOne(t_inc *index, t_muteChar *trig, char *command, char **line) {
-    if (command[(*index).c] == 96 && command[(*index).c - 1] != 92 && (*trig).dQ == false) {
-        if ((*trig).sQ == false) {
-            (*trig).sQ = true;
-        }
-        else {
-            return -1;
-        }
-        return 1;
-    }
-    else if (command[(*index).c - 1] == 36 && command[(*index).c] == 40 && (*trig).sQ == false) {
-        if ((*trig).dQ == false) {
-            (*trig).dQ = true;
-        }
-        else {
-            (*trig).iSs = true;
-            (*line)[(*index).a] = command[(*index).c];
-            (*index).a++;
-        }
-        return 1;
-    }
-    return 0;
-}
-
-static int cycleTwo(t_inc *index, t_muteChar *trig, char *command, char **mainCommand) {
+static int cycleTwo(t_inc *index, t_muteChar *trig, char *command,
+                    char **mainCommand) {
     if (command[(*index).c] == 41) {
         if ((*trig).iSs == true)
             (*trig).iSs = false;
@@ -42,26 +19,24 @@ static int cycleTwo(t_inc *index, t_muteChar *trig, char *command, char **mainCo
     return 0;
 }
 
-static void closeString(char **line, t_inc *index, char **mainCommand, t_builtin_command *my_command) {
+static void closeString(char **line, t_inc *index, char **mainCommand,
+                        t_builtin_command *my_command) {
     (*line)[(*index).a] = '\0';
     (*mainCommand)[(*index).b] = ' ';
     (*line) = realloc((*line), strlen(*line) + 1);
     (*line) = mx_aliasSearch(*line, my_command->alias_list);
 }
 
-char *mx_subLine(char **mainCommand, char *command, t_builtin_command *my_command, t_inc *index) {
-    t_muteChar trig;
-    char *line = (char *)malloc(sizeof(char) * strlen(command));
+static void innerCycle(t_muteChar trig, t_inc *index, t_subCom commands) {
     int check;
 
-    memset(&trig, 0, sizeof(t_muteChar));
-    for (; command[(*index).c] != '\0'; (*index).c++) {
-        check = cycleOne(index, &trig, command, &line);
+    for (; commands.com[(*index).c] != '\0'; (*index).c++) {
+        check = mx_cycleOne(index, &trig, commands.com, &commands.line);
         if (check == 0) {
-            check = cycleTwo(index, &trig, command, mainCommand);
+            check = cycleTwo(index, &trig, commands.com, commands.origin);
             if (check == 0) {
                 if (trig.sQ == true || trig.dQ == true) {
-                    line[(*index).a] = command[(*index).c];
+                    commands.line[(*index).a] = commands.com[(*index).c];
                     (*index).a++;
                 }
             }
@@ -71,6 +46,19 @@ char *mx_subLine(char **mainCommand, char *command, t_builtin_command *my_comman
         if (check == -1)
             break;
     }
+}
+
+char *mx_subLine(char **mainCommand, char *command,
+                t_builtin_command *my_command, t_inc *index) {
+    t_muteChar trig;
+    char *line = (char *)malloc(sizeof(char) * strlen(command));
+    t_subCom commands;
+
+    memset(&trig, 0, sizeof(t_muteChar));
+    commands.com = command;
+    commands.line = line;
+    commands.origin = mainCommand;
+    innerCycle(trig, index, commands);
     closeString(&line, index, mainCommand, my_command);
     return line;
 }

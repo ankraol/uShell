@@ -150,6 +150,13 @@ typedef struct s_reddir t_reddir;
 typedef struct s_list t_list;
 typedef struct s_alias t_alias;
 typedef struct s_muteChar t_muteChar;
+typedef struct s_subCom t_subCom;
+
+struct s_subCom {
+    char *com;
+    char *line;
+    char **origin;
+};
 
 struct s_muteChar {
     bool sQ;
@@ -350,5 +357,7 @@ void mx_command_cut_one(t_reddir *tasks, int *arr, char *command,
 void mx_command_cut_thirteen(t_path **output, char *command, int *arr,
                              bool *brr);
 bool mx_command_cut_fourteen( char *command, int *arr, bool *brr);
+int mx_cycleOne(t_inc *index, t_muteChar *trig, char *command,
+            char **line);
 
 #endif
