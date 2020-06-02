@@ -359,5 +359,6 @@ void mx_command_cut_thirteen(t_path **output, char *command, int *arr,
 bool mx_command_cut_fourteen( char *command, int *arr, bool *brr);
 int mx_cycleOne(t_inc *index, t_muteChar *trig, char *command,
             char **line);
+char *mx_parameterSearch(char *parameter, char *command);
 
 #endif

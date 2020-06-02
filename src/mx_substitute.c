@@ -34,5 +34,7 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
         subFill(fd, index, &mainCommand, command);
         return mainCommand;
     }
+    mx_strdel(&line);
+    mx_strdel(&mainCommand);
     return command;
 }

@@ -31,9 +31,9 @@ int mx_subExec(t_builtin_command *my_command, char *line) {
             execute(work[i], my_command);
         }
         exit(0);
-        }
-        else {
-            close(fd[1]);
-        }
-        return fd[0];
+    }
+    else
+        close(fd[1]);
+    mx_strdel(&line);
+    return fd[0];
 }

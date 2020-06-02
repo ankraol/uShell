@@ -11,8 +11,8 @@ static bool first(char *command, int i, bool sQ) {
 }
 
 static bool second(char *command, int i, bool sQ, bool dQ) {
-    if (command[i] == 36 && (command[i + 1] != ' ' || command[i + 1] != '\0')
-        && sQ == false && command[i - 1] != 92)
+    if (command[i] == 36 && (command[i + 1] != ' ' && command[i + 1] != '\0'
+        && command[i + 1] != 40) && sQ == false && command[i - 1] != 92)
         {
             return true;
         }
