@@ -46,7 +46,7 @@ void mx_print_e(char **file, int *err) {
                 tmp = '\\';
             else if (file[i][j] == '\\' && file[i][j + 1] == '0')
                 tmp = '\0';
-            else if (file[i][j] == '\\' && file[i][j + 1] == 'a' && ++i > 0)
+            else if (file[i][j] == '\\' && file[i][j + 1] == 'a' && ++j > 0)
                 tmp = '\a';
             else if ((tmp = print_e(&file[i][j], &j)) != -1);
             else if (file[i][j] == '\\' && file[i][j + 1] == 'c' && ++j > 0)
