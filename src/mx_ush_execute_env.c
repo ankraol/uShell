@@ -11,10 +11,18 @@ void mx_del_all(char ***argv, char **path) {
 
 
 
-void mx_mistake(char *command, char ***argv, char **path) {
-    mx_printerr("env: ");
-    mx_printerr(command);
-    mx_printerr(": No such file or directory\n");
+void mx_mistake(char *command, char ***argv, char **path, bool flag) {
+    if (flag) {
+        mx_printerr("ush: ");
+        mx_printerr("command not found: ");
+        mx_printerr(command);
+        mx_printerr("\n");
+    }
+    else{
+        mx_printerr("env: ");
+        mx_printerr(command);
+        mx_printerr(": No such file or directory\n");
+    }
     mx_del_all(argv, path);
 }
 
@@ -65,9 +73,9 @@ static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
 // }
 
 
-static bool path_check(char **path, char *command, char ***argv) {
+static bool path_check(char **path, char *command, char ***argv, bool flag) {
     if (*path == NULL) {
-        mx_mistake(command, argv, path);
+        mx_mistake(command, argv, path, flag);
         return true;
     }
     return false;
@@ -77,26 +85,26 @@ void last_func(char ***argv, char **str) {
     mx_del_all(argv, str);
 }
 
-int mx_ush_execute_env(char *command, t_builtin_command *my_command,
+int mx_ush_execute_env(char *com, t_builtin_command *my_com,
                        char **new_env, char *path_env) {
     pid_t pid;
-    char **argv = mx_tokenSplit(command);
-    int val_ret = 0;
+    char **argv = mx_tokenSplit(com);
+    int val_ret = 1;
 
-    my_command->path_for_ex = mx_read_env(argv[0], path_env, my_command);
-    if (my_command->execute == true)
-        val_ret = mx_valid_command(argv, mx_count_elem(argv), my_command);
+    my_com->path_for_ex = mx_read_env(argv[0], path_env, my_com);
+    if (my_com->execute == true)
+        val_ret = mx_valid_command(argv, mx_count_elem(argv), my_com);
     if (val_ret != 0) {
-        if (path_check(&(my_command->path_for_ex), command, &argv))
+        if (path_check(&(my_com->path_for_ex), com, &argv, my_com->execute))
             return 1;
         pid = fork();
         if (pid == 0) {
-            if (mx_child(command, my_command, new_env, &argv) == 1)
+            if (mx_child(com, my_com, new_env, &argv) == 1)
                 return 1;
         }
         else
-            parent(pid, &val_ret, my_command, argv);
+            parent(pid, &val_ret, my_com, argv);
     }
-    last_func(&argv, &(my_command->path_for_ex));
+    last_func(&argv, &(my_com->path_for_ex));
     return val_ret;
 }

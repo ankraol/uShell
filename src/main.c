@@ -51,6 +51,7 @@ void mx_mysetenv() {
     free(pwd);
 }
 
+
 static void build_export(t_export **export_list) {
     extern char **environ;
     char **full_val = NULL;
@@ -64,6 +65,24 @@ static void build_export(t_export **export_list) {
         }
     }
 }
+
+void del_work( t_queue ***work) {
+    t_queue *p = NULL;
+    t_queue *buf = NULL;
+
+    for (int i = 0; (*work)[i]; i++) {
+        p = (*work)[i];
+        while (p) {
+           buf = p->next;
+           mx_strdel(&(p->command));
+           free(p);
+           p = buf;
+        }
+    }
+    free(*work);
+    
+}
+
 
 void ush_loop(void) {
     unsigned char *line;
@@ -109,15 +128,16 @@ void ush_loop(void) {
     while (trig == false) {
         // mx_printstr("u$h> ");
         line = mx_read_line(&trig, &my_command);
+        //system("leaks -q ush");
         if (line[0] != '\0') {
             printf("BEFORE WORK SPLIT - %s\n", line);
             work = mx_works_queue((char *)line);
-            // system("leaks -q ush");
+            system("leaks -q ush");
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
                     // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
-                    (*p).command = mx_parameter_exp((*p).command, my_command.var);
+                    //(*p).command = mx_parameter_exp((*p).command, my_command.var);
                     // system("leaks -q ush");
                     printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &my_command);
@@ -135,6 +155,7 @@ void ush_loop(void) {
             // printf("NAME -> %s\n", aliasList->name);
             // printAlias(aliasList);
         }
+        del_work(&work);
         free(line);
         // system("leaks -q ush");
     }
@@ -180,6 +201,7 @@ int main(void) {
     //system("leaks -q ush");
     // lsh_loop();
     // mx_ush_pipe_execute(); 
+    //system("leaks -q ush");
     
 }
 

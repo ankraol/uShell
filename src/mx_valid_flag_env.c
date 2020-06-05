@@ -22,13 +22,13 @@ int mx_child(char *command, t_builtin_command *my_command, char **new_env,
     mx_set_signal();
     if (my_command->execute == false) {
         if (execve(my_command->path_for_ex, *argv, new_env) == -1) {
-            mx_mistake(command, argv, &(my_command->path_for_ex));
+            mx_mistake(command, argv, &(my_command->path_for_ex), false);
             val_ret = 1;
         }
     }
     if (my_command->execute == true) {
         if (execvp(my_command->path_for_ex, *argv) == -1) {
-            mx_mistake(command, argv, &(my_command->path_for_ex));
+            mx_mistake(command, argv, &(my_command->path_for_ex), true);
             val_ret = 1;
         }
     }

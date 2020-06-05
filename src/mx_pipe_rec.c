@@ -18,7 +18,7 @@ static int for_child(t_reddir *command, int pos, int in_fd, t_builtin_command *m
     task = mx_strsplit(command[pos].task, ' ');
     path = mx_read_env(task[0], NULL, my_command);
     if (execvp(path, task) == -1) {
-        mx_mistake(task[0], &task, &path);
+        mx_mistake(task[0], &task, &path, true);
         ret = 1;
     }
     mx_del_all(&task, &path);
@@ -51,7 +51,7 @@ static int in_fork(t_builtin_command *my_command, int pos, int in_fd, int *fd, t
     task = mx_strsplit(command[pos].task, ' ');
     path = mx_read_env(task[0], NULL, my_command);
     if (execvp(path, task) == -1) {
-        mx_mistake(task[0], &task, &path);
+        mx_mistake(task[0], &task, &path, true);
         return 1;
     }
     mx_del_all(&task, &path);
