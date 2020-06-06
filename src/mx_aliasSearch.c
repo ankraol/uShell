@@ -52,6 +52,7 @@ char *mx_aliasSearch(char *command, t_alias *list) {
                 newCommand = aliasSub(command, task, p->meaning);
         }
     }
+    mx_strdel(&task);
     return newCommand;
 }
 

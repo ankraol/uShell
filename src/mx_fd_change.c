@@ -18,7 +18,7 @@ static void in_fork(t_builtin_command *my_command, int pos, int in_fd, int outpu
     task = mx_strsplit(command[pos].task, ' ');
     path = mx_read_env(task[0], NULL, my_command);
     if (execvp(path, task) == -1) {
-        mx_mistake(task[0], &task, &path);
+        mx_mistake(task[0], &task, &path, true);
         return;
     }
     mx_del_all(&task, &path);

@@ -340,7 +340,7 @@ bool mx_glag_p_u(t_env **env_list, t_env_flag *env_flag, char **path,
 char *mx_no_path(char *file, t_builtin_command *my_command);
 void mx_set_signal();
 int mx_count_elem(char **arr);
-void mx_mistake(char *command, char ***argv, char **path);
+void mx_mistake(char *command, char ***argv, char **path, bool flag);
 int mx_child(char *command, t_builtin_command *my_command, char **new_env,
              char ***argv);
 void mx_del_all(char ***argv, char **path);
