@@ -70,7 +70,7 @@ char *mx_new_l_pwd(char **file, char *path,  t_builtin_command *command) {
 		mx_strdel(&tmp1);
 		mx_change_path(tmp2);
         if (mx_zero_arr(tmp2))
-            path = mx_make_logic_path(tmp2, tmp, path);
+            path = mx_make_logic_path(tmp2, tmp);
         else
             path = mx_strdup("/");
 		mx_del_strarr(&tmp2);
@@ -90,5 +90,6 @@ char *mx_cd_logic(char **file, t_builtin_command *command, int *err) {
             return NULL;
 		}	
 	}
+    mx_strdel(&link_name);
     return path;
 }

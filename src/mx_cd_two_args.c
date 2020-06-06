@@ -8,7 +8,9 @@ bool mx_zero_arr(char **str) {
     return false;
 }
 
-char *mx_make_logic_path(char **tmp2, char *tmp, char *tmp1) {
+char *mx_make_logic_path(char **tmp2, char *tmp) {
+    char *tmp1 = NULL;
+
     for (int i = 0; tmp2[i]; i++) {
         if (tmp2[i][0] != '\0') {
             tmp = mx_strjoin(tmp1, "/");
@@ -56,7 +58,7 @@ void mx_cd_two_args(char **file, t_builtin_command *command, int *err) {
         mx_strdel(&tmp1);
         mx_change_path(tmp2);
         if (mx_zero_arr(tmp2))
-            tmp1 = mx_make_logic_path(tmp2, tmp, tmp1);
+            tmp1 = mx_make_logic_path(tmp2, tmp);
         else
             tmp1 = mx_strdup("/");
         mx_change_pwd(tmp1, command, err, file);
