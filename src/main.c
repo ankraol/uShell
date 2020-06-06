@@ -142,7 +142,7 @@ void ush_loop(void) {
             printf("BEFORE WORK SPLIT - %s\n", line);
             work = mx_works_queue((char *)line);
 
-            system("leaks -q ush");
+            //system("leaks -q ush");
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
@@ -169,7 +169,7 @@ void ush_loop(void) {
         del_work(&work);
         //printf("del line\n");
         free(line);
-        // system("leaks -q ush");
+        system("leaks -q ush");
     }
 }
 

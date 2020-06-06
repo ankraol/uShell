@@ -91,9 +91,10 @@ int mx_ush_execute_env(char *com, t_builtin_command *my_com,
     char **argv = mx_tokenSplit(com);
     int val_ret = 1;
 
-    my_com->path_for_ex = mx_read_env(argv[0], path_env, my_com);
+    //my_com->path_for_ex = mx_read_env(argv[0], path_env, my_com);
     if (my_com->execute == true)
         val_ret = mx_valid_command(argv, mx_count_elem(argv), my_com);
+    my_com->path_for_ex = mx_read_env(argv[0], path_env, my_com);
     if (val_ret != 0) {
         if (path_check(&(my_com->path_for_ex), com, &argv, my_com->execute))
             return 1;
