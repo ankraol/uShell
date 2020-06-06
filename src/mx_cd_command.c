@@ -122,6 +122,7 @@ void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, int *err) 
 	}
 	file = mx_create_file(arg, ac, count_files, file);
 	mx_falid_files(file, count_files, command, err);
+    mx_del_strarr(&file);
 }
 
 

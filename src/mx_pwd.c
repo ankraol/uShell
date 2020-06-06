@@ -36,7 +36,7 @@ void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err)
 		else if (!flag_priority)
 			count_files++;
 	}
-	if (count_files > 0)
+	if (count_files > 0) 
 		fprintf(stderr, "pwd: too many arguments\n");
 	if (command->pwd->flag_P || command->cd->flag_P) {
 		printf("%s\n", command->path->pwdP);

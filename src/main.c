@@ -70,17 +70,23 @@ void del_work( t_queue ***work) {
     t_queue *p = NULL;
     t_queue *buf = NULL;
 
-    for (int i = 0; (*work)[i]; i++) {
-        p = (*work)[i];
-        while (p) {
-           buf = p->next;
-           mx_strdel(&(p->command));
-           free(p);
-           p = buf;
+    if (*work != NULL) {
+        for (int i = 0; (*work)[i]; i++) {
+            p = (*work)[i];
+            while (p) {
+                buf = p->next;
+                mx_strdel(&(p->command));
+                if (malloc_size(p) && p != NULL)
+                    free(p);
+                p = buf;
+            }
+        }
+        if (malloc_size(*work) && *work != NULL) {
+            free(*work);
+            *work = NULL;
         }
     }
-    free(*work);
-    
+
 }
 
 
@@ -128,10 +134,14 @@ void ush_loop(void) {
     while (trig == false) {
         // mx_printstr("u$h> ");
         line = mx_read_line(&trig, &my_command);
+        //printf("HERE\n");
+        //printf("%-----d-----\n", line[0]);
         //system("leaks -q ush");
-        if (line[0] != '\0') {
+        if (line && line[0] != '\0') {
+
             printf("BEFORE WORK SPLIT - %s\n", line);
             work = mx_works_queue((char *)line);
+
             system("leaks -q ush");
             for (int i = 0; work[i]; i++) {
                 p = work[i];
@@ -155,7 +165,9 @@ void ush_loop(void) {
             // printf("NAME -> %s\n", aliasList->name);
             // printAlias(aliasList);
         }
+        //printf("del work\n");
         del_work(&work);
+        //printf("del line\n");
         free(line);
         // system("leaks -q ush");
     }
