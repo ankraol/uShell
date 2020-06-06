@@ -151,6 +151,20 @@ typedef struct s_list t_list;
 typedef struct s_alias t_alias;
 typedef struct s_muteChar t_muteChar;
 typedef struct s_subCom t_subCom;
+typedef struct s_expIndex t_expIndex;
+typedef struct s_expChar t_expChar;
+
+struct s_expChar {
+    bool exp;
+    bool dollar;
+    bool sQ;
+};
+
+struct s_expIndex {
+    int k;
+    int j;
+    int start;
+};
 
 struct s_subCom {
     char *com;
@@ -360,5 +374,6 @@ bool mx_command_cut_fourteen( char *command, int *arr, bool *brr);
 int mx_cycleOne(t_inc *index, t_muteChar *trig, char *command,
             char **line);
 char *mx_parameterSearch(char *parameter, char *command);
+char *mx_parFill(char *command, char **newLine, t_expIndex *index, bool *tilda, t_var *varList);
 
 #endif
