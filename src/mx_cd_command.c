@@ -79,6 +79,7 @@ void mx_cd_flag_min(t_builtin_command *command) {
 }
 
 void mx_falid_files(char **file, int count_files, t_builtin_command *command, int *err) {
+    char *path = NULL;
 
     if (count_files > 2) {
         fprintf(stderr, "cd: too many arguments\n");
@@ -91,9 +92,10 @@ void mx_falid_files(char **file, int count_files, t_builtin_command *command, in
     else if (!(command->cd->arg_min) && (count_files == 0 || strcmp(file[0], "~") == 0))
         mx_home(command);
 	else {
-		char *path = mx_cd_logic(file, command, err);
+		path = mx_cd_logic(file, command, err);
 		if (path != NULL)
             mx_change_pwd(path, command, err, file);
+        mx_strdel(&path);
 	}
 }
 
