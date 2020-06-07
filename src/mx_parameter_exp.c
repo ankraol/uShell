@@ -13,6 +13,7 @@ char *mx_parameter_exp(char *command, t_var *varList) {
         newLine = (char *)malloc(sizeof(char) * (strlen(command) * 50));
     while (command[index.start] != '\0') {
         replace = mx_parFill(command, &newLine, &index, varList);
+        printf("REPLACE = %s\n", replace);
         index.tilda = false;
         index.k = 0;
         if (replace) {
