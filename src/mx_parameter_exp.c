@@ -3,7 +3,6 @@
 char *mx_parameter_exp(char *command, t_var *varList) {
     char *newLine = NULL;
     char *replace = NULL;
-    bool tilda = false;
     t_expIndex index;
 
     memset(&index, 0, sizeof(t_expIndex));
@@ -13,11 +12,11 @@ char *mx_parameter_exp(char *command, t_var *varList) {
     {
         newLine = (char *)malloc(sizeof(char) * (strlen(command) * 50));
     while (command[index.start] != '\0') {
-        replace = mx_parFill(command, &newLine, &index, &tilda, varList);
-        tilda = false;
+        replace = mx_parFill(command, &newLine, &index, varList);
+        index.tilda = false;
         index.k = 0;
         if (replace) {
-            newLine = realloc(newLine, strlen(command) + strlen(replace) + 1);
+            // newLine = realloc(newLine, strlen(command) + strlen(replace) + 1);
             for (int i = 0; replace[i] != '\0'; i++) {
                 newLine[index.j] = replace[i];
                 index.j++;

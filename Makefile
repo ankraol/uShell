@@ -82,6 +82,9 @@ FILES = main \
 	mx_cycleOne \
 	mx_parameterSearch \
 	mx_parFill \
+	mx_parCycle \
+	mx_par_firstPart \
+	mx_par_secondPart \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
