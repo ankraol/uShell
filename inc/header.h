@@ -130,7 +130,7 @@ int mx_valid_command(char **arg, int ac, t_builtin_command *command);
 void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, int *err);
 char *mx_cd_logic(char **file, t_builtin_command *command, int *err);
 void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err);
-char *mx_make_logic_path(char **tmp2, char *tmp, char *tmp1);
+char *mx_make_logic_path(char **tmp2, char *tmp);
 void mx_valid_flag_echo(t_builtin_command *command, char **arg, int ac);
 void mx_change_path(char **tmp2);
 char **my_strsplit(const char *s, char c);

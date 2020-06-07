@@ -121,4 +121,5 @@ void mx_valid_flag_echo(t_builtin_command *command, char **arg, int ac) {
     }
     file = mx_create_file_echo(arg, ac, count_files, file);
     mx_echo(file, command);
+    mx_del_strarr(&file);
 }
