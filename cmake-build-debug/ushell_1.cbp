@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="ushell_1"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/anetreba/Desktop/ushell_1/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/anetreba/Desktop/ushell_1/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/anetreba/Desktop/ushell_1/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ushell_1">
+				<Option output="/Users/anetreba/Desktop/ushell_1/cmake-build-debug/ushell_1" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/anetreba/Desktop/ushell_1/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/anetreba/Desktop/ushell_1/inc"/>
+					<Add directory="/Users/anetreba/Desktop/ushell_1/src"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/10.0.1/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 ushell_1"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ushell_1/fast">
+				<Option output="/Users/anetreba/Desktop/ushell_1/cmake-build-debug/ushell_1" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/anetreba/Desktop/ushell_1/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/anetreba/Desktop/ushell_1/inc"/>
+					<Add directory="/Users/anetreba/Desktop/ushell_1/src"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/10.0.1/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 ushell_1/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/anetreba/Desktop/ushell_1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/inc/header.h">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/example.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/main.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_add_to_str.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_aliasList.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_aliasList_func.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_aliasSearch.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_arrow_down.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_arrow_up.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_arrow_use.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_back_to_str.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_byte_check.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_cd_command.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_cd_two_args.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_comand_env_four.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_comand_env_one.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_comand_env_three.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_comand_env_two.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_command_cut.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_command_cut_five.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_command_cut_four.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_command_cut_nine.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_command_cut_therteen.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_command_export.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_count_words.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_cycleOne.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_del_strarr.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_echo.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_env_list.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_env_list_find.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_expLine.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_export_list.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_fd_change.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_fg_command.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_file_to_str.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_for_export_com.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_for_fg_command.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_four_cycle.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_get_width.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_history_use.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_implementarion_of_builtin_commands.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_input_key.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_is_buildin.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_itoa.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_logicOp.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_logic_path.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_main_cycle_key.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_one_cycle.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_parFill.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_parameterSearch.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_parameter_exp.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_parameter_exp_one.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_pid_list.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_pipe_rec.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_printchar.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_printerr.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_printstr.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_pwd.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_read_env.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_read_env_two.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_redirection.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_strcat.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_strcmp.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_strcpy.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_strdel.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_strdup.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_strjoin.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_strjoin_two.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_strlen.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_strnew.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_strsplit.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_subExec.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_subLine.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_substitute.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_tokenSplit.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_tokenSplit_one.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_tokens.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_two_cycle.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_unset_command.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_ush_execute_env.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_valid_flag_env.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_varList.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_which.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/src/mx_works_queue.c">
+			<Option target="ushell_1"/>
+		</Unit>
+		<Unit filename="/Users/anetreba/Desktop/ushell_1/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

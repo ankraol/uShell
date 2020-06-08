@@ -65,8 +65,24 @@ void mx_home(t_builtin_command *command) {
     chdir(pw->pw_dir);
 }
 
+void mx_print_min(char *pwd) {
+    struct passwd *pw = getpwuid(getuid());
+
+    if (strstr(pwd, pw->pw_dir) != NULL) {
+        int len = strlen(pw->pw_dir);
+
+        printf("~");
+        printf("%s\n", pwd + len);
+    }
+    else
+        printf("%s\n", pwd);
+}
+
 void mx_cd_flag_min(t_builtin_command *command) {
     chdir(command->path->oldpwd);
+
+    mx_print_min(command->path->oldpwd);
+
     if (command->cd->flag_P) {
         mx_swap_str(&command->path->oldpwd, &command->path->pwdP);
         command->path->pwdP = getcwd(NULL, 0);
