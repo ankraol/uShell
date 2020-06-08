@@ -87,14 +87,6 @@ int mx_valid_command(char **arg, int ac, t_builtin_command *command) {
 	"unset", "fg", "exit", NULL};
 	int err = 0;
 
-    // printf("lol\n");
-
-	// command->env = (t_env *)malloc(sizeof(t_env));
-	// command->which = (t_which *)malloc(sizeof(t_which));
-
-	// memset(command->env, 0, sizeof(t_env));
-	// memset(command->which, 0, sizeof(t_which));
-
 	if (strcmp(builtin_str[0], arg[0]) == 0 && strlen(arg[0]) == 2) {
 		mx_valid_flag_cd(command, arg, ac, &err);
         return err;

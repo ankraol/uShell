@@ -7,7 +7,7 @@ void mx_struct_flag_cd(char *av, t_builtin_command *command, char *flag, int *er
 		else if (av[j] == flag[1])
 			command->cd->flag_P = true;
 		else if (av[j] > 47 && av[j] < 58) {
-			fprintf(stderr, "cd: no such entry in dir stack\n");
+            fprintf(stderr, "cd: no such entry in dir stack\n");
             *err = 1;
         }
 		else {
@@ -65,8 +65,24 @@ void mx_home(t_builtin_command *command) {
     chdir(pw->pw_dir);
 }
 
+void mx_print_min(char *pwd) {
+    struct passwd *pw = getpwuid(getuid());
+
+    if (strstr(pwd, pw->pw_dir) != NULL) {
+        int len = strlen(pw->pw_dir);
+
+        printf("~");
+        printf("%s\n", pwd + len);
+    }
+    else
+        printf("%s\n", pwd);
+}
+
 void mx_cd_flag_min(t_builtin_command *command) {
     chdir(command->path->oldpwd);
+
+    mx_print_min(command->path->oldpwd);
+
     if (command->cd->flag_P) {
         mx_swap_str(&command->path->oldpwd, &command->path->pwdP);
         command->path->pwdP = getcwd(NULL, 0);
