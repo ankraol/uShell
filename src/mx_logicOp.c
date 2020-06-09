@@ -125,7 +125,7 @@ void mx_logicOp(char *line, t_queue **list) {
         newLine = deleteExtraSpaces(line);
         mx_strdel(&line);
     }
-    else
+    else 
         newLine = mx_strdup(line);
     // printf("LINE IN LOGICOP = %s\n", newLine);
     for (; newLine[i] != '\0'; i++) {
@@ -140,8 +140,13 @@ void mx_logicOp(char *line, t_queue **list) {
                 start = i;
             }
     }
-    // printf("NEWLINE = %s\n", newLine);
+    //printf("NEWLINE = %s\n", newLine);
     pushBack(list, newLine, start, i);
+    // t_queue *n = *list;
+    // while (n) {
+    //     printf("LIST IN OP -----  %s\n", n->command);
+    //     n = n->next;
+    // }
     mx_strdel(&newLine);
 }
 

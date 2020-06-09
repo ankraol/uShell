@@ -159,6 +159,7 @@ void jobs_delete(t_list **jobs) {
         p1 = p2;
         p2 = *jobs;
     }
+    mx_strdel(&p1->command);
     if (malloc_size(*jobs))
         free(*jobs);
 }
@@ -187,5 +188,15 @@ t_queue **mx_works_queue(char *line) {
     }
     list[size] = NULL;
     jobs_delete(&jobs);
+
+    // for (int i = 0; list[i]; i++) {
+
+
+    //     t_queue *n = list[i];
+    //     while (n) {
+    //         printf("LIST IN QUEUE -----  %s\n", n->command);
+    //         n = n->next;
+    //     }
+    // }
     return list;
 }

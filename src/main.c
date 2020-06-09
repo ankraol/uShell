@@ -74,6 +74,7 @@ void del_work( t_queue ***work) {
         for (int i = 0; (*work)[i]; i++) {
             p = (*work)[i];
             while (p) {
+                printf("DELETE : %s\n", p->command);
                 buf = p->next;
                 mx_strdel(&(p->command));
                 if (malloc_size(p) && p != NULL)
