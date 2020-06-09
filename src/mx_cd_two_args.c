@@ -25,7 +25,7 @@ char *mx_make_logic_path(char **tmp2, char *tmp) {
 }
 
 void mx_change_pwd(char *tmp1, t_builtin_command *command, int *err, char **file) {
-    if (chdir(tmp1) != 0) {
+    if (chdir(tmp1) < 0) {
         if (mx_str_count(file) == 2)
             fprintf(stderr, "cd: no such file or directory: %s\n", file[1]);
         else

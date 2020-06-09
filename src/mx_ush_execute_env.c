@@ -1,31 +1,6 @@
 #include "header.h"
 
 
-void mx_del_all(char ***argv, char **path) {
-    if (*argv != NULL)
-        mx_del_strarr(argv);
-    if (*path != NULL)
-        mx_strdel(path);
-}
-
-
-
-
-void mx_mistake(char *command, char ***argv, char **path, bool flag) {
-    if (flag) {
-        mx_printerr("ush: ");
-        mx_printerr("command not found: ");
-        mx_printerr(command);
-        mx_printerr("\n");
-    }
-    else{
-        mx_printerr("env: ");
-        mx_printerr(command);
-        mx_printerr(": No such file or directory\n");
-    }
-    mx_del_all(argv, path);
-}
-
 static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
                     char **argv) {
     int number = 0;
@@ -50,27 +25,7 @@ static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
         *val_ret = 1;
 }
 
-// static void set_env(char **new_env) {
-//     extern char **environ;
-//     char **full_val = NULL;
 
-//     if (environ != NULL) {
-//         for (int i = 0; environ[i] != NULL; i++) {
-//             full_val = mx_strsplit(environ[i], '=');
-//             if (full_val[0] != NULL)
-//                 unsetenv(full_val[0]);
-//             mx_del_strarr(&full_val);
-//         }
-//     }
-//     if (new_env != NULL) {
-//         for (int i = 0; new_env[i] != NULL; i++) {
-//             full_val = mx_strsplit(new_env[i], '=');
-//             if (full_val[0] != NULL)
-//                 setenv(full_val[0], full_val[1], 1);
-//             mx_del_strarr(&full_val);
-//         }
-//     }
-// }
 
 
 static bool path_check(char **path, char *command, char ***argv, bool flag) {
@@ -80,6 +35,7 @@ static bool path_check(char **path, char *command, char ***argv, bool flag) {
     }
     return false;
 }
+
 void last_func(char ***argv, char **str) {
     tcsetpgrp(1, getpid());
     mx_del_all(argv, str);
@@ -89,13 +45,13 @@ int mx_ush_execute_env(char *com, t_builtin_command *my_com,
                        char **new_env, char *path_env) {
     pid_t pid;
     char **argv = mx_tokenSplit(com);
-    int val_ret = 1;
+    int val_ret = 0;
 
-    //my_com->path_for_ex = mx_read_env(argv[0], path_env, my_com);
     if (my_com->execute == true)
         val_ret = mx_valid_command(argv, mx_count_elem(argv), my_com);
-    my_com->path_for_ex = mx_read_env(argv[0], path_env, my_com);
-    if (val_ret != 0) {
+    if (val_ret == 999) {
+        my_com->path_for_ex = mx_read_env(argv[0], path_env, my_com);
+        val_ret = 0;
         if (path_check(&(my_com->path_for_ex), com, &argv, my_com->execute))
             return 1;
         pid = fork();

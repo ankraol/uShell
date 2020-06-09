@@ -85,6 +85,7 @@ FILES = main \
 	mx_parCycle \
 	mx_par_firstPart \
 	mx_par_secondPart \
+	mx_mistake \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
