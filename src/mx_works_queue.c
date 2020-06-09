@@ -1,5 +1,13 @@
 #include "header.h"
 
+static bool extraCommand(char *line, int i) {
+    for (int j = i + 1; line[j] != '\0'; j++) {
+        if (line[j] != ' ')
+            return false;
+    }
+    return true;
+}
+
 static void muteChar(bool *sQ, bool *dQ, bool *a, char *l, int i) {
     if (l[i] == 96 && l[i - 1] != 92 && (*sQ) == false && (*dQ) == false) {
         if ((*a) == false)
@@ -29,8 +37,10 @@ static int worksCount(char *line) {
 
     for (int i = 0; line[i] != '\0'; i++) {
         muteChar(&sQ, &dQ, &iSs, line, i);
-        if (line[i] == ';' && sQ == false && dQ == false && iSs == false)
-            count += 1;
+        if (line[i] == ';' && sQ == false && dQ == false && iSs == false) {
+            if(extraCommand(line, i) == false && line[i + 1] != '\0')
+                count += 1;
+        }
     }
     return count;
 }
@@ -91,7 +101,8 @@ static char *commandCut(char *line, int start, int end) {
         }
     }
     command[q] = '\0';
-    command = realloc(command, strlen(command));
+    command = realloc(command, strlen(command) + 1);
+    // printf("COMMAND = %s\n", command);
     return command;
 }
 
@@ -99,12 +110,14 @@ static void pushBack(t_list **jobs, char *line, int start, int end) {
     t_list **p = jobs;
 
     if ((*jobs) == NULL) {
+        // printf("FIRST JOB\n");
         (*p) = (t_list *)malloc(sizeof(t_list));
         (*p)->command = commandCut(line, start, end);
         (*p)->next = NULL;
     }
     else {
-        for (; (*p)->next; *p = (*p)->next);
+        for (; (*p)->next; p = &(*p)->next);
+        // printf("NEXT COMMAND AFTER -> %s\n", (*p)->command);
         (*p)->next = (t_list *)malloc(sizeof(t_list));
         (*p)->next->command = commandCut(line, start, end);
         (*p)->next->next = NULL;
@@ -123,6 +136,7 @@ static t_list *jobsSplit(char *line) {
     for (; line[i] != '\0'; i++) {
         muteChar(&mute.sQ, &mute.dQ, &mute.iSs, line, i);
         if (mute.sQ == false && mute.dQ == false && mute.iSs == false && line[i] == ';') {
+            // printf("THERE IS A DIFFERENT JOB");
             pushBack(&jobs, line, start, i);
             start = i + 1;
         }
@@ -149,15 +163,27 @@ void jobs_delete(t_list **jobs) {
         free(*jobs);
 }
 
+// static void listPrint(t_list *jobs) {
+//     t_list *p = jobs;
+
+//     for (; p; p = p->next) {
+//         printf("splited LIST = %s\n", p->command);
+//     }
+// }
+
 t_queue **mx_works_queue(char *line) {
     int size = worksCount(line);
+    // printf("%d\n", size);
     t_list *jobs = jobsSplit(line);
+    // listPrint(jobs);
     t_queue **list = (t_queue **)malloc(sizeof(t_queue *) * (size + 1));
     int i = 0;
 
     for (t_list *p = jobs; p && i < size; p = (*p).next, i++) {
         list[i] = NULL;
+        // printf("WE ARE IN WORKS QUEUE - %s\n", (*p).command);
         mx_logicOp((*p).command, &list[i]);
+        // printf("AFTER LOGICOP = %s\n", list[i]->command);
     }
     list[size] = NULL;
     jobs_delete(&jobs);

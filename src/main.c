@@ -89,6 +89,15 @@ void del_work( t_queue ***work) {
 
 }
 
+// static void work_print(t_queue **work) {
+//     t_queue *p = NULL;
+    
+//     for (int i = 0; work[i]; i++) {
+//         for (p = work[i]; p; p = p->next) {
+//             printf("COMMAND AFTER WORK_QUEUE = %s\n", p->command);
+//         }
+//     }
+// }
 
 void ush_loop(void) {
     unsigned char *line;
@@ -139,9 +148,9 @@ void ush_loop(void) {
         //system("leaks -q ush");
         if (line && line[0] != '\0') {
 
-            printf("BEFORE WORK SPLIT - %s\n", line);
+            // printf("BEFORE WORK SPLIT - %s\n", line);
             work = mx_works_queue((char *)line);
-
+            // work_print(work);
             //system("leaks -q ush");
             for (int i = 0; work[i]; i++) {
                 p = work[i];
@@ -149,9 +158,9 @@ void ush_loop(void) {
                     // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
                     (*p).command = mx_parameter_exp((*p).command, my_command.var);
                     // system("leaks -q ush");
-                    printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
+                    // printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &my_command);
-                    printf("everything is ok ---- %s\n", (*p).command);
+                    // printf("everything is ok ---- %s\n", (*p).command);
                    // system("leaks -q ush");
                     status = mx_redirection((*p).command, &my_command);
                    // system("leaks -q ush");
