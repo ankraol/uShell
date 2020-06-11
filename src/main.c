@@ -145,7 +145,7 @@ void ush_loop(void) {
     while (trig == false) {
         // mx_printstr("u$h> ");
         line = mx_read_line(&trig, &my_command);
-        printf("FIRS LINE ------ %s\n", line);
+        // printf("FIRS LINE ------ %s\n", line);
         //printf("HERE\n");
         //printf("%-----d-----\n", line[0]);
         //system("leaks -q ush");
@@ -161,12 +161,12 @@ void ush_loop(void) {
                     // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
                     (*p).command = mx_expandParameter((*p).command, my_command.var);
                     // system("leaks -q ush");
-                    printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
+                    // printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &my_command);
-                    printf("COMMAND AFTER SUBSTITUTION - %s\n", (*p).command);
+                    // printf("COMMAND AFTER SUBSTITUTION - %s\n", (*p).command);
                 //    system("leaks -q ush");
                     status = mx_redirection((*p).command, &my_command);
-                    printf("COMMAND AFTER REDIRECTION - %s\n", (*p).command);
+                    // printf("COMMAND AFTER REDIRECTION - %s\n", (*p).command);
                    // system("leaks -q ush");
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))

@@ -378,5 +378,6 @@ char *mx_expandParameter(char *line, t_var *varList);
 char *mx_expandedLine(char *line, t_var *varList);
 char *mx_findParameter(char *parameter, t_var *varList);
 char *mx_expand_parts(char *dollarSplit, t_var *varList);
+char *mx_findTilda(char *line, t_var *varList);
 
 #endif
