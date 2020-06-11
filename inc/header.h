@@ -382,6 +382,9 @@ int mx_par_firstPart(char *command, int *i, t_expChar *trig, bool *tilda);
 int mx_par_secondPart(char *command, int *i, t_expChar *trig);
 
 
-void mx_expandParameter(char *line);
+char *mx_expandParameter(char *line, t_var *varList);
+char *mx_expandedLine(char *line, t_var *varList);
+char *mx_findParameter(char *parameter, t_var *varList);
+char *mx_expand_parts(char *dollarSplit, t_var *varList);
 
 #endif

@@ -105,6 +105,12 @@ static int tokensCount(char *command) {
 //     return tokens;
 // }
 
+static void arr_print(char **arr) {
+    for (int i = 0; arr[i]; i++) {
+        printf("%s\n", arr[i]);
+    }
+}
+
 char **mx_tokenSplit(char *command) {
     bool iSsq = false;
     bool iSdq = false;
@@ -123,5 +129,6 @@ char **mx_tokenSplit(char *command) {
     }
     tokens[arr[0]] = mx_tokenCut(command, arr[1], arr[2]);
     tokens[arr[0] + 1] = NULL;
+arr_print(tokens);
     return tokens;
 }
