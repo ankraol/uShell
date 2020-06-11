@@ -381,5 +381,6 @@ char *mx_findParameter(char *parameter, t_var *varList);
 char *mx_expand_parts(char *dollarSplit, t_var *varList);
 void mx_command_exit(t_builtin_command *com, int *err, char **argv, int ac);
 
+char *mx_findTilda(char *line, t_var *varList);
 
 #endif

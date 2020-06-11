@@ -84,6 +84,7 @@ FILES = main \
 	mx_findParameter \
 	mx_expand_parts \
 	mx_exit_commnad \
+	mx_findTilda \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
