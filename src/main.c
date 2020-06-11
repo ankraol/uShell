@@ -103,7 +103,7 @@ void del_work( t_queue ***work) {
 
 int ush_loop(void) {
     unsigned char *line;
-   int status = 2;
+   int status = 0;
    t_queue **work = NULL;
    t_queue *p = NULL;
     int exit_code = 0;
@@ -164,8 +164,8 @@ int ush_loop(void) {
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
-                    printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
-                    (*p).command = mx_parameter_exp((*p).command, my_command.var);
+                    // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
+                    (*p).command = mx_expandParameter((*p).command, my_command.var, status);
                     // system("leaks -q ush");
                     // printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &my_command);

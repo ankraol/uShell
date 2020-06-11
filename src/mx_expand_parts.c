@@ -38,7 +38,7 @@ static char *joinExpansion(char **part, char *expansion) {
     return newLine;
 }
 
-char *mx_expand_parts(char *dollarSplit, t_var *varList) {
+char *mx_expand_parts(char *dollarSplit, t_var *varList, int status) {
     char **parameter = mx_strsplit(dollarSplit, ' ');
     char *bracketless = NULL;
     char *expansion = NULL;
@@ -46,11 +46,11 @@ char *mx_expand_parts(char *dollarSplit, t_var *varList) {
 
     if (parameter[0][0] == '{') {
         bracketless = deleteBrackets(parameter[0]);
-        expansion = mx_findParameter(bracketless, varList);
+        expansion = mx_findParameter(bracketless, varList, status);
         mx_strdel(&bracketless);
     }
     else
-        expansion = mx_findParameter(parameter[0], varList);
+        expansion = mx_findParameter(parameter[0], varList, status);
     newLine = joinExpansion(parameter, expansion);
     return newLine;
 }

@@ -19,12 +19,12 @@ static bool isExp(char *line) {
     return false;
 }
 
-char *mx_expandParameter(char *line, t_var *varList) {
+char *mx_expandParameter(char *line, t_var *varList, int status) {
     char *newLine = NULL;
     char *tilda = NULL;
 
     if (isExp(line) == true) {
-        newLine = mx_expandedLine(line, varList);
+        newLine = mx_expandedLine(line, varList, status);
         mx_strdel(&line);
     }
     else {
@@ -32,7 +32,7 @@ char *mx_expandParameter(char *line, t_var *varList) {
         mx_strdel(&line);
     }
     if (isTilda(newLine) == true) {
-        tilda = mx_findTilda(newLine, varList);
+        tilda = mx_findTilda(newLine, varList, status);
         mx_strdel(&newLine);
         return tilda;
     }

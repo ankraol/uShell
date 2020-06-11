@@ -375,12 +375,12 @@ bool mx_command_cut_fourteen( char *command, int *arr, bool *brr);
 int mx_cycleOne(t_inc *index, t_muteChar *trig, char *command,
                 char **line);
 
-char *mx_expandParameter(char *line, t_var *varList);
-char *mx_expandedLine(char *line, t_var *varList);
-char *mx_findParameter(char *parameter, t_var *varList);
-char *mx_expand_parts(char *dollarSplit, t_var *varList);
+char *mx_expandParameter(char *line, t_var *varList, int status);
+char *mx_expandedLine(char *line, t_var *varList, int status);
+char *mx_findParameter(char *parameter, t_var *varList, int status);
+char *mx_expand_parts(char *dollarSplit, t_var *varList, int status);
 void mx_command_exit(t_builtin_command *com, int *err, char **argv, int ac);
 
-char *mx_findTilda(char *line, t_var *varList);
+char *mx_findTilda(char *line, t_var *varList, int status);
 
 #endif

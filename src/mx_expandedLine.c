@@ -16,13 +16,16 @@ static char *joinParts(char *first, char *second) {
 
 static char *commandDup(char *command) {
     char **arr = mx_strsplit(command, ' ');
-    char *newCommand = mx_strdup(arr[0]);
+    char *newCommand = NULL;
 
+    for (int i = 0; arr[i]; i++) {
+        newCommand = joinParts(newCommand, arr[i]);
+    }
     mx_del_strarr(&arr);
     return newCommand;
 }
 
-char *mx_expandedLine(char *line, t_var *varList) {
+char *mx_expandedLine(char *line, t_var *varList, int status) {
     char **dollarSplit = mx_strsplit(line, '$');
     char *newLine = NULL;
     char *parameter = NULL;
@@ -33,11 +36,12 @@ char *mx_expandedLine(char *line, t_var *varList) {
         newLine = commandDup(dollarSplit[0]);
     }
     for(; dollarSplit[i]; i++) {
-        parameter = mx_expand_parts(dollarSplit[i], varList);
-        newLine = joinParts(newLine, parameter);
-        mx_strdel(&parameter);
+        parameter = mx_expand_parts(dollarSplit[i], varList, status);
+        if (parameter) {
+            newLine = joinParts(newLine, parameter);
+            mx_strdel(&parameter);
+        }
     }
-
     mx_del_strarr(&dollarSplit);
     return newLine;
 }

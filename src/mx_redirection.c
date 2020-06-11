@@ -248,7 +248,7 @@ static void for_redir_four(t_reddir *tasks, t_builtin_command *my_command,
 
 int mx_redirection(char *command, t_builtin_command *my_command) {
     t_reddir *tasks = pipe_check(command);
-    int status = 2;
+    int status = 0;
 
     if (tasks[0].op == '|' || tasks[0].output || tasks[0].input)
         for_redir_four(tasks, my_command, &status);

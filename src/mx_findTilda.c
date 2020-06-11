@@ -14,25 +14,25 @@ static char *joinParts(char *first, char *second) {
     return newLine;
 }
 
-static char *tildaMeaning(char *tilda, t_var *varList) {
+static char *tildaMeaning(char *tilda, t_var *varList, int status) {
     char *meaning = NULL;
 
     if (tilda[0] == '~')
-        meaning = mx_findParameter("PWD", varList);
+        meaning = mx_findParameter("PWD", varList, status);
     else if (tilda[0] == '+')
-        meaning = mx_findParameter("HOME", varList);
+        meaning = mx_findParameter("HOME", varList, status);
     else if (tilda[0] == '-')
-        meaning = mx_findParameter("OLDPWD", varList);
+        meaning = mx_findParameter("OLDPWD", varList, status);
     return meaning;
 }
 
-char *mx_findTilda(char *line, t_var *varList) {
+char *mx_findTilda(char *line, t_var *varList, int status) {
     char **arr = mx_strsplit(line, ' ');
     char *part = NULL;
     char *newLine = NULL;
 
     for (int i = 0; arr[i]; i++) {
-        part = tildaMeaning(arr[i], varList);
+        part = tildaMeaning(arr[i], varList, status);
         if (!part)
             newLine = joinParts(newLine, arr[i]);
         else {
