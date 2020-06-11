@@ -1,5 +1,14 @@
 #include "header.h"
 
+void mx_del_export_var(t_var **var_list) {
+    if (*var_list != NULL) {
+        mx_strdel(&(*var_list)->name);
+        mx_strdel(&(*var_list)->meaning);
+        free(*var_list);
+        *var_list = NULL;
+    }
+}
+
 
 void mx_command_exit(t_builtin_command *com, int *err, char **argv, int ac) {
     if (com->pid_ar != NULL) {
