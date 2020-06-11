@@ -296,7 +296,6 @@ void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
 void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
                    t_builtin_command *my_co);
 void mx_add_to_str(unsigned char **str, t_len_name **le);
-char *mx_parameter_exp(char *command, t_var *varList);
 void mx_aliasList(char *command, t_alias **aliasList);
 char *mx_aliasSearch(char *command, t_alias *list);
 void mx_back_to_str(unsigned char **str,  t_len_name **le);
@@ -347,7 +346,6 @@ int mx_child(char *command, t_builtin_command *my_command, char **new_env,
 void mx_del_all(char ***argv, char **path);
 char *mx_nameCut(char *command, int *start);
 char *mx_tokenCut(char *command, int start, int end);
-bool mx_parExt(char *command);
 int mx_subExec(t_builtin_command *my_command, char *line);
 char *mx_subLine(char **mainCommand, char *command,
                  t_builtin_command *my_command, t_inc *index);
@@ -374,12 +372,6 @@ void mx_command_cut_thirteen(t_path **output, char *command, int *arr,
 bool mx_command_cut_fourteen( char *command, int *arr, bool *brr);
 int mx_cycleOne(t_inc *index, t_muteChar *trig, char *command,
                 char **line);
-char *mx_parameterSearch(char *parameter, char *command);
-char *mx_parFill(char *command, char **newLine, t_expIndex *index,
-                t_var *varList);
-char *mx_parCycle(t_expIndex *index, char *command, bool *tilda, char **newLine);
-int mx_par_firstPart(char *command, int *i, t_expChar *trig, bool *tilda);
-int mx_par_secondPart(char *command, int *i, t_expChar *trig);
 
 
 char *mx_expandParameter(char *line, t_var *varList);

@@ -36,7 +36,6 @@ FILES = main \
 	mx_arrow_up \
 	mx_arrow_down \
 	mx_add_to_str \
-	mx_parameter_exp \
 	mx_aliasList \
 	mx_aliasSearch \
 	mx_implementarion_of_builtin_commands \
@@ -72,7 +71,6 @@ FILES = main \
 	mx_read_env_two \
 	mx_aliasList_func \
 	mx_tokenSplit_one \
-	mx_parameter_exp_one \
 	mx_subLine \
 	mx_subExec \
 	mx_command_cut_four \
@@ -80,11 +78,6 @@ FILES = main \
 	mx_command_cut_nine \
 	mx_command_cut_therteen \
 	mx_cycleOne \
-	mx_parameterSearch \
-	mx_parFill \
-	mx_parCycle \
-	mx_par_firstPart \
-	mx_par_secondPart \
 	mx_mistake \
 	mx_expandParameter \
 	mx_expandedLine \

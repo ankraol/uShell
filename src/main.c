@@ -160,7 +160,6 @@ void ush_loop(void) {
                 for (; p; p = (*p).next) {
                     // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
                     (*p).command = mx_expandParameter((*p).command, my_command.var);
-                    // (*p).command = mx_parameter_exp((*p).command, my_command.var);
                     // system("leaks -q ush");
                     printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &my_command);
