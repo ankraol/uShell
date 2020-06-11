@@ -88,13 +88,13 @@ static char *commandCut(char *line, int start, int end) {
             quotesCheck(&ap, &iSsq, &iSdq, line, i);
         }
         if (line[i - 1] != 92 && line[i] == 92
-            && (line[i + 1] == 34 || line[i + 1] == 39 || line[i + 1] == 96)
-            && ap == false && iSsq == false && iSdq == false)
+            && line[i + 1] == 96 && ap == false && iSsq == false
+            && iSdq == false)
             {
                 i++;
             }
-            else if (line[i] == 92 && line[i + 1] == 92 && ap == false && iSsq == false && iSdq == false)
-                for (int k = 0; line[i + 1] == 92 && k < 4; i++, k++);
+        //     else if (line[i] == 92 && line[i + 1] == 92 && ap == false && iSsq == false && iSdq == false)
+        //         for (int k = 0; line[i + 1] == 92 && k < 4; i++, k++);
             if (onlySpaces(line, i, end) == false) {
                 command[q] = line[i];
                 q++;

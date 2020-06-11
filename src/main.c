@@ -93,7 +93,7 @@ void del_work( t_queue ***work) {
 
 // static void work_print(t_queue **work) {
 //     t_queue *p = NULL;
-    
+   
 //     for (int i = 0; work[i]; i++) {
 //         for (p = work[i]; p; p = p->next) {
 //             printf("COMMAND AFTER WORK_QUEUE = %s\n", p->command);
@@ -159,7 +159,7 @@ int ush_loop(void) {
 
             // printf("BEFORE WORK SPLIT - %s\n", line);
             work = mx_works_queue((char *)line);
-            //work_print(work);
+            // work_print(work);
             //system("leaks -q ush");
             for (int i = 0; work[i]; i++) {
                 p = work[i];

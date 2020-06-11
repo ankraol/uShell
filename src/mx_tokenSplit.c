@@ -24,7 +24,8 @@ static int tokensCount(char *command) {
         if (command[i] == 34 || command[i] == 39)
             quotesCheck(&iSsq, &iSdq, command, i);
         if (iSsq == false && iSdq == false
-        && command[i] == ' ' && command[i + 1] != '\0')
+        && command[i] == ' ' && command[i + 1] != '\0'
+        && command[i - 1] != 92)
             {
                 count++;
             }
@@ -105,11 +106,11 @@ static int tokensCount(char *command) {
 //     return tokens;
 // }
 
-static void arr_print(char **arr) {
-    for (int i = 0; arr[i]; i++) {
-        printf("%s\n", arr[i]);
-    }
-}
+// static void arr_print(char **arr) {
+//     for (int i = 0; arr[i]; i++) {
+//         printf("%s\n", arr[i]);
+//     }
+// }
 
 char **mx_tokenSplit(char *command) {
     bool iSsq = false;
@@ -121,14 +122,16 @@ char **mx_tokenSplit(char *command) {
     for (; command[arr[2]] != '\0'; arr[2]++) {
         if (command[arr[2]] == 34 || command[arr[2]] == 39)
             quotesCheck(&iSsq, &iSdq, command, arr[2]);
-        else if (command[arr[2]] == ' ' && iSsq == false && iSdq == false) {
-            tokens[arr[0]] = mx_tokenCut(command, arr[1], arr[2]);
-            arr[1] = arr[2] + 1;
-            arr[0]++;
+        else if (command[arr[2]] == ' ' && iSsq == false && iSdq == false
+                && command[arr[2] - 1] != 92)
+                {
+                    tokens[arr[0]] = mx_tokenCut(command, arr[1], arr[2]);
+                    arr[1] = arr[2] + 1;
+                    arr[0]++;
+                }
         }
-    }
-    tokens[arr[0]] = mx_tokenCut(command, arr[1], arr[2]);
-    tokens[arr[0] + 1] = NULL;
-arr_print(tokens);
-    return tokens;
+        tokens[arr[0]] = mx_tokenCut(command, arr[1], arr[2]);
+        tokens[arr[0] + 1] = NULL;
+// arr_print(tokens);
+        return tokens;
 }
