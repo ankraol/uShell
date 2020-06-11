@@ -36,14 +36,14 @@ int mx_child(char *command, t_builtin_command *my_command, char **new_env,
 }
 
 
-void mx_valid_flag_env(char **arg, int ac, t_builtin_command *command) {
+void mx_valid_flag_env(char **arg, int ac, t_builtin_command *com, int *err) {
 
     if (ac == 1)
         mx_env_one();
 
 
     else if (ac > 1) {
-        mx_env_two(arg, ac, command);
+        mx_env_two(arg, ac, com, err);
         }
 
 }

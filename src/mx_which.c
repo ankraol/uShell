@@ -9,7 +9,6 @@ static bool mx_is_commad(char *fullname, int flags) {
                 free(fullname);
                 return true;
             }
-            
             mx_printstr(fullname);
             mx_printchar('\n');
             free(fullname);
@@ -49,8 +48,10 @@ static int get_flags(int *i, char **argv) {
 */
 static int check_buildin(char *command, int flags, bool *finded) {
     if (mx_is_buildin(command)) {
-        if ((flags & 2) == 2)
+        if ((flags & 2) == 2) {
+            printf("%s: shell built-in command\n", command);
             return 1;
+        }
         printf("%s: shell built-in command\n", command);
         *finded = true;
         if ((flags & 1) == 0)
@@ -93,14 +94,15 @@ static bool check_commands(char **commands, char** pathes, int start_index,
         if ((finded == false) && ((flags & 2) == 2))
             return false;
         if (finded == false) 
-            printf("%s not found\n", commands[i]);
+            mx_printerr(commands[i]);
+            mx_printerr(" not found\n");
         if (finded && ((flags & 1) == 0 || (flags & 2) == 2))
             return true;
     }
     return finded;
 }
 
-void mx_which(char **argv, int err) {
+void mx_which(char **argv, int *err) {
     char **pathes = NULL;
     int i_args = 0;
     int flags = get_flags(&i_args, argv);
@@ -111,11 +113,11 @@ void mx_which(char **argv, int err) {
     if (flags == -1) {
         if (pathes != NULL)
             mx_del_strarr(&pathes);
-        err = 0;
+        *err = 1;
         return;
     }
     finded = check_commands(argv, pathes, i_args, flags);
-    finded ? (err = 0) : (err = 1);
+    finded ? (*err = 0) : (*err = 1);
     if (pathes != NULL)
         mx_del_strarr(&pathes);
 }

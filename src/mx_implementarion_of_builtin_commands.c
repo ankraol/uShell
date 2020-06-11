@@ -100,27 +100,29 @@ int mx_valid_command(char **arg, int ac, t_builtin_command *command) {
 	 	return err;
 	 }
 	else if (strcmp(builtin_str[1], arg[0]) == 0 && strlen(arg[0]) == 3) {
-        mx_valid_flag_env(arg, ac, command);
+        mx_valid_flag_env(arg, ac, command, &err);
         return err;
     }
 	else if (strcmp(builtin_str[3], arg[0]) == 0 && strlen(arg[0]) == 5) {
-		mx_which(arg, 0);
+		mx_which(arg, &err);
         return err;
     }
 	else if (strcmp(builtin_str[5], arg[0]) == 0 && strlen(arg[0]) == 6) {
-		mx_command_export(command, arg, ac);
+		mx_command_export(command, arg, ac, &err);
         return err;
     }
 	else if (strcmp(builtin_str[6], arg[0]) == 0 && strlen(arg[0]) == 5) {
-		mx_unset_command(command, ac, arg);
+		mx_unset_command(command, ac, arg, &err);
         return err;
     }
 	else if (strcmp(builtin_str[7], arg[0]) == 0 && strlen(arg[0]) == 2) {
-		mx_fg_command(command, arg, ac);
+		mx_fg_command(command, arg, ac, &err);
         return err;
     }
-	// else if (strcmp(builtin_str[8], arg[0]) == 0 && strlen(arg[0]) == 4)
-	// 	mx_command_exit();
+	else if (strcmp(builtin_str[8], arg[0]) == 0 && strlen(arg[0]) == 4) {
+		mx_command_exit(command, &err, arg, ac);
+        return err;
+    }
 	return 999;
 }
 

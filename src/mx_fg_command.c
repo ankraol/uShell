@@ -46,15 +46,17 @@ int mx_get_peid_name(char *name, t_pid_name *pid_arr) {
 }
 
 
-void mx_fg_command(t_builtin_command *command, char **arg, int ac) {
+void mx_fg_command(t_builtin_command *command, char **arg, int ac, int *err) {
 
     if (ac == 1) {
         if (command->pid_ar != NULL)
             mx_wait_cont(&(command)->pid_ar, command->pid_ar->pid);
-        else 
+        else {
             mx_printerr("fg: no current job\n");
+            *err = 1;
+        }
     }
     else {
-        mx_for_fg_command(command, arg, ac);
+        mx_for_fg_command(command, arg, ac, err);
     }
 }

@@ -31,18 +31,20 @@ t_env_flag *mx_creat_flag() {
 
 
 
-static void fail(t_env_flag *env_flag, t_env **env_list, char var) {
+static void fail(t_env_flag *env_flag, t_env **env_list, char var, int *err) {
     mx_delete_env(env_list);
     free(env_flag->pa);
     free(env_flag);
     mx_printerr("env: illegal option -- ");
     mx_printcharerr(var);
-    mx_printerr("\nusage: env [-i] [-P utilpath] [-u name] \
-                [name=value ...] [utility [argument ...]]\n");
-    printf("error\n");
+    mx_printerr("\nusage: env [-i] [-P utilpath] [-u name] \n\
+            [name=value ...] [utility [argument ...]]\n");
+    *err = 1;
+
 }
 
-bool mx_flag_priority(t_env_flag *env_flag, t_env **env_list, char var) {
+static bool flag_priority(t_env_flag *env_flag, t_env **env, char var,
+                            int *err) {
     if (var == 'u') {
         env_flag->flag_u = true;
         return true;
@@ -53,13 +55,13 @@ bool mx_flag_priority(t_env_flag *env_flag, t_env **env_list, char var) {
     }
     else if (var == 'i') {
         if (env_flag->i_access == true) {
-            mx_delete_env(env_list);
+            mx_delete_env(env);
             env_flag->i_access = false;
             return true;
         }
     }
     else if (var != '-') {
-        fail(env_flag, env_list, var);
+        fail(env_flag, env, var, err);
         return false;
     }
     return true;
@@ -67,7 +69,7 @@ bool mx_flag_priority(t_env_flag *env_flag, t_env **env_list, char var) {
 
 
 
-void mx_env_two(char **arg, int ac, t_builtin_command *command) {
+void mx_env_two(char **arg, int ac, t_builtin_command *command, int *err) {
     t_env *env_list = NULL;
     int i = 0;
     t_env_flag *env_flag = mx_creat_flag();
@@ -80,7 +82,7 @@ void mx_env_two(char **arg, int ac, t_builtin_command *command) {
             if (mx_glag_p_u(&env_list, env_flag, &(env_flag->pa),&(arg[i][j])))
                 break;
             if (env_flag->flag_priority == true)
-                if (!mx_flag_priority(env_flag, &env_list, arg[i][j]))
+                if (!flag_priority(env_flag, &env_list, arg[i][j], err))
                     return;
             if (mx_flag_command(arg[i], j, env_flag, &env_list))
                 break;
