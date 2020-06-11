@@ -19,7 +19,7 @@ void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err)
 	char flag[] = "LP";
 	bool flag_priority = true;
 	int count_files = 0;
-	command->pwd = (t_pwd *)malloc(sizeof(t_pwd));
+	//command->pwd = (t_pwd *)malloc(sizeof(t_pwd));
 	memset(command->pwd, 0, sizeof(t_pwd));
 
 	for(int i = 1; i < ac; i++) {

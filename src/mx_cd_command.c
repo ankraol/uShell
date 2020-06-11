@@ -117,6 +117,14 @@ void mx_falid_files(char **file, int count_files, t_builtin_command *command, in
 	}
 }
 
+void mx_change_envpwd(t_builtin_command *command) {
+    if (command->cd->flag_P)
+        setenv("PWD", command->path->pwdP, 1);
+    else
+        setenv("PWD", command->path->pwdL, 1);
+    setenv("OLDPWD", command->path->oldpwd, 1);
+}
+
 void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, int *err) {
 	char flag[] = "sP";
 	bool flag_priority = true;
@@ -142,6 +150,7 @@ void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, int *err) 
 	}
 	file = mx_create_file(arg, ac, count_files, file);
 	mx_falid_files(file, count_files, command, err);
+    mx_change_envpwd(command);
     mx_del_strarr(&file);
 }
 
