@@ -123,7 +123,7 @@ void mx_logicOp(char *line, t_queue **list) {
 
     if (extraSpaces(line) == true) {
         newLine = deleteExtraSpaces(line);
-        mx_strdel(&line);
+        // mx_strdel(&line);
     }
     else 
         newLine = mx_strdup(line);

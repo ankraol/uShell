@@ -13,8 +13,9 @@ int mx_par_secondPart(char *command, int *i, t_expChar *trig) {
         return -1;
     }
     else if (command[(*i)] == ' ' && (*trig).dollar == true) {
+        fprintf(stdout, "pre space char = %c\n", command[((*i))]);
         (*trig).dollar = false;
-        i -= 1;
+        (*i) = (*i) - 1;
         return -1;
     }
     return 0;

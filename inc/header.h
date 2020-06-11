@@ -381,4 +381,7 @@ char *mx_parCycle(t_expIndex *index, char *command, bool *tilda, char **newLine)
 int mx_par_firstPart(char *command, int *i, t_expChar *trig, bool *tilda);
 int mx_par_secondPart(char *command, int *i, t_expChar *trig);
 
+
+void mx_expandParameter(char *line);
+
 #endif

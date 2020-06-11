@@ -145,6 +145,7 @@ void ush_loop(void) {
     while (trig == false) {
         // mx_printstr("u$h> ");
         line = mx_read_line(&trig, &my_command);
+        printf("FIRS LINE ------ %s\n", line);
         //printf("HERE\n");
         //printf("%-----d-----\n", line[0]);
         //system("leaks -q ush");
@@ -158,9 +159,10 @@ void ush_loop(void) {
                 p = work[i];
                 for (; p; p = (*p).next) {
                     // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
-                    (*p).command = mx_parameter_exp((*p).command, my_command.var);
+                    mx_expandParameter((*p).command);
+                    // (*p).command = mx_parameter_exp((*p).command, my_command.var);
                     // system("leaks -q ush");
-                    // printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
+                    printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &my_command);
                     // printf("everything is ok ---- %s\n", (*p).command);
                    // system("leaks -q ush");
