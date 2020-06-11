@@ -66,7 +66,7 @@ static char *deleteExtraSpaces(char *line) {
     }
     newLine[j] = '\0';
     newLine = realloc(newLine, strlen(newLine) + 1);
-    // printf("NEW LINE = %s\n", newLine);
+    //printf("NEW LINE = %s\n", newLine);
     return newLine;
 }
 
@@ -99,21 +99,31 @@ static t_queue *createList(char *line, int start, int end) {
 }
 
 static void pushBack(t_queue **list, char *line, int start, int end) {
-    t_queue **p = list;
+    t_queue *p = createList(line, start, end);
+    t_queue *buf = *list;
 
-    if ((*list) == NULL) {
-        *p = createList(line, start, end);
+     if ((*list) == NULL)
+        *list = p;
+    else {
+        for (; buf->next; buf = buf->next);
+        buf->next = p;
     }
-    else
-    {
-        for (; (*p)->next; p = &(*p)->next);
-        (*p)->next = createList(line, start, end);
-    }
+
+    
+
+    // if ((*list) == NULL) {
+    //     p = createList(line, start, end);
+    // }
+    // else
+    // {
+    //     for (; p->next; p = p->next);
+    //     p->next = createList(line, start, end);
+    // }
     
 }
 
 void mx_logicOp(char *line, t_queue **list) {
-    // printf("\tFIRST PARSING ===> %s\n", line);
+    //printf("\tFIRST PARSING ===> %s\n", line);
     char *newLine = NULL;
     bool sQ = false;
     bool dQ = false;
@@ -123,10 +133,12 @@ void mx_logicOp(char *line, t_queue **list) {
 
     if (extraSpaces(line) == true) {
         newLine = deleteExtraSpaces(line);
-        mx_strdel(&line);
+        //mx_strdel(&line);
     }
-    else 
+    else {
         newLine = mx_strdup(line);
+        //mx_strdel(&line);
+    }
     // printf("LINE IN LOGICOP = %s\n", newLine);
     for (; newLine[i] != '\0'; i++) {
         if (newLine[i] == 34 || newLine[i] == 39 || newLine[i] == 96)

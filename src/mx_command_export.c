@@ -85,20 +85,22 @@ static void general(t_builtin_command *command, char **arr_val) {
     }
 }
 
-void mx_command_export(t_builtin_command *command, char **arg, int ac) {
+void mx_command_export(t_builtin_command *com, char **arg, int ac, int *err) {
     char **arr_val;
 
     if (ac == 1) {
-        sort_list(&command->export_ar);
-        print_list(command->export_ar);
+        sort_list(&com->export_ar);
+        print_list(com->export_ar);
     }
     else {
         for (int i = 1; i < ac; i++)
         {
             arr_val = mx_strsplit(arg[i], '='); 
             if (check_str(arr_val[0]) == 0) {
-                   general(command, arr_val);
+                   general(com, arr_val);
             }
+            else
+                *err = 1;
          mx_del_strarr(&arr_val);
         }
     }

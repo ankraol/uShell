@@ -146,22 +146,14 @@ static t_list *jobsSplit(char *line) {
 }
 
 void jobs_delete(t_list **jobs) {
-    t_list *p1 = *jobs;
-    t_list *p2 = *jobs;
+    t_list *p1 = NULL;
 
-    for (; p1->next; p1 = p1->next);
-    while (p1 != *jobs) {
-        if (malloc_size(p1->command))
-            mx_strdel(&p1->command);
-        for (; p2->next != p1; p2 = p2->next);
-        if (malloc_size(p1))
-            free(p1);
-        p1 = p2;
-        p2 = *jobs;
-    }
-    mx_strdel(&p1->command);
-    if (malloc_size(*jobs))
+    while (*jobs) {
+        p1 = (*jobs)->next;
+        mx_strdel(&((*jobs)->command));
         free(*jobs);
+        *jobs = p1;
+    }
 }
 
 // static void listPrint(t_list *jobs) {
@@ -176,14 +168,16 @@ t_queue **mx_works_queue(char *line) {
     int size = worksCount(line);
     // printf("%d\n", size);
     t_list *jobs = jobsSplit(line);
-    // listPrint(jobs);
+    //listPrint(jobs);
     t_queue **list = (t_queue **)malloc(sizeof(t_queue *) * (size + 1));
     int i = 0;
+    t_list *p = jobs;
 
-    for (t_list *p = jobs; p && i < size; p = (*p).next, i++) {
+    for (; i < size; i++) {
         list[i] = NULL;
         // printf("WE ARE IN WORKS QUEUE - %s\n", (*p).command);
-        mx_logicOp((*p).command, &list[i]);
+        mx_logicOp(p->command, &list[i]);
+        p = (*p).next;
         // printf("AFTER LOGICOP = %s\n", list[i]->command);
     }
     list[size] = NULL;

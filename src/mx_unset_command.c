@@ -30,18 +30,18 @@ static void variable_out(char *command, t_export **list) {
 }
 
 
-void mx_unset_command(t_builtin_command *command, int ac, char **arg) {
-    if (ac == 1)
+void mx_unset_command(t_builtin_command *com, int ac, char **arg, int *err) {
+    if (ac == 1) {
         mx_printerr("unset: not enough arguments\n");
-
+        *err = 1;
+    }
     else {
         for (int i = 1; i < ac; i++) {
             if (strcmp(arg[i], "PATH") == 0)
-                command->unset_path = true;
-            variable_out(arg[i], &command->export_ar);
+                com->unset_path = true;
+            variable_out(arg[i], &com->export_ar);
             if (getenv(arg[i]) != 0)
                 unsetenv(arg[i]);
         }
-        
     }
 }

@@ -1,21 +1,22 @@
 #include "header.h"
 
-static void exit_func(t_history_name **history, unsigned char *mystr, 
-                      t_len_name *len, char *buf_first) {
-    if (mx_strcmp("exit", mystr) == 0 || mystr[0] == 4) {
-        mx_delete_history(history);
-        if (malloc_size(buf_first))
-            free(buf_first);
-        if (malloc_size(mystr))
-            free(mystr);
-        free(len);
+static void exit_func(t_builtin_command *my_command) {
+    //if (mx_strcmp("exit", mystr) == 0 || mystr[0] == 4) {
+        mx_delete_history(&(my_command->history));
         printf("\nTEST EXIT/\n");
-        //system("leaks -q ush");
-        exit(0);
-    }
+    //}
 }
 
-unsigned char *mx_read_line(bool *trig, t_builtin_command *my_command) {
+static bool contral_d(unsigned char **str, t_builtin_command *my_command) {
+    if (*str[0] == 4) {
+        my_command->trig = true;
+        mx_strdel((char **) str);
+        return true;
+    }
+    return false;
+}
+
+unsigned char *mx_read_line(t_builtin_command *my_command) {
     struct termios savetty;
     struct termios tty;
     t_len_name *len = mx_creat_len();
@@ -27,15 +28,15 @@ unsigned char *mx_read_line(bool *trig, t_builtin_command *my_command) {
     savetty = tty;
     tty.c_lflag &= ~(ICANON | ECHO | ISIG);
     tty.c_cc[VMIN] = 1;
-    tcsetattr (0, TCSAFLUSH, &tty);
+    tcsetattr(0, TCSAFLUSH, &tty);
     mx_get_width(&(len->col));
     fprintf(my_command->file, "u$h> ");
     fflush(my_command->file);
     mx_main_cycle_key(my_command, &mystr, len, buf_first);
     tcsetattr (0, TCSAFLUSH, &savetty);
-    exit_func(&(my_command->history), mystr, len, buf_first);
-    *trig = len->trig;
-    free(len); 
+    my_command->trig = len->trig;
+    free(len);
+    mx_strdel(&buf_first);
     return mystr;
 }
 
@@ -74,7 +75,7 @@ void del_work( t_queue ***work) {
         for (int i = 0; (*work)[i]; i++) {
             p = (*work)[i];
             while (p) {
-                printf("DELETE : %s\n", p->command);
+                //printf("DELETE : %s\n", p->command);
                 buf = p->next;
                 mx_strdel(&(p->command));
                 if (malloc_size(p) && p != NULL)
@@ -100,16 +101,19 @@ void del_work( t_queue ***work) {
 //     }
 // }
 
-void ush_loop(void) {
+int ush_loop(void) {
     unsigned char *line;
    int status = 2;
    t_queue **work = NULL;
    t_queue *p = NULL;
-    bool trig = false;
+    int exit_code = 0;
+
 
 
 //    t_path_builtin pwd;
     t_builtin_command my_command;
+    my_command.trig = false;
+    my_command.exit_code = 0;
 
 
     my_command.unset_path = false;
@@ -142,22 +146,25 @@ void ush_loop(void) {
 
 
 
-    while (trig == false) {
+    while (my_command.trig == false) {
         // mx_printstr("u$h> ");
-        line = mx_read_line(&trig, &my_command);
+        line = mx_read_line(&my_command);
+        // mx_printstr((char *) line);
+        // mx_printstr("\n");
+        //contral_d(&line, &my_command);
         //printf("HERE\n");
         //printf("%-----d-----\n", line[0]);
         //system("leaks -q ush");
-        if (line && line[0] != '\0') {
+        if (line && line[0] != '\0' && !contral_d(&line, &my_command)) {
 
             // printf("BEFORE WORK SPLIT - %s\n", line);
             work = mx_works_queue((char *)line);
-            // work_print(work);
+            //work_print(work);
             //system("leaks -q ush");
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
-                    // printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
+                    printf("COMMAND BEFORE PARAMETER EXPANSION - %s\n", (*p).command);
                     (*p).command = mx_parameter_exp((*p).command, my_command.var);
                     // system("leaks -q ush");
                     // printf("COMMAND BEFORE SUBSTITUTION - %s\n", (*p).command);
@@ -177,11 +184,15 @@ void ush_loop(void) {
             // printAlias(aliasList);
         }
         //printf("del work\n");
+        exit_code = my_command.exit_code;
         del_work(&work);
         //printf("del line\n");
         free(line);
         system("leaks -q ush");
     }
+    exit_func(&my_command);
+    //system("leaks -q ush");
+    return exit_code;
 }
 
 void hdl(int sig)
@@ -192,6 +203,7 @@ void hdl(int sig)
 }
 
 int main(void) {
+    int exit = 0;
     // struct sigaction act;
     // memset(&act, 0, sizeof(act));
     // act.sa_handler = hdl;
@@ -220,7 +232,8 @@ int main(void) {
    // fprintf(stdout, "%d\n", getpid());
    // fflush(stdout);
 
-    ush_loop();
+    exit = ush_loop();
+    return exit;
     //system("leaks -q ush");
     // lsh_loop();
     // mx_ush_pipe_execute(); 
