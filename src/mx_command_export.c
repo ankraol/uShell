@@ -83,6 +83,7 @@ static void general(t_builtin_command *command, char **arr_val) {
             setenv(arr_val[0], command->var->meaning, 1);
         }
     }
+    mx_del_export_var(&command->var);
 }
 
 void mx_command_export(t_builtin_command *com, char **arg, int ac, int *err) {

@@ -380,6 +380,7 @@ char *mx_expandedLine(char *line, t_var *varList);
 char *mx_findParameter(char *parameter, t_var *varList);
 char *mx_expand_parts(char *dollarSplit, t_var *varList);
 void mx_command_exit(t_builtin_command *com, int *err, char **argv, int ac);
+void mx_del_export_var(t_var **var_list);
 
 
 #endif
