@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="ush_last_ver" targetName="ush_last_ver" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c97bf1e6-20f2-4cf5-892b-5588cfe51447" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mx_cd_command.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mx_cd_command.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mx_implementarion_of_builtin_commands.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mx_implementarion_of_builtin_commands.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mx_pwd.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mx_pwd.c" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1dAo1Pc5ekn2WdzGXyYSkvqJJB2" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="RunManager">
+    <configuration name="ush_last_ver" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ush_last_ver" TARGET_NAME="ush_last_ver" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ush_last_ver" RUN_TARGET_NAME="ush_last_ver">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c97bf1e6-20f2-4cf5-892b-5588cfe51447" name="Default Changelist" comment="" />
+      <created>1591877042471</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1591877042471</updated>
+      <workItem from="1591877044442" duration="58000" />
+      <workItem from="1591879471445" duration="2785000" />
+      <workItem from="1591887170667" duration="23000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1367" y="521" key="com.intellij.ide.util.TipDialog" timestamp="1591879492022">
+      <screen x="0" y="23" width="2560" height="1337" />
+    </state>
+    <state x="1367" y="521" key="com.intellij.ide.util.TipDialog/0.23.2560.1337@0.23.2560.1337" timestamp="1591879492022" />
+    <state x="1207" y="430" width="687" height="518" key="find.popup" timestamp="1591881086343">
+      <screen x="0" y="23" width="2560" height="1337" />
+    </state>
+    <state x="1207" y="430" width="687" height="518" key="find.popup/0.23.2560.1337@0.23.2560.1337" timestamp="1591881086343" />
+  </component>
+</project>
