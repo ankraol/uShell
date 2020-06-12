@@ -20,89 +20,89 @@ static bool isAlias(char *command) {
 
     //bool *sQ, bool *dQ, bool *iSs
 
-static void quoteCheck(char *c, int i, bool br[]) {
-    if (c[i] == 96 && c[i - 1] != 92 && (br[1]) == false && (br[0]) == false) {
-            if (br[2] == false)
-                br[2] = true;
-            else
-                br[2] = false;
-        }
-    else if (c[i] == 34 && c[i - 1] != 92 && br[1] == false
-            && (br[2]) == false)
-        {
-            if (br[0] == false)
-                br[0] = true;
-            else
-                br[0] = false;
-        }
-    else if (c[i] == 39 && br[0] == false && br[2] == false) {
-        if (br[1] == false)
-            br[1] = true;
-        else
-            br[1] = false;
-    }
-}
+// static void quoteCheck(char *c, int i, bool br[]) {
+//     if (c[i] == 96 && c[i - 1] != 92 && (br[1]) == false && (br[0]) == false) {
+//             if (br[2] == false)
+//                 br[2] = true;
+//             else
+//                 br[2] = false;
+//         }
+//     else if (c[i] == 34 && c[i - 1] != 92 && br[1] == false
+//             && (br[2]) == false)
+//         {
+//             if (br[0] == false)
+//                 br[0] = true;
+//             else
+//                 br[0] = false;
+//         }
+//     else if (c[i] == 39 && br[0] == false && br[2] == false) {
+//         if (br[1] == false)
+//             br[1] = true;
+//         else
+//             br[1] = false;
+//     }
+// }
 
-static int dir_count(char *command) {
-    int count = 0;
-    bool br[] = {false, false, false};
-
+// static int dir_count(char *command) {
+//     int count = 0;
+//     bool br[] = {false, false, false};
+///////////////////////////////
     //bool iSdq = false;
     //bool iSsq = false;
     //bool iSs = false;
+//////////////////////////////////
+//     for (int i = 0; command[i] != '\0'; i++) {
+//         quoteCheck(command, i, br);
+//         if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'
+//             && br[0] == false && br[1]  == false && br[2] == false)
+//             {
+//                 count++;
+//             }
+//     }
+//     return count;
+// }
 
-    for (int i = 0; command[i] != '\0'; i++) {
-        quoteCheck(command, i, br);
-        if (command[i] == '|' && command[i + 1] != '|' && command[i - 1] != '|'
-            && br[0] == false && br[1]  == false && br[2] == false)
-            {
-                count++;
-            }
-    }
-    return count;
-}
+// static bool for_pipe_chek(char *cm, int *arr, bool *brr) {
+//     if (cm[arr[2]] == '|' && cm[arr[2] + 1] != '|' && cm[arr[2] - 1] != '|'
+//             && brr[0] == false && brr[1] == false && brr[2] == false)
+//         {
+//             return true;
+//         }
+//     return false;
+// }
 
-static bool for_pipe_chek(char *cm, int *arr, bool *brr) {
-    if (cm[arr[2]] == '|' && cm[arr[2] + 1] != '|' && cm[arr[2] - 1] != '|'
-            && brr[0] == false && brr[1] == false && brr[2] == false)
-        {
-            return true;
-        }
-    return false;
-}
+// static void for_pipe_check_one(t_reddir *tasks, char *cm, int *arr, bool fl) {
+//     tasks->input = NULL;
+//     tasks->output = NULL;
 
-static void for_pipe_check_one(t_reddir *tasks, char *cm, int *arr, bool fl) {
-    tasks->input = NULL;
-    tasks->output = NULL;
+//     if (fl) {
+//         mx_command_cut(cm, arr[0], arr[2], tasks);
+//         tasks->op = '-';
+//     }
+// }
 
-    if (fl) {
-        mx_command_cut(cm, arr[0], arr[2], tasks);
-        tasks->op = '-';
-    }
-}
+// static t_reddir *pipe_check(char *cm) {
+//     int size = dir_count(cm);
+//     t_reddir *tasks = (t_reddir *)malloc(sizeof(t_reddir) * (size + 2));
+//     int arr[] = {0, 0, 0};
+//     bool brr[] = {false, false, false};
 
-static t_reddir *pipe_check(char *cm) {
-    int size = dir_count(cm);
-    t_reddir *tasks = (t_reddir *)malloc(sizeof(t_reddir) * (size + 2));
-    int arr[] = {0, 0, 0};
-    bool brr[] = {false, false, false};
-
-    for (; cm[arr[2]] != '\0'; arr[2]++) {
-        quoteCheck(cm, arr[2], brr);
-        if (for_pipe_chek(cm, arr, brr)) {
-            for_pipe_check_one(&tasks[arr[1]], cm, arr, false);
-            if (cm[arr[2] - 1] == ' ')
-                (arr[2]) -= 1;
-            mx_command_cut(cm, arr[0], arr[2], &tasks[arr[1]]);
-            tasks[arr[1]].op = '|';
-            for (; cm[arr[2]] == ' ' || cm[arr[2]] == '|'; arr[2]++);
-            arr[0] = arr[2];
-            (arr[1])++;
-        }
-    }
-    for_pipe_check_one(&tasks[arr[1]], cm, arr, true);
-    return tasks;
-}
+//     for (; cm[arr[2]] != '\0'; arr[2]++) {
+//         quoteCheck(cm, arr[2], brr);
+//         if (for_pipe_chek(cm, arr, brr)) {
+//             for_pipe_check_one(&tasks[arr[1]], cm, arr, false);
+//             if (cm[arr[2] - 1] == ' ')
+//                 (arr[2]) -= 1;
+//             mx_command_cut(cm, arr[0], arr[2], &tasks[arr[1]]);
+//             tasks[arr[1]].op = '|';
+//             for (; cm[arr[2]] == ' ' || cm[arr[2]] == '|'; arr[2]++);
+//             arr[0] = arr[2];
+//             (arr[1])++;
+//         }
+//     }
+//     for_pipe_check_one(&tasks[arr[1]], cm, arr, true);
+//     return tasks;
+// }
 
 static void printVar(t_var *varList) {
     t_var *p = varList;
@@ -247,7 +247,10 @@ static void for_redir_four(t_reddir *tasks, t_builtin_command *my_command,
 }
 
 int mx_redirection(char *command, t_builtin_command *my_command) {
-    t_reddir *tasks = pipe_check(command);
+    t_reddir *tasks = *mx_pipeCreate(command);
+    printf("new pipe commnd finished\n");
+    // t_reddir *tasks = pipe_check(command);
+    // printf("old pipe finished\n");
     int status = 0;
 
     if (tasks[0].op == '|' || tasks[0].output || tasks[0].input)

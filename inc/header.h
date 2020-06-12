@@ -384,4 +384,11 @@ void mx_del_export_var(t_var **var_list);
 
 char *mx_findTilda(char *line, t_var *varList, int status);
 
+
+t_reddir **mx_pipeCreate(char *line);
+void mx_outputCreate(char **pipeArr, t_reddir **tasks, int i);
+void mx_inputCreate(char **pipeArr, char *outputArr, t_reddir **tasks, int i, int j);
+t_reddir *mx_taskCreate(char **arr, int i);
+char **mx_customSplit(const char *s, char c);
+
 #endif
