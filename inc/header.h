@@ -392,4 +392,10 @@ t_reddir *mx_taskCreate(char **arr, int i);
 char **mx_customSplit(const char *s, char c);
 char *mx_customDup(char *str);
 
+t_list *mx_jobSplit(char *line);
+char *mx_jobDup(char *str);
+void mx_removeSlash(char **str, char symb);
+void mx_del_subSlash(char *str, int *i);
+
+
 #endif

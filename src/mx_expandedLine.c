@@ -1,11 +1,25 @@
 #include "header.h"
 
+static bool onlySlash(char *first) {
+    int i = mx_strlen(first) - 1;
+
+    if (first[i] == 92)
+        return true;
+    return false;
+}
+
 static char *joinParts(char *first, char *second) {
     char *addspace = NULL;
     char *newLine = NULL;
 
-    if (first)
+    if (first) {
+        if (onlySlash(first)) {
+            newLine = mx_strjoin(first, second);
+            mx_strdel(&first);
+            return newLine;
+        }
         addspace = mx_strjoin(first, " ");
+    }
     newLine = mx_strjoin(addspace, second);
     if (first) {
         mx_strdel(&first);

@@ -134,12 +134,16 @@ int ush_loop(void) {
         line = mx_read_line(&my_command);
         if (line && line[0] != '\0' && !contral_d(&line, &my_command)) {
             work = mx_works_queue((char *)line);
+            printf("WORKS QUEUE DONE - %s\n", work[0]->command);
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
                     (*p).command = mx_expandParameter((*p).command, my_command.var, status);
+                    printf("EXPAND DONE - %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &my_command);
+                    printf("SUBSTITUTE DONE - %s\n", (*p).command);
                     status = mx_redirection((*p).command, &my_command);
+                    printf("REDIRECTION DONE\n");
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                             p = (*p).next;
@@ -149,7 +153,7 @@ int ush_loop(void) {
         exit_code = my_command.exit_code;
         del_work(&work);
         free(line);
-        system("leaks -q ush");
+        // system("leaks -q ush");
     }
     exit_func(&my_command);
     return exit_code;
@@ -167,6 +171,7 @@ int main(void) {
     signal(SIGTTIN, SIG_IGN);
     signal(SIGTTOU, SIG_IGN);
     exit = ush_loop();
+    system("leaks -q ush");
     return exit;
 }
 

@@ -119,6 +119,7 @@ char **mx_tokenSplit(char *command) {
     int count = tokensCount(command);
     char **tokens = (char **)malloc(sizeof(char *) * (count + 1));
 
+    // printf("COMMAND IN TOKEN SPLIT = %s\n", command);
     for (; command[arr[2]] != '\0'; arr[2]++) {
         if (command[arr[2]] == 34 || command[arr[2]] == 39)
             quotesCheck(&iSsq, &iSdq, command, arr[2]);

@@ -91,6 +91,10 @@ FILES = main \
 	mx_taskCreate \
 	mx_customSplit \
 	mx_customDup \
+	mx_jobSplit \
+	mx_jobDup \
+	mx_removeSlash \
+	mx_del_subSlash \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

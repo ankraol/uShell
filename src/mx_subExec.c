@@ -5,6 +5,7 @@ static void execute(t_queue *work, t_builtin_command *my_command) {
     int status;
 
     for (; p; p = (*p).next) {
+        (*p).command = mx_tokenCut((*p).command, 0, mx_strlen((*p).command));
         (*p).command = mx_substitute((*p).command, my_command);
         status = mx_redirection((*p).command, my_command);
         if (((*p).op == '&' && status == 1)

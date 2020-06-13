@@ -23,14 +23,16 @@ static bool first(char *command, int *i, bool *sQ, bool *dQ) {
 }
 
 static bool second(char *command, int *i, bool *sQ, bool *dQ) {
+    // printf("IM HERE\n");
     if (command[(*i)] == 92 && (command[(*i) + 1] == 34
         || command[(*i) + 1] == 39 || command[(*i) + 1] == 36
         || command[(*i) + 1] == 44 || command[(*i) + 1] == 123
         || command[(*i) + 1] == 125 || command[(*i) + 1] == 40
         || command[(*i) + 1] == 41 || command[(*i) + 1] == ' '
-        || command[(*i) + 1] == 96))
+        || command[(*i) + 1] == 96) && !(*sQ))
         {
-           (*i)++;
+            // printf("IM HERE\n");
+           (*i) = (*i) + 1;
             return true;
         }
     else if ((command[(*i)] == 36 || command[(*i)] == 44
@@ -56,14 +58,17 @@ char *mx_tokenCut(char *command, int start, int end) {
     bool dQ = false;
 
     for (int i = start; i < end && command[i] != '\0'; i++) {
-        // if (command[i] == 92 && command[i + 1] == 92)
-        //     for (int c = 0; command[i + 1] == 92 && c < 4; i++, c++);
-        if (first(command, &i, &sQ, &dQ));
-        else if (second(command, &i, &sQ, &dQ)) {
-        }
         if (command[i] == 92 && command[i + 1] == 92) {
-            for (int c = 0; command[i + 1] == 92 && c < 4; i++, c++);
+            i++;
         }
+        else if (first(command, &i, &sQ, &dQ));
+        else if (second(command, &i, &sQ, &dQ)){
+        }
+        // if (command[i] == 92 && command[i + 1] == 92) {
+            // for (int c = 0; command[i + 1] == 92 && c < 4; i++, c++);
+        // }
+        if (command[i] == '\0')
+            break;
         token[j] = command[i];
         j++;
     }
