@@ -85,6 +85,7 @@ FILES = main \
 	mx_expand_parts \
 	mx_exit_commnad \
 	mx_findTilda \
+	example \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 
@@ -94,7 +95,7 @@ SRC = $(addprefix "src/", $(ROOT_C))
 
 ROOT_O = $(addsuffix ".o", $(FILES))
 
-CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic #-g -fsanitize=address
+CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic -g3 -glldb -fno-omit-frame-pointer -fsanitize=address -fsanitize=undefined
 
 all: install clean
 

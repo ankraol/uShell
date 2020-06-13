@@ -137,11 +137,13 @@ int ush_loop(void) {
             for (int i = 0; work[i]; i++) {
                 p = work[i];
                 for (; p; p = (*p).next) {
-
+                    printf("before expansion = %s\n", (*p).command);
                     (*p).command = mx_expandParameter((*p).command, my_command.var, status);
+                    printf("after expansion = %s\n", (*p).command);
                     (*p).command = mx_substitute((*p).command, &my_command);
+                    printf("after substitute = %s\n", (*p).command);
                     status = mx_redirection((*p).command, &my_command);
-
+                    printf("after = %s\n", (*p).command);
                     if (((*p).op == '&' && status == 1)
                         || ((*p).op == '|' && status == 0))
                             p = (*p).next;

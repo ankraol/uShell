@@ -35,7 +35,7 @@ t_path *mx_create_list(char *command, int *i, int f, int s) {
             (*i)++;
     }
     p->file[j] = '\0';
-    p->file = realloc(p->file, strlen(p->file));
+    p->file = realloc(p->file, strlen(p->file) + 1);
     p->next = NULL;
     return p;
 }
@@ -74,7 +74,7 @@ void mx_command_cut(char *command, int s, int f, t_reddir *tasks) {
     input = &tasks->input;
     output = &tasks->output;
     mx_command_cut_ten(tasks, arr, command, brr);
-    for (; arr[0] < f; arr[0]++) {
+    for (; arr[0] < f && command[arr[0]] != '\0'; arr[0]++) {
         mx_command_cut_twelve(output, command, arr, brr);
         if (mx_command_cut_fourteen(command, arr, brr)) {
             if (!(*input))

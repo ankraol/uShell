@@ -77,30 +77,36 @@ static void for_pipe_check_one(t_reddir *tasks, char *cm, int *arr, bool fl) {
 
     if (fl) {
         mx_command_cut(cm, arr[0], arr[2], tasks);
-        tasks->op = '-';
+        printf("INSIDE for_pipe_check_one ========== %s\n", tasks->task);
+        tasks->op = false;
+        printf("INSIDE for_pipe_check_two ========== %s\n", tasks->task);
     }
 }
 
 static t_reddir *pipe_check(char *cm) {
     int size = dir_count(cm);
     t_reddir *tasks = (t_reddir *)malloc(sizeof(t_reddir) * (size + 2));
+    
     int arr[] = {0, 0, 0};
     bool brr[] = {false, false, false};
 
     for (; cm[arr[2]] != '\0'; arr[2]++) {
         quoteCheck(cm, arr[2], brr);
         if (for_pipe_chek(cm, arr, brr)) {
+            printf("inside cycle\n");
             for_pipe_check_one(&tasks[arr[1]], cm, arr, false);
             if (cm[arr[2] - 1] == ' ')
                 (arr[2]) -= 1;
             mx_command_cut(cm, arr[0], arr[2], &tasks[arr[1]]);
-            tasks[arr[1]].op = '|';
+            tasks[arr[1]].op = true;
             for (; cm[arr[2]] == ' ' || cm[arr[2]] == '|'; arr[2]++);
             arr[0] = arr[2];
             (arr[1])++;
         }
     }
+    // printf("inside pipe_check = %s\n", tasks[0].task);
     for_pipe_check_one(&tasks[arr[1]], cm, arr, true);
+    printf("after for_pipe_check_one = %s\n", tasks[0].task);
     return tasks;
 }
 
@@ -156,7 +162,7 @@ void deletePath(t_path **path) {
 void deleteTasks(t_reddir **tasks) {
     int i = 0;
 
-    for ( ; (*tasks)[i].op != '-'; i++) {
+    for ( ; (*tasks)[i].op != false; i++) {
         mx_strdel(&(*tasks)[i].task);
         if ((*tasks)[i].output)
             deletePath(&(*tasks)[i].output);
@@ -177,7 +183,7 @@ static void for_redir_one(t_reddir *tasks, t_builtin_command *my_command) {
     bool extInput = false;
     t_path *p = NULL;
 
-    for (int i = 0; tasks[i - 1].op != '-'; i++) {
+    for (int i = 0; tasks[i - 1].op != false; i++) {
         if (tasks[i].input) {
             p = tasks[i].input;
             for (; p;  p = p->next) {
@@ -209,7 +215,7 @@ static void for_redir_two(t_reddir *tasks) {
     char *str = NULL;
     int size = 0;
 
-    for (int i = 0; tasks[i - 1].op != '-'; i++) {
+    for (int i = 0; tasks[i - 1].op != false; i++) {
         if (tasks[i].output != NULL) {
             if (tasks[i].output->next) {
                 str = mx_file_to_str(tasks[i].output->file);
@@ -240,17 +246,19 @@ static void for_redir_four(t_reddir *tasks, t_builtin_command *my_command,
                             int *stat) {
     bool extInput = false;
 
-    if ((tasks[0].op == '|' || tasks[0].output) && !tasks[0].input)
+    if ((tasks[0].op == true || tasks[0].output) && !tasks[0].input)
         *stat = mx_pipe_rec(tasks, 0, 0, extInput, my_command);
     for_redir_one(tasks, my_command);
     for_redir_two(tasks);
 }
 
 int mx_redirection(char *command, t_builtin_command *my_command) {
+    printf("redirection start = %s\n", command);
     t_reddir *tasks = pipe_check(command);
+    printf("after pipe check = %s\n", tasks[0].task);
     int status = 0;
 
-    if (tasks[0].op == '|' || tasks[0].output || tasks[0].input)
+    if (tasks[0].op == true || tasks[0].output || tasks[0].input)
         for_redir_four(tasks, my_command, &status);
     else {
         if (isAlias(tasks[0].task) == true) {
@@ -260,7 +268,9 @@ int mx_redirection(char *command, t_builtin_command *my_command) {
         else if (iSvar(tasks[0].task) == true)
             for_redir_three(tasks, my_command, &status);
         else {
+
             my_command->execute = true;
+            printf("before execute = %s\n", tasks[0].task);
             status = mx_ush_execute_env(tasks[0].task, my_command, NULL, NULL);
         }
     }

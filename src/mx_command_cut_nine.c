@@ -2,7 +2,7 @@
 
 void mx_command_cut_one(t_reddir *tasks, int *arr, char *command,
                                 bool *brr) {
-    for (; arr[0] < arr[3]; arr[0]++) {
+    for (; arr[0] < arr[3] && command[arr[0]] != '\0'; arr[0]++) {
         mx_quotesCheck(&(brr[1]), &(brr[0]), command, arr[0]);
         if (((command[arr[0]] == '>' || command[arr[0]] == '<')
             && brr[0] == false && brr[0] == false) || command[arr[0]] == '\0')
@@ -37,7 +37,7 @@ void mx_command_cut_nine(t_reddir *tasks, int *arr, int s, int f) {
 void mx_command_cut_ten(t_reddir *tasks, int *arr, char *com, bool *brr) {
     mx_command_cut_one(tasks, arr, com, brr);
     tasks->task[arr[1]] = '\0';
-    tasks->task = realloc(tasks->task, strlen(tasks->task));
+    tasks->task = realloc(tasks->task, strlen(tasks->task) + 1);
 }
 
 void mx_command_cut_eleven(t_path **output, char *command, int *arr,

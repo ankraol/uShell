@@ -21,11 +21,14 @@ bool mx_isSpace(char *command, int i) {
 static void command_cut_four_one(char *command, int *arr, t_path **output) {
     if (mx_isSpace(command, arr[0]) == false){
         (*output)->next->file[arr[2]] = command[arr[0]];
-        arr[0]++;
+        if (command[arr[0]] != '\0')
+            arr[0]++;
         arr[2]++;
     }
-    else
-        arr[0]++;
+    else {
+        if (command[arr[0]] != '\0')
+            arr[0]++;
+    }
 }
 
 static bool command_cut_four_two(char *com, int *arr, bool *brr) {
@@ -54,7 +57,8 @@ void mx_command_cut_four(char *com, int *arr, bool *brr, t_path **output) {
             command_cut_four_one(com, arr, output);
         else if (brr[1] == true || brr[0] == true) {
             (*output)->next->file[arr[2]] = com[arr[0]];
-            arr[0]++;
+            if (com[arr[0]] != '\0')
+                arr[0]++;
             arr[2]++;
         }
         else if (command_cut_four_two(com, arr, brr))
@@ -65,7 +69,7 @@ void mx_command_cut_four(char *com, int *arr, bool *brr, t_path **output) {
 void mx_command_seven(int *arr, t_path **input) {
     (*input)->next->file[arr[2]] = '\0';
     (*input)->next->file = realloc((*input)->next->file,
-                            strlen((*input)->next->file));
+                            strlen((*input)->next->file) + 1);
     (*input)->next->next = NULL;
 }
 

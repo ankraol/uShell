@@ -83,7 +83,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_
     pid_t pid;
     int val_ret = 0;
 
-    if (command[pos].op == '-') {
+    if (command[pos].op == false) {
         if (command[pos].output)
             mx_fd_change(command, pos, in_fd, extInput, my_command);
         else {
@@ -96,7 +96,7 @@ int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_
                 parent(pid, &val_ret);
         }
     }
-    else if (command[pos].op == '|')
+    else if (command[pos].op == true)
         if (two_child(command, pos, in_fd, extInput, my_command) == 1)
             return 1;
     return val_ret;

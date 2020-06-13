@@ -205,7 +205,7 @@ struct s_path {
 };
 
 struct s_reddir {
-    char op;
+    bool op;
     char *task;
     t_path *input;
     t_path *output;
@@ -383,5 +383,10 @@ void mx_command_exit(t_builtin_command *com, int *err, char **argv, int ac);
 void mx_del_export_var(t_var **var_list);
 
 char *mx_findTilda(char *line, t_var *varList, int status);
+
+
+
+
+void mx_command_cut2(char *command, int s, int f, t_reddir *tasks);
 
 #endif
