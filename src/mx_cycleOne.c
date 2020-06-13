@@ -31,5 +31,6 @@ int mx_cycleOne(t_inc *index, t_muteChar *trig, char *command,
             }
             return 1;
         }
-        return partTwo(command, index, trig, line);
+        else
+            return partTwo(command, index, trig, line);
 }

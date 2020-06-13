@@ -9,7 +9,7 @@ static void subFill(int fd, t_inc index, char **mainCommand, char *command) {
         (*mainCommand)[index.b] = c;
     }
     close(fd);
-    for (index.c += 2; command[index.c] != '\0' && command[index.c - 1] != '\0'; index.c++) {
+    for (index.c += 1; command[index.c] != '\0' && command[index.c - 1] != '\0'; index.c++) {
         (*mainCommand)[index.b] = command[index.c];
         index.b++;
     }
@@ -28,10 +28,10 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
 
     memset(&index, 0, sizeof(t_inc));
     line = mx_subLine(&mainCommand, command, my_command, &index);
-
     if (index.a > 0) {
         fd = mx_subExec(my_command, line);
         subFill(fd, index, &mainCommand, command);
+        mainCommand = mx_substitute(mainCommand, my_command);
         mx_strdel(&line);
         mx_strdel(&command);
         return mainCommand;

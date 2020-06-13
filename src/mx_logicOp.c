@@ -32,6 +32,8 @@ static bool extraSpaces(char *line) {
         if (dQ == false && sQ == false && ap == false) {
             if (line[i] == ' ' && line[i + 1] == ' ')
                 return true;
+            else if (line[0] == ' ' || line[mx_strlen(line) - 1] == ' ')
+                return true;
         }
     }
     return false;
@@ -56,7 +58,11 @@ static char *deleteExtraSpaces(char *line) {
         isQuote(&dQ, &sQ, &ap, line, i);
             if (dQ == false && sQ == false && ap == false) {
                 if (line[i] == ' ') {
-                    if (onlySpaces(line, i) == true)
+                    if (i == 0)
+                        i++;
+                    else if (line[i + 1] == '\0')
+                        break;
+                    else if (onlySpaces(line, i) == true)
                         break;
                     else
                         for(; line[i + 1] == ' '; i++);

@@ -23,15 +23,13 @@ static bool first(char *command, int *i, bool *sQ, bool *dQ) {
 }
 
 static bool second(char *command, int *i, bool *sQ, bool *dQ) {
-    // printf("IM HERE\n");
     if (command[(*i)] == 92 && (command[(*i) + 1] == 34
         || command[(*i) + 1] == 39 || command[(*i) + 1] == 36
         || command[(*i) + 1] == 44 || command[(*i) + 1] == 123
         || command[(*i) + 1] == 125 || command[(*i) + 1] == 40
         || command[(*i) + 1] == 41 || command[(*i) + 1] == ' '
-        || command[(*i) + 1] == 96) && !(*sQ))
+        || command[(*i) + 1] == 96 || command[(*i) + 1] == 33) && !(*sQ))
         {
-            // printf("IM HERE\n");
            (*i) = (*i) + 1;
             return true;
         }

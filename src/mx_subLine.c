@@ -36,8 +36,6 @@ static void innerCycle(t_muteChar trig, t_inc *index, t_subCom commands) {
             check = cycleTwo(index, &trig, commands.com, commands.origin);
             if (check == 0) {
                 if (trig.sQ == true || trig.dQ == true) {
-                    if (commands.com[(*index).c] == 92)
-                        mx_del_subSlash(commands.com, &(*index).c);
                     commands.line[(*index).a] = commands.com[(*index).c];
                     (*index).a++;
                 }

@@ -94,7 +94,6 @@ static int count_words(const char *str, char c) {
     return count;
 }
 
-
 char **mx_customSplit(const char *s, char c) {
     int b = 0;
     char **s1 = NULL;
@@ -102,7 +101,8 @@ char **mx_customSplit(const char *s, char c) {
     if (s == 0)
         return 0;
     b = count_words(s, c);
-    s1 = (char **)malloc((b + 1) * sizeof(char *));
+    if (b > 0)
+        s1 = (char **)malloc((b + 1) * sizeof(char *));
     if (s1 != 0) { 
         write_str_to_strstr(&s1, s, c, b);
     }

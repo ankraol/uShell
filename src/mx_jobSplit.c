@@ -22,9 +22,11 @@ t_list *mx_jobSplit(char *line) {
     t_list *jobs = NULL;
     char **multiColumn = mx_customSplit(line, ';');
 
-    for (int i = 0; multiColumn[i]; i++) {
-        pushBack(&jobs, multiColumn[i]);
+    if (multiColumn) {
+        for (int i = 0; multiColumn[i]; i++) {
+            pushBack(&jobs, multiColumn[i]);
+        }
+        mx_del_strarr(&multiColumn);
     }
-    mx_del_strarr(&multiColumn);
     return jobs;
 }

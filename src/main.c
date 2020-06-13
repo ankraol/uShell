@@ -1,7 +1,32 @@
 #include "header.h"
 
+void mx_deleteBuildstruct(t_builtin_command **my_command) {
+    mx_strdel(&(*my_command)->path->pwdP);
+    mx_strdel(&(*my_command)->path->pwdL);
+    mx_strdel(&(*my_command)->path->oldpwd);
+    free((*my_command)->path);
+    free((*my_command)->cd);
+    free((*my_command)->pwd);
+    free((*my_command)->echo);
+}
+
+void mx_deleteExportArr(t_export **export_arr) {
+    t_export *p1 = *export_arr;
+    t_export *p2 = *export_arr;
+
+    while (p1) {
+        p2 = p1->next;
+        mx_strdel(&p1->name);
+        mx_strdel(&p1->value);
+        free(p1);
+        p1 = p2;
+    }
+}
+
 static void exit_func(t_builtin_command *my_command) {
+    mx_deleteBuildstruct(&my_command);
     mx_delete_history(&(my_command->history));
+    mx_deleteExportArr(&(my_command->export_ar));
     printf("\nTEST EXIT/\n");
 }
 
@@ -134,19 +159,17 @@ int ush_loop(void) {
         line = mx_read_line(&my_command);
         if (line && line[0] != '\0' && !contral_d(&line, &my_command)) {
             work = mx_works_queue((char *)line);
-            printf("WORKS QUEUE DONE - %s\n", work[0]->command);
-            for (int i = 0; work[i]; i++) {
-                p = work[i];
-                for (; p; p = (*p).next) {
-                    (*p).command = mx_expandParameter((*p).command, my_command.var, status);
-                    printf("EXPAND DONE - %s\n", (*p).command);
-                    (*p).command = mx_substitute((*p).command, &my_command);
-                    printf("SUBSTITUTE DONE - %s\n", (*p).command);
-                    status = mx_redirection((*p).command, &my_command);
-                    printf("REDIRECTION DONE\n");
-                    if (((*p).op == '&' && status == 1)
-                        || ((*p).op == '|' && status == 0))
-                            p = (*p).next;
+            if (work) {
+                for (int i = 0; work[i]; i++) {
+                    p = work[i];
+                    for (; p; p = (*p).next) {
+                        (*p).command = mx_expandParameter((*p).command, my_command.var, status);
+                        (*p).command = mx_substitute((*p).command, &my_command);
+                        status = mx_redirection((*p).command, &my_command);
+                        if (((*p).op == '&' && status == 1)
+                            || ((*p).op == '|' && status == 0))
+                                p = (*p).next;
+                    }
                 }
             }
         }
