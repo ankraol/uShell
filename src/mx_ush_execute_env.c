@@ -41,13 +41,13 @@ void last_func(char ***argv, char **str) {
     mx_del_all(argv, str);
 }
 
-static void print_arr(char **arr) {
-    printf("TOKEN\n");
-    for (int i = 0; arr[i]; i++) {
-        printf("%s\n", arr[i]);
-    }
-    printf("\n");
-}
+// static void print_arr(char **arr) {
+//     printf("TOKEN\n");
+//     for (int i = 0; arr[i]; i++) {
+//         printf("%s\n", arr[i]);
+//     }
+//     printf("\n");
+// }
 
 int mx_ush_execute_env(char *com, t_builtin_command *my_com,
                        char **new_env, char *path_env) {
@@ -55,7 +55,7 @@ int mx_ush_execute_env(char *com, t_builtin_command *my_com,
     char **argv = mx_tokenSplit(com);
     int val_ret = 0;
 
-    print_arr(argv);
+    // print_arr(argv);
 
     if (my_com->execute == true)
         val_ret = mx_valid_command(argv, mx_count_elem(argv), my_com);

@@ -102,7 +102,6 @@ static char *commandCut(char *line, int start, int end) {
     }
     command[q] = '\0';
     command = realloc(command, strlen(command) + 1);
-    // printf("COMMAND = %s\n", command);
     return command;
 }
 
@@ -110,14 +109,12 @@ static void pushBack(t_list **jobs, char *line, int start, int end) {
     t_list **p = jobs;
 
     if ((*jobs) == NULL) {
-        // printf("FIRST JOB\n");
         (*p) = (t_list *)malloc(sizeof(t_list));
         (*p)->command = commandCut(line, start, end);
         (*p)->next = NULL;
     }
     else {
         for (; (*p)->next; p = &(*p)->next);
-        // printf("NEXT COMMAND AFTER -> %s\n", (*p)->command);
         (*p)->next = (t_list *)malloc(sizeof(t_list));
         (*p)->next->command = commandCut(line, start, end);
         (*p)->next->next = NULL;
@@ -136,7 +133,6 @@ static t_list *jobsSplit(char *line) {
     for (; line[i] != '\0'; i++) {
         muteChar(&mute.sQ, &mute.dQ, &mute.iSs, line, i);
         if (mute.sQ == false && mute.dQ == false && mute.iSs == false && line[i] == ';') {
-            // printf("THERE IS A DIFFERENT JOB");
             pushBack(&jobs, line, start, i);
             start = i + 1;
         }
@@ -166,7 +162,6 @@ void jobs_delete(t_list **jobs) {
 
 t_queue **mx_works_queue(char *line) {
     int size = worksCount(line);
-    // printf("%d\n", size);
     t_list *jobs = jobsSplit(line);
     //listPrint(jobs);
     t_queue **list = (t_queue **)malloc(sizeof(t_queue *) * (size + 1));
@@ -175,22 +170,10 @@ t_queue **mx_works_queue(char *line) {
 
     for (; i < size; i++) {
         list[i] = NULL;
-        // printf("WE ARE IN WORKS QUEUE - %s\n", (*p).command);
         mx_logicOp(p->command, &list[i]);
         p = (*p).next;
-        // printf("AFTER LOGICOP = %s\n", list[i]->command);
     }
     list[size] = NULL;
     jobs_delete(&jobs);
-
-    // for (int i = 0; list[i]; i++) {
-
-
-    //     t_queue *n = list[i];
-    //     while (n) {
-    //         printf("LIST IN QUEUE -----  %s\n", n->command);
-    //         n = n->next;
-    //     }
-    // }
     return list;
 }

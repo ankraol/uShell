@@ -66,7 +66,6 @@ static char *deleteExtraSpaces(char *line) {
     }
     newLine[j] = '\0';
     newLine = realloc(newLine, strlen(newLine) + 1);
-    //printf("NEW LINE = %s\n", newLine);
     return newLine;
 }
 
@@ -82,7 +81,6 @@ static char *commandCut(char *line, int start, int end) {
     command[j] = '\0';
 
     command = realloc(command, strlen(command));
-    // printf("COMMAND CUT --> %s\n", command);
     return command;
 }
 
@@ -123,7 +121,6 @@ static void pushBack(t_queue **list, char *line, int start, int end) {
 }
 
 void mx_logicOp(char *line, t_queue **list) {
-    //printf("\tFIRST PARSING ===> %s\n", line);
     char *newLine = NULL;
     bool sQ = false;
     bool dQ = false;
@@ -133,13 +130,10 @@ void mx_logicOp(char *line, t_queue **list) {
 
     if (extraSpaces(line) == true) {
         newLine = deleteExtraSpaces(line);
-        //mx_strdel(&line);
     }
     else {
         newLine = mx_strdup(line);
-        //mx_strdel(&line);
     }
-    // printf("LINE IN LOGICOP = %s\n", newLine);
     for (; newLine[i] != '\0'; i++) {
         if (newLine[i] == 34 || newLine[i] == 39 || newLine[i] == 96)
             isQuote(&dQ, &sQ, &ap, newLine, i);
@@ -152,13 +146,7 @@ void mx_logicOp(char *line, t_queue **list) {
                 start = i;
             }
     }
-    //printf("NEWLINE = %s\n", newLine);
     pushBack(list, newLine, start, i);
-    // t_queue *n = *list;
-    // while (n) {
-    //     printf("LIST IN OP -----  %s\n", n->command);
-    //     n = n->next;
-    // }
     mx_strdel(&newLine);
 }
 

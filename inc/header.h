@@ -205,7 +205,7 @@ struct s_path {
 };
 
 struct s_reddir {
-    bool op;
+    char op;
     char *task;
     t_path *input;
     t_path *output;
@@ -258,13 +258,13 @@ void mx_strdel(char **str);
 int mx_redirection(char *command, t_builtin_command *my_command);
 
 
-int mx_pipe_rec(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_command *my_command);
+int mx_pipe_rec(t_reddir **command, int pos, int in_fd, bool extInput, t_builtin_command *my_command);
 int mx_ush_execute(char *argv, t_builtin_command *my_command);
 
 
 char *mx_itoa(int number);
 
-void mx_fd_change(t_reddir *command, int pos, int in_fd, bool extInput, t_builtin_command *my_command);
+void mx_fd_change(t_reddir **command, int pos, int in_fd, bool extInput, t_builtin_command *my_command);
 void mx_command_cut(char *command, int s, int f, t_reddir *tasks);
 char *mx_file_to_str(const char *file);
 void mx_printstr(const char *s);
@@ -385,8 +385,11 @@ void mx_del_export_var(t_var **var_list);
 char *mx_findTilda(char *line, t_var *varList, int status);
 
 
-
-
-void mx_command_cut2(char *command, int s, int f, t_reddir *tasks);
+t_reddir **mx_pipeCreate(char *line);
+void mx_outputCreate(char **pipeArr, t_reddir **tasks, int i);
+void mx_inputCreate(char **pipeArr, char *outputArr, t_reddir **tasks, int i, int j);
+t_reddir *mx_taskCreate(char **arr, int i);
+char **mx_customSplit(const char *s, char c);
+char *mx_customDup(char *str);
 
 #endif

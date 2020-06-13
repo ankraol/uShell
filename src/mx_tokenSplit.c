@@ -116,27 +116,21 @@ char **mx_tokenSplit(char *command) {
     bool iSsq = false;
     bool iSdq = false;
     int arr[] = {0, 0, 0};
-    printf("inside the split = %s\n", command);
     int count = tokensCount(command);
     char **tokens = (char **)malloc(sizeof(char *) * (count + 1));
 
-    printf("inside the split = %s\n", command);
     for (; command[arr[2]] != '\0'; arr[2]++) {
         if (command[arr[2]] == 34 || command[arr[2]] == 39)
             quotesCheck(&iSsq, &iSdq, command, arr[2]);
         else if (command[arr[2]] == ' ' && iSsq == false && iSdq == false
                 && command[arr[2] - 1] != 92)
                 {
-                    printf("inside the cycle\n");
                     tokens[arr[0]] = mx_tokenCut(command, arr[1], arr[2]);
                     arr[1] = arr[2] + 1;
                     arr[0]++;
                 }
         }
-        printf("inside the split = %s\n", tokens[arr[0] - 1]);
-        printf("size of command = %lu, start = %d, end = %d\n", strlen(command), arr[1], arr[2]);
         tokens[arr[0]] = mx_tokenCut(command, arr[1], arr[2]);
-        printf("inside the split = %s\n", tokens[arr[0]]);
         tokens[arr[0] + 1] = NULL;
 // arr_print(tokens);
         return tokens;

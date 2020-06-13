@@ -21,6 +21,3 @@ char *mx_file_to_str(const char *file){
 	return NULL;
 }
 
-// int main () {
-// 	printf("%s\n", mx_file_to_str("example"));
-// }
