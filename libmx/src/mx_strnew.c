@@ -1,4 +1,4 @@
-#include "header.h"
+#include "libmx.h"
 
 char *mx_strnew(const int size) {
     char *ptr = (char *)malloc(size + 1);

@@ -1,7 +1,5 @@
 #include "header.h"
 
-
-
 static bool first(char *command, int *i, bool *sQ, bool *dQ) {
     if (command[*i] == 34 && command[(*i) - 1] != 92 && *sQ == false) {
         (*i)++;
@@ -44,11 +42,6 @@ static bool second(char *command, int *i, bool *sQ, bool *dQ) {
     return false;
 }
 
-
-
-
-
-
 char *mx_tokenCut(char *command, int start, int end) {
     char *token = (char *)malloc(sizeof(char) * (strlen(command) + 1));
     int j = 0;
@@ -62,9 +55,6 @@ char *mx_tokenCut(char *command, int start, int end) {
         else if (first(command, &i, &sQ, &dQ));
         else if (second(command, &i, &sQ, &dQ)){
         }
-        // if (command[i] == 92 && command[i + 1] == 92) {
-            // for (int c = 0; command[i + 1] == 92 && c < 4; i++, c++);
-        // }
         if (command[i] == '\0')
             break;
         token[j] = command[i];

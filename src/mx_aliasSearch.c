@@ -1,20 +1,20 @@
 #include "header.h"
 
-static char *aliasSub(char *command, char *task, char *sub) {
-    char *newCommand = (char *)malloc(sizeof(char) * strlen(command) + strlen(sub));
+static char *aliasSub(char *com, char *task, char *sub) {
+    char *newCom = (char *)malloc(sizeof(char) * strlen(com) + strlen(sub));
     int start = strlen(task);
     int i = 0;
 
     for (; sub[i] != '\0'; i++) {
-        newCommand[i] = sub[i];
+        newCom[i] = sub[i];
     }
-    for (; command[start] != '\0'; start++) {
-        newCommand[i] = command[start];
+    for (; com[start] != '\0'; start++) {
+        newCom[i] = com[start];
         i++;
     }
-    newCommand[i] = '\0';
-    newCommand = realloc(newCommand, strlen(newCommand) + 1);
-    return newCommand;
+    newCom[i] = '\0';
+    newCom = realloc(newCom, strlen(newCom) + 1);
+    return newCom;
 }
 
 static bool aliasCheck(char *task, t_alias *list) {

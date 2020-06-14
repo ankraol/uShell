@@ -1,4 +1,4 @@
-#include "header.h"
+#include "libmx.h"
 
 
 static int numer( int i, int number) {

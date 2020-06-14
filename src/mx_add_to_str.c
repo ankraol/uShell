@@ -1,6 +1,5 @@
  #include "header.h"
 
-
 static void first(t_len_name **le, unsigned char **str, int plus, int len) {
     (*le)->n_bute = (*le)->n_bute + plus;
     (*le)->n_cursor_b = (*le)->n_cursor_b + plus;
@@ -12,7 +11,8 @@ static void first(t_len_name **le, unsigned char **str, int plus, int len) {
 
 static void second(t_len_name **le, unsigned char **buf_str,
                    unsigned char **str, int plus) {
-    *buf_str = (unsigned char *)malloc(sizeof(char) * (((*le)->n_bute) + plus));
+    *buf_str =
+            (unsigned char *)malloc(sizeof(char) * (((*le)->n_bute) + plus));
     for (int i = 0; i < (*le)->n_cursor_b - 1; i++)
         (*buf_str)[i] = (*str)[i];
     for (int i = 0; i < plus; i++)
@@ -22,6 +22,7 @@ static void second(t_len_name **le, unsigned char **buf_str,
     free(*str);
     *str = *buf_str;
 }
+
 static void third(t_len_name **le, int plus, int len) {
     (*le)->n_bute = (*le)->n_bute + plus;
     (*le)->n_cursor_b = (*le)->n_cursor_b + plus;

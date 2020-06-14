@@ -29,8 +29,6 @@ static void print_line(t_len_name *len, t_history_name **his, FILE *file) {
     len->n_bute = len->n_cursor_b;
     len->buf = (*his)->name;
     len->trig_copy = true;
-    // if (*mystr != NULL && malloc_size(*mystr))
-    //     free(*mystr);
     fprintf(file, "%s", (*his)->name);
     fflush(file);
     if ((*his)->next)
@@ -42,10 +40,8 @@ void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
     if (len->ch[0] == 27 && len->ch[1] == 91 && len->ch[2] == 65) {// errow up
         if (my_com->his != NULL) {
             first_line_use(mystr, len, buf_first);
-            if (len->n_cursor + 5 > len->col) {
+            if (len->n_cursor + 5 > len->col)
                 fprintf(my_com->file, "\033[%dF", (len->n_cursor + 4)/len->col);
-                //fflush(file);
-            }
             else
                 fprintf(my_com->file, "\033[1G");
             fflush(my_com->file);

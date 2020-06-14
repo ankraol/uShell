@@ -1,4 +1,4 @@
-#include "header.h"
+#include "libmx.h"
 
 char *mx_strjoin( char *s1,  char *s2) {
     char *res = NULL;

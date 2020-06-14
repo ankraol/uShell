@@ -1,7 +1,7 @@
-#include "header.h"
+#include "libmx.h"
 
 void mx_strdel(char **str) {
-    if (malloc_size(*str)){
+    if ((*str)){
         free(*str);
         *str = NULL;
     }

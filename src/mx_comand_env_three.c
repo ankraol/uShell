@@ -29,7 +29,6 @@ static void flag_prior( t_env_flag *env_flag, char *var, int j) {
     }
 }
 
-
 bool mx_flag_command(char *var, int j, t_env_flag *env_flag, 
                     t_env **env_list) {
     flag_prior(env_flag, var, j);

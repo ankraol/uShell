@@ -1,6 +1,5 @@
 #include "header.h"
 
-
 static void print_list(t_env *export_list) {
  
     while (export_list) {
@@ -8,8 +7,6 @@ static void print_list(t_env *export_list) {
         export_list = export_list->next;
     }
 }
-
-
 
 static char **create_env_arr(t_env *export_list) {
     t_env *buf = export_list;
@@ -47,6 +44,7 @@ static char *build_prog(int index, char **arr) {
         prog = strdup(arr[index]);
     return prog;
 }
+
 void mx_execute_command(t_builtin_command *command, t_env **env_list, 
                         t_env_flag *env_flag, char **program) {
     char **new_env = NULL;

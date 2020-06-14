@@ -1,16 +1,5 @@
 #include "header.h"
 
-void mx_struct_flag_echo(char *av, t_builtin_command *command, char *flag) {
-    for (int j = 1; av[j] ; j++) {
-        if (av[j] == flag[0])
-            command->echo->flag_n = true;
-        else if (av[j] == flag[1])
-            command->echo->flag_e = true;
-        else if (av[j] == flag[2])
-            command->echo->flag_E = true;
-    }
-}
-
 int print_e(char *str, int *i) {
     if (str[0] == '\\' && str[1] == 'b' && ++(*i) > 0)
         return '\b';
@@ -69,31 +58,6 @@ void mx_echo(char **file, t_builtin_command *command) {
         mx_print_e(file, &err);
     if (!(command->echo->flag_n) && (err == 1))
         printf("\n");
-}
-
-char **mx_create_file_echo(char **av, int ac, int count_files, char **file) {
-    bool flag_priority = true;
-    file = (char **)malloc(sizeof(char *) * (count_files + 1));
-    int g = 0;
-
-    for(int i = 1; i < ac; i++) {
-        if (flag_priority == true) {
-            if (av[i][0] != '-') {
-                flag_priority = false;
-                file[g++] = strdup(av[i]);
-            }
-            if (av[i][0] == '-' && av[i][1] == '-') {
-                flag_priority = false;
-                file[g++] = strdup(av[i]);
-            }
-        }
-        else if (!flag_priority) {
-            file[g++] = strdup(av[i]);
-            flag_priority = false;
-        }
-    }
-    file[count_files] = NULL;
-    return file;
 }
 
 void mx_valid_flag_echo(t_builtin_command *command, char **arg, int ac) {

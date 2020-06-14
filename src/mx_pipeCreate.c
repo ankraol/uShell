@@ -27,19 +27,21 @@ t_reddir **mx_pipeCreate(char *line) {
     char **pipeArr = mx_customSplit(line, '|');
     int size = arrSize(pipeArr);
     t_reddir **tasks = (t_reddir **)malloc(sizeof(t_reddir*) * (size + 1));
-    int i = 0;
+    t_inc index;
 
-    for (; pipeArr[i]; i++) {
-        if (isOutput(pipeArr[i]))
-            mx_outputCreate(pipeArr, tasks, i);
+    memset(&index, 0, sizeof(t_inc));
+    for (; pipeArr[index.a]; index.a++) {
+        if (isOutput(pipeArr[index.a]))
+            mx_outputCreate(pipeArr, tasks, index.a);
         else {
-            if(iSinput(pipeArr[i]))
-                mx_inputCreate(pipeArr, pipeArr[i], tasks, i, 0);
+            if(iSinput(pipeArr[index.a])) {
+                mx_inputCreate(pipeArr, pipeArr[index.a], tasks, index);
+            }
             else
-                tasks[i] = mx_taskCreate(pipeArr, i);
+                tasks[index.a] = mx_taskCreate(pipeArr, index.a);
         }
     }
-    tasks[i] = NULL;
+    tasks[index.a] = NULL;
     mx_del_strarr(&pipeArr);
     return tasks;
 }

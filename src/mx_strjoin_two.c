@@ -1,6 +1,5 @@
 #include "header.h"
 
-
 static char *result(char *s1,  char *s2) {
     char *res = NULL;
     res = mx_strnew(mx_strlen(s1) + mx_strlen(s2));

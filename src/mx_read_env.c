@@ -1,6 +1,5 @@
 #include "header.h"
 
-
 char *if_program(char *file, struct stat sb) {
 
     if ((sb.st_mode & S_IFREG) == S_IFREG)
@@ -12,6 +11,7 @@ char *if_program(char *file, struct stat sb) {
         return NULL;
     }
 }
+
 char *is_path(char *path, char *file) {
     char *last_path = NULL;
     struct stat sb;
@@ -24,8 +24,6 @@ char *is_path(char *path, char *file) {
     }
     return last_path;
 }
-
-
 
 char *mx_read_env(char *file, char *path, t_builtin_command *my_command) {
     char *last_path = NULL;

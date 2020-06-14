@@ -1,4 +1,4 @@
- #include "header.h"
+#include "libmx.h"
 
 void mx_printstr(const char *s) {
 	int size = mx_strlen(s);

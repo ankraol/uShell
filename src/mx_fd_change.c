@@ -8,13 +8,13 @@ static void redirect(int oldfd, int newfd) {
     }
 }
 
-static void in_fork(t_builtin_command *my_command, int pos, int in_fd, int output, t_reddir **command) {
+static void in_fork(t_builtin_command *my_command, int pos, int in_fd,
+                    int output, t_reddir **command) {
     char **task = NULL;
     char *path = NULL;
 
     redirect(0, in_fd);
     redirect(1, output);
-
     task = mx_strsplit(command[pos]->task, ' ');
     path = mx_read_env(task[0], NULL, my_command);
     if (execvp(path, task) == -1) {
@@ -35,7 +35,8 @@ static void open_file(bool extInput, char *file, int *output) {
     }
 }
 
-void mx_fd_change(t_reddir **command, int pos, int in_fd, bool extInput, t_builtin_command *my_command) {
+void mx_fd_change(t_reddir **command, int pos, int in_fd, bool extInput,
+                    t_builtin_command *my_command) {
     t_path *p = command[pos]->output;
     pid_t pid;
     int status;
@@ -47,9 +48,8 @@ void mx_fd_change(t_reddir **command, int pos, int in_fd, bool extInput, t_built
                 perror("ush: ");
         else {
             pid = fork();
-            if (pid == 0) {
+            if (pid == 0)
                in_fork(my_command, pos, in_fd, output, command);
-            }
             else {
                 close(output);
                 waitpid(pid, &status, WUNTRACED);

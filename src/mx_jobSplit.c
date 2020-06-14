@@ -6,14 +6,12 @@ static void pushBack(t_list **jobs, char *multiColumn) {
     if ((*jobs) == NULL) {
         (*p) = (t_list *)malloc(sizeof(t_list));
         (*p)->command = mx_jobDup(multiColumn);
-        // printf("dubbed command = %s\n", (*p)->command);
         (*p)->next = NULL;
     }
     else {
         for (; (*p)->next; p = &(*p)->next);
         (*p)->next = (t_list *)malloc(sizeof(t_list));
         (*p)->next->command = mx_jobDup(multiColumn);
-        // printf("dubbed command = %s\n", (*p)->next->command);
         (*p)->next->next = NULL;
     }
 }

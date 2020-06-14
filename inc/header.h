@@ -20,18 +20,33 @@
 #include <ctype.h>
 #include <pwd.h>
 
+#include "libmx.h"
 
-
-
-
-/*************************************************************************/
 typedef struct s_var t_var;
 typedef struct s_pid_name t_pid_name;
 typedef struct s_env t_env;
 typedef struct s_export t_export;
 typedef struct s_alias t_alias;
 typedef struct s_inc t_inc;
-//typedef struct s_history_name t_history_name;
+typedef struct s_history_name t_history_name;
+typedef struct s_cd t_cd;
+typedef struct s_pwd t_pwd;
+typedef struct s_which t_which;
+typedef struct s_echo t_echo;
+typedef struct s_path_builtin t_path_builtin;
+typedef struct s_builtin_command t_builtin_command;
+typedef struct s_env_flag t_env_flag;
+typedef struct s_env t_env;
+typedef struct s_queue t_queue;
+typedef struct s_path t_path;
+typedef struct s_reddir t_reddir;
+typedef struct s_list t_list;
+typedef struct s_alias t_alias;
+typedef struct s_muteChar t_muteChar;
+typedef struct s_subCom t_subCom;
+typedef struct s_expIndex t_expIndex;
+typedef struct s_expChar t_expChar;
+typedef struct s_len_name t_len_name;
 
 extern char **environ;
 
@@ -41,13 +56,13 @@ struct s_inc {
     int c;
 };
 
-typedef struct s_history_name {
+struct s_history_name {
     unsigned char *name;
     int n_byte;
     int n_len;
     struct s_history_name *next;
     struct s_history_name *previous;
-}                 t_history_name;
+};
 
 struct s_var {
     char *name;
@@ -57,11 +72,11 @@ struct s_var {
 };
 
 
-typedef struct s_cd {
+struct s_cd {
     bool flag_s;
     bool flag_P;
     bool arg_min;
-}               t_cd;
+};
 
 struct s_export {
     char *name;
@@ -69,29 +84,29 @@ struct s_export {
     struct s_export *next;
 };
 
-typedef struct s_pwd {
+struct s_pwd {
     bool flag_L;
     bool flag_P;
-}               t_pwd;
+};
 
-typedef struct s_which {
+struct s_which {
     bool flag_a;
     bool flag_s;
-}               t_which;
+};
 
-typedef struct s_echo {
+struct s_echo {
     bool flag_n;
     bool flag_e;
     bool flag_E;
-}               t_echo;
+};
 
-typedef struct s_path_builtin {
+struct s_path_builtin {
     char *pwdP;
     char *pwdL;
     char *oldpwd;
-}               t_path_builtin;
+};
 
-typedef struct s_builtin_command {
+struct s_builtin_command {
     t_path_builtin *path;
     t_cd *cd;
     t_env *env;
@@ -110,14 +125,14 @@ typedef struct s_builtin_command {
     char *path_for_ex;
     bool trig;
     int exit_code;
-}               t_builtin_command;
+};
 
-typedef struct s_env {
+struct s_env {
     char *name;
     struct s_env *next;
-}               t_env;
+};
 
-typedef struct s_env_flag {
+struct s_env_flag {
     bool flag_priority;
     bool flag_u;
     bool flag_p;
@@ -126,35 +141,7 @@ typedef struct s_env_flag {
     bool find_program;
     char *pa;
     int index;
-}               t_env_flag;
-
-int mx_valid_command(char **arg, int ac, t_builtin_command *command);
-void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac, int *err);
-char *mx_cd_logic(char **file, t_builtin_command *command, int *err);
-void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err);
-char *mx_make_logic_path(char **tmp2, char *tmp);
-void mx_valid_flag_echo(t_builtin_command *command, char **arg, int ac);
-void mx_change_path(char **tmp2);
-char **my_strsplit(const char *s, char c);
-void mx_cd_two_args(char **file, t_builtin_command *command, int *err);
-bool mx_zero_arr(char **str);
-void mx_change_pwd(char *tmp1, t_builtin_command *command, int *err, char **file);
-int mx_str_count(char **str);
-
-/*************************************************************************/
-
-
-
-
-typedef struct s_queue t_queue;
-typedef struct s_path t_path;
-typedef struct s_reddir t_reddir;
-typedef struct s_list t_list;
-typedef struct s_alias t_alias;
-typedef struct s_muteChar t_muteChar;
-typedef struct s_subCom t_subCom;
-typedef struct s_expIndex t_expIndex;
-typedef struct s_expChar t_expChar;
+};
 
 struct s_expChar {
     bool exp;
@@ -213,7 +200,7 @@ struct s_reddir {
 
 
 
-typedef struct s_len_name {
+struct s_len_name {
     unsigned char ch[4];
     int n_bute;
     int n_len;
@@ -229,7 +216,7 @@ typedef struct s_len_name {
     bool trig;
     bool trig_copy;
     unsigned char *buf;
-}              t_len_name;
+};
 
 struct s_pid_name {
     int pid;
@@ -238,43 +225,32 @@ struct s_pid_name {
     struct s_pid_name *next;
 };
 
-
-
-//int main(void);
-int mx_count_words(const char *str, char c);
-char *mx_strnew(const int size);
-char **mx_strsplit(const char *s, char c);
-int mx_strlen(const char *s);
+int mx_valid_command(char **arg, int ac, t_builtin_command *command);
+void mx_valid_flag_cd(t_builtin_command *command, char **arg, int ac,
+                        int *err);
+char *mx_cd_logic(char **file, t_builtin_command *command, int *err);
+void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac,
+                        int *err);
+char *mx_make_logic_path(char **tmp2, char *tmp);
+void mx_valid_flag_echo(t_builtin_command *command, char **arg, int ac);
+void mx_change_path(char **tmp2);
+char **my_strsplit(const char *s, char c);
+void mx_cd_two_args(char **file, t_builtin_command *command, int *err);
+bool mx_zero_arr(char **str);
+void mx_change_pwd(char *tmp1, t_builtin_command *command, int *err,
+                    char **file);
+int mx_str_count(char **str);
 char *mx_read_env(char *file, char *path, t_builtin_command *my_command);
-void mx_del_strarr(char ***arr);
-
 char *mx_strjoin_two( char *s1,  char *s2);
-char *mx_strjoin( char *s1,  char *s2);
-char *mx_strcat(char *restrict s1, const char *restrict s2);
-
-void mx_strdel(char **str);
-
-
 int mx_redirection(char *command, t_builtin_command *my_command);
-
-
-int mx_pipe_rec(t_reddir **command, int pos, int in_fd, bool extInput, t_builtin_command *my_command);
+int mx_pipe_rec(t_reddir **command, int pos, int in_fd, bool extInput,
+                t_builtin_command *my_command);
 int mx_ush_execute(char *argv, t_builtin_command *my_command);
-
-
-char *mx_itoa(int number);
-
-void mx_fd_change(t_reddir **command, int pos, int in_fd, bool extInput, t_builtin_command *my_command);
-void mx_command_cut(char *command, int s, int f, t_reddir *tasks);
-char *mx_file_to_str(const char *file);
-void mx_printstr(const char *s);
+void mx_fd_change(t_reddir **command, int pos, int in_fd, bool extInput,
+                    t_builtin_command *my_command);
 t_queue **mx_works_queue(char *line);
-//char **mx_tokens(char *line, char sp);
-int mx_strcmp(const char *s1, unsigned const char *s2);
 void mx_logicOp(char *line, t_queue **list);
 char *mx_substitute(char *command, t_builtin_command *my_command);
-
-
 void mx_push_back_history(t_history_name **history, unsigned char *str,
                           t_len_name *len);
 void mx_delete_history(t_history_name **history);
@@ -304,13 +280,9 @@ void mx_back_to_str(unsigned char **str,  t_len_name **le);
 void mx_delete_pid(t_pid_name **pid_list);
 void mx_push_back_pid(t_pid_name **pid_list,int pid, char *name, int num);
 void mx_which(char **argv, int *err);
-void mx_printchar(char c);
 void mx_printcharerr(char c);
 void mx_printerr(const char *s);
-char *mx_strjoin2(char *s1, char *s2);
-char *mx_strcpy(char *dst, const char *src);
 bool mx_is_buildin(char *str);
-char *mx_strdup(const char *s1);
 void mx_fg_command(t_builtin_command *command, char **arg, int ac, int *err);
 char **mx_tokenSplit(char *command);
 void mx_varList(char *command, t_var **varList);
@@ -351,51 +323,44 @@ char *mx_tokenCut(char *command, int start, int end);
 int mx_subExec(t_builtin_command *my_command, char *line);
 char *mx_subLine(char **mainCommand, char *command,
                  t_builtin_command *my_command, t_inc *index);
-void mx_command_cut_four(char *command, int *arr, bool *brr, t_path **output);
-bool mx_isSpace(char *command, int i);
-void mx_command_cut_five(t_path **output, char *command, int *arr, int s);
-void mx_command_cut_six(int *arr, char *com, t_path **output, bool *brr);
-void mx_command_seven(int *arr, t_path **input);
-void mx_command_eight(int *arr, t_path **output);
-void mx_command_cut_ten(t_reddir *tasks, int *arr, char *com, bool *brr);
-void mx_command_cut_nine(t_reddir *tasks, int *arr, int s, int f);
-void mx_command_cut_eleven(t_path **output, char *command, int *arr,
-                            bool *brr);
-void mx_command_cut_twelve(t_path **output, char *command, int *arr,
-                            bool *brr);
-t_path *mx_create_list(char *command, int *i, int f, int s);
-void mx_command_cut_two(char *com, int *arr, bool *brr);
-void mx_quotesCheck(bool *sQ, bool *dQ, char *command, int i);
-void mx_command_cut_three(t_path **output, char *command, int *arr, int s);
-void mx_command_cut_one(t_reddir *tasks, int *arr, char *command,
-                                bool *brr);
-void mx_command_cut_thirteen(t_path **output, char *command, int *arr,
-                             bool *brr);
-bool mx_command_cut_fourteen( char *command, int *arr, bool *brr);
-int mx_cycleOne(t_inc *index, t_muteChar *trig, char *command,
-                char **line);
-
 char *mx_expandParameter(char *line, t_var *varList, int status);
 char *mx_expandedLine(char *line, t_var *varList, int status);
 char *mx_findParameter(char *parameter, t_var *varList, int status);
 char *mx_expand_parts(char *dollarSplit, t_var *varList, int status);
 void mx_command_exit(t_builtin_command *com, int *err, char **argv, int ac);
 void mx_del_export_var(t_var **var_list);
-
 char *mx_findTilda(char *line, t_var *varList, int status);
-
-
 t_reddir **mx_pipeCreate(char *line);
 void mx_outputCreate(char **pipeArr, t_reddir **tasks, int i);
-void mx_inputCreate(char **pipeArr, char *outputArr, t_reddir **tasks, int i, int j);
+void mx_inputCreate(char **pipeArr, char *outputArr, t_reddir **tasks,
+                        t_inc index);
 t_reddir *mx_taskCreate(char **arr, int i);
 char **mx_customSplit(const char *s, char c);
 char *mx_customDup(char *str);
-
 t_list *mx_jobSplit(char *line);
 char *mx_jobDup(char *str);
 void mx_removeSlash(char **str, char symb);
-void mx_del_subSlash(char *str, int *i);
-
+int mx_cycleOne(t_inc *index, t_muteChar *trig, char *command,
+                char **line);
+int mx_ush_loop(void);
+void mx_exit_func(t_builtin_command *my_command);
+void mx_set_builstuct(t_builtin_command *my_command);
+unsigned char *mx_read_line(t_builtin_command *my_command);
+void mx_struct_flag_cd(char *av, t_builtin_command *command, char *flag,
+                        int *err);
+char **mx_create_file(char **av, int ac, int count_files, char **file);
+void mx_falid_files(char **file, int count, t_builtin_command *com, int *err);
+char *mx_delete_Extra(char *str);
+void mx_write_str_to_strstr(char ***s1, const char *s, char c, int b);
+void mx_for_redir_four(t_reddir **tasks, t_builtin_command *my_command, 
+                            int *stat);
+void mx_deleteTasks(t_reddir ***tasks);
+int mx_two_child(t_reddir **command, int pos, int in_fd, bool extInput,
+                    t_builtin_command *my_command);
+void mx_logic_pushBack(t_queue **list, char *line, int start, int end);
+char *mx_deleteExtraSpaces(char *line);
+char *mx_job_deleteExtra(char *str);
+char **mx_create_file_echo(char **av, int ac, int count_files, char **file);
+void mx_struct_flag_echo(char *av, t_builtin_command *command, char *flag);
 
 #endif

@@ -1,4 +1,4 @@
-#include "header.h"
+#include "libmx.h"
 
 char *mx_strdup(const char *s1) {
     if (s1 == 0)

@@ -1,27 +1,19 @@
 NAME = ush
 
-HEADER = header.h \
+ROOT_A = libmx.a \
+
+LIB_A = ./libmx/libmx.a \
+
+HEADER = -I inc \
+	-I libmx/inc \
 
 FILES = main \
-	mx_strsplit \
-	mx_count_words \
-	mx_strnew \
-	mx_strlen \
 	mx_read_env \
-	mx_del_strarr \
-	mx_strdel \
 	mx_strjoin_two \
-	mx_strjoin \
-	mx_strcat \
 	mx_pipe_rec \
-	mx_itoa \
 	mx_redirection \
 	mx_fd_change \
-	mx_command_cut \
-	mx_file_to_str \
-	mx_printstr \
 	mx_works_queue \
-	mx_strcmp \
 	mx_logicOp \
 	mx_substitute \
 	mx_history_use \
@@ -47,9 +39,6 @@ FILES = main \
 	mx_pid_list \
 	mx_which \
 	mx_printerr \
-	mx_printchar \
-	mx_strdup \
-	mx_strcpy \
 	mx_is_buildin \
 	mx_fg_command \
 	mx_tokenSplit \
@@ -73,10 +62,6 @@ FILES = main \
 	mx_tokenSplit_one \
 	mx_subLine \
 	mx_subExec \
-	mx_command_cut_four \
-	mx_command_cut_five \
-	mx_command_cut_nine \
-	mx_command_cut_therteen \
 	mx_cycleOne \
 	mx_mistake \
 	mx_expandParameter \
@@ -94,9 +79,23 @@ FILES = main \
 	mx_jobSplit \
 	mx_jobDup \
 	mx_removeSlash \
-	mx_del_subSlash \
-
-INC_H = $(addprefix "inc/", $(HEADER))
+	mx_ush_loop \
+	mx_exit_func \
+	mx_set_builstuct \
+	mx_read_line \
+	mx_struct_flag_cd \
+	mx_create_file \
+	mx_falid_files \
+	mx_delete_Extra \
+	mx_write_str_to_strstr \
+	mx_for_redir_four \
+	mx_deleteTasks \
+	mx_two_child \
+	mx_logic_pushBack \
+	mx_deleteExtraSpaces \
+	mx_job_deleteExtra \
+	mx_create_file_echo \
+	mx_struct_flag_echo \
 
 ROOT_C = $(addsuffix ".c", $(FILES))
 
@@ -109,21 +108,24 @@ CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic #-g3 -glldb -fno-omit-frame-p
 all: install clean
 
 install:
+	@make -sC libmx $@
 	@cp $(SRC) .
-	@cp $(INC_H) .
-	@clang $(CFLAGS) -c $(ROOT_C)
-	@clang $(CFLAGS) -ltermcap $(ROOT_O) -o $(NAME)
+	@cp $(LIB_A) .
+	@clang $(CFLAGS) -c $(ROOT_C) $(HEADER)
+	@clang $(CFLAGS) -ltermcap $(ROOT_O) $(ROOT_A) -o $(NAME) $(HEADER)
 	@mkdir -p obj
 	@cp $(ROOT_O) obj/
 	@rm -rf $(ROOT_O)
 
 uninstall: clean
+	@make -C libmx uninstall
 	@rm -rf $(NAME)
 
 clean:
+	@make -C libmx clean
 	@rm -rf $(ROOT_O)
 	@rm -rf $(ROOT_C)
-	@rm -rf $(HEADER)
+	@rm -rf $(ROOT_A)
 	@rm -rf obj
 
 reinstall: uninstall install

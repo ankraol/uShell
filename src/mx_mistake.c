@@ -7,9 +7,6 @@ void mx_del_all(char ***argv, char **path) {
         mx_strdel(path);
 }
 
-
-
-
 void mx_mistake(char *command, char ***argv, char **path, bool flag) {
     if (flag) {
         mx_printerr("ush: ");

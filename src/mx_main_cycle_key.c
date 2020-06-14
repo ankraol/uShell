@@ -21,8 +21,6 @@ static bool check_for_byte(t_len_name *len) {
     return false;
 }
 
-
-
 void mx_main_cycle_key(t_builtin_command *my_command, unsigned char **mystr, 
                        t_len_name *len, char *buf_first) {
     my_command->his = my_command->history;
@@ -43,10 +41,6 @@ void mx_main_cycle_key(t_builtin_command *my_command, unsigned char **mystr,
             mx_three_cycle(mystr, len, my_command->file);
         }
         mx_four_cycle(mystr, len, &buf_first, my_command);
-        //printf("%-----d-----\n", *mystr[0]);
-        
-        //system("leaks -q ush");
     }
     push_and_free(&(my_command->history), mystr, len, buf_first);
-    //system("leaks -q ush");
 }

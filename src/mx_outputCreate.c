@@ -42,10 +42,15 @@ static t_reddir *outputTask(char **pipeArr, char *command, int i) {
 
 void mx_outputCreate(char **pipeArr, t_reddir **tasks, int i) {
     char **outputArr = mx_customSplit(pipeArr[i], '>');
+    t_inc index;
 
+    memset(&index, 0, sizeof(t_inc));
     for (int j = 0; outputArr[j]; j++) {
-        if (isInput(outputArr[j]))
-            mx_inputCreate(pipeArr ,outputArr[j], tasks, i, j);
+        if (isInput(outputArr[j])) {
+            index.a = i;
+            index.b = j;
+            mx_inputCreate(pipeArr ,outputArr[j], tasks, index);
+        }
         else if (j == 0)
             tasks[i] = outputTask(pipeArr, outputArr[j], i);
         else

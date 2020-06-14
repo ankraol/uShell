@@ -1,22 +1,22 @@
 #include "header.h"
 
-static void subFill(int fd, t_inc index, char **mainCommand, char *command) {
+static void subFill(int fd, t_inc i, char **mainCommand, char *com) {
     char c;
 
-    for(; read(fd, &c, 1); index.b++) {
+    for(; read(fd, &c, 1); i.b++) {
         if (c == '\n')
             c = ' ';
-        (*mainCommand)[index.b] = c;
+        (*mainCommand)[i.b] = c;
     }
     close(fd);
-    for (index.c += 1; command[index.c] != '\0' && command[index.c - 1] != '\0'; index.c++) {
-        (*mainCommand)[index.b] = command[index.c];
-        index.b++;
+    for (i.c += 1; com[i.c] != '\0' && com[i.c - 1] != '\0'; i.c++) {
+        (*mainCommand)[i.b] = com[i.c];
+        i.b++;
     }
-    if ((*mainCommand)[index.b - 1] == ' ')
-        (*mainCommand)[index.b - 1] = '\0';
+    if ((*mainCommand)[i.b - 1] == ' ')
+        (*mainCommand)[i.b - 1] = '\0';
     else
-        (*mainCommand)[index.b] = '\0';
+        (*mainCommand)[i.b] = '\0';
     (*mainCommand) = realloc(*mainCommand, strlen(*mainCommand) + 1);
 }
 

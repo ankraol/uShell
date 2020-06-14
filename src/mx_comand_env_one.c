@@ -1,8 +1,5 @@
 #include "header.h"
 
-
-
-
 static void build_env(t_env **env_list) {
     extern char **environ;
 
@@ -12,8 +9,6 @@ static void build_env(t_env **env_list) {
         }
     }
 }
-
-
 
 t_env_flag *mx_creat_flag() {
     t_env_flag *flag = (t_env_flag *)malloc(sizeof(t_env_flag));
@@ -28,8 +23,6 @@ t_env_flag *mx_creat_flag() {
     flag->index = 0;
     return flag;
 }
-
-
 
 static void fail(t_env_flag *env_flag, t_env **env_list, char var, int *err) {
     mx_delete_env(env_list);
@@ -66,8 +59,6 @@ static bool flag_priority(t_env_flag *env_flag, t_env **env, char var,
     }
     return true;
 }
-
-
 
 void mx_env_two(char **arg, int ac, t_builtin_command *command, int *err) {
     t_env *env_list = NULL;

@@ -45,102 +45,6 @@ static int worksCount(char *line) {
     return count;
 }
 
-// static bool onlySpaces(char *line, int st, int end) {
-//     for (int i = st; i < end; i++) {
-//         if (line[i] != ' ')
-//             return false;
-//     }
-//     return true;
-// }
-
-// static void quotesCheck(bool *ap, bool *sQ, bool *d, char *c, int i) {
-//     if (c[i] == 34 && c[i - 1] != 92 && (*ap) == false && (*sQ) == false) {
-//         if ((*d) == false)
-//             *d = true;
-//         else
-//             *d = false;
-//     }
-//     else if (c[i] == 39 && (*d) == false && (*ap) == false) {
-//         if ((*sQ) == false)
-//             *sQ = true;
-//         else
-//             *sQ = false;
-//     }
-//     else if (c[i] == 96 && c[i - 1] != 92 && (*sQ) == false && (*d) == false) {
-//         if ((*ap) == false)
-//             *ap = true;
-//         else
-//             *ap = false;
-//     }
-// }
-
-// static char *commandCut(char *line, int start, int end) {
-//     char *command = (char *)malloc(sizeof(char) * (end - start + 2));
-//     int q = 0;
-//     bool ap = false;
-//     bool iSsq = false;
-//     bool iSdq = false;
-
-//     for (int i = start; i < end; i++) {
-//         if (i == start && line[i] == ' ')
-//             for (; line[i] == ' '; i++);
-//         if (line[i] == 34 || line[i] == 39 || line[i] == 96) {
-//             quotesCheck(&ap, &iSsq, &iSdq, line, i);
-//         }
-//         if (line[i - 1] != 92 && line[i] == 92
-//             && line[i + 1] == 96 && ap == false && iSsq == false
-//             && iSdq == false)
-//             {
-//                 i++;
-//             }
-//         //     else if (line[i] == 92 && line[i + 1] == 92 && ap == false && iSsq == false && iSdq == false)
-//         //         for (int k = 0; line[i + 1] == 92 && k < 4; i++, k++);
-//             if (onlySpaces(line, i, end) == false) {
-//                 command[q] = line[i];
-//                 q++;
-//         }
-//     }
-//     command[q] = '\0';
-//     command = realloc(command, strlen(command) + 1);
-//     return command;
-// }
-
-// static void pushBack(t_list **jobs, char *line, int start, int end) {
-//     t_list **p = jobs;
-
-//     if ((*jobs) == NULL) {
-//         (*p) = (t_list *)malloc(sizeof(t_list));
-//         (*p)->command = commandCut(line, start, end);
-//         (*p)->next = NULL;
-//     }
-//     else {
-//         for (; (*p)->next; p = &(*p)->next);
-//         (*p)->next = (t_list *)malloc(sizeof(t_list));
-//         (*p)->next->command = commandCut(line, start, end);
-//         (*p)->next->next = NULL;
-//     }
-// }
-
-// static t_list *jobsSplit(char *line) {
-//     t_list *jobs = NULL;
-//     t_muteChar mute;
-//     int start = 0;
-//     int i = 0;
-
-//     mute.dQ = false;
-//     mute.sQ = false;
-//     mute.iSs = false;
-//     for (; line[i] != '\0'; i++) {
-//         muteChar(&mute.sQ, &mute.dQ, &mute.iSs, line, i);
-//         if (mute.sQ == false && mute.dQ == false && mute.iSs == false && line[i] == ';') {
-//             pushBack(&jobs, line, start, i);
-//             start = i + 1;
-//         }
-//     }
-//     pushBack(&jobs, line, start, i);
-//     return jobs;
-// }
-
 void jobs_delete(t_list **jobs) {
     t_list *p1 = NULL;
 
@@ -152,18 +56,9 @@ void jobs_delete(t_list **jobs) {
     }
 }
 
-// static void listPrint(t_list *jobs) {
-//     t_list *p = jobs;
-
-//     for (; p; p = p->next) {
-//         printf("splited LIST = %s\n", p->command);
-//     }
-// }
-
 t_queue **mx_works_queue(char *line) {
     int size = worksCount(line);
     t_list *jobs = mx_jobSplit(line);
-    // listPrint(jobs);
     t_queue **list = NULL;
     int i = 0;
     t_list *p = jobs;

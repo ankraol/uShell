@@ -93,9 +93,10 @@ static bool check_commands(char **commands, char** pathes, int start_index,
         finded = check_command(commands[i], pathes, flags);
         if ((finded == false) && ((flags & 2) == 2))
             return false;
-        if (finded == false) 
+        if (finded == false) {
             mx_printerr(commands[i]);
             mx_printerr(" not found\n");
+        }
         if (finded && ((flags & 1) == 0 || (flags & 2) == 2))
             return true;
     }

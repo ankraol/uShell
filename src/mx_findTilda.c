@@ -18,9 +18,9 @@ static char *tildaMeaning(char *tilda, t_var *varList, int status) {
     char *meaning = NULL;
 
     if (tilda[0] == '~')
-        meaning = mx_findParameter("PWD", varList, status);
-    else if (tilda[0] == '+')
         meaning = mx_findParameter("HOME", varList, status);
+    else if (tilda[0] == '+')
+        meaning = mx_findParameter("PWD", varList, status);
     else if (tilda[0] == '-')
         meaning = mx_findParameter("OLDPWD", varList, status);
     return meaning;

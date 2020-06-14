@@ -32,8 +32,11 @@ static t_reddir *inputTask(char **pipeArr, char *command, int i) {
     return task;
 }
 
-void mx_inputCreate(char **pipeArr, char *outputArr, t_reddir **tasks, int i, int j) {
+void mx_inputCreate(char **pipeArr, char *outputArr, t_reddir **tasks,
+                        t_inc index) {
     char **inputArr = mx_customSplit(outputArr, '<');
+    int i = index.a;
+    int j = index.b;
 
     if (j == 0)
         tasks[i] = inputTask(pipeArr, inputArr[0], i);
