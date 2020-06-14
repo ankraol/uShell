@@ -22,7 +22,7 @@ static void del_work( t_queue ***work) {
     }
 }
 
-static void execLoop(char *line, int status, t_builtin_command *my_command) {
+static void execLoop(char *line, int *status, t_builtin_command *my_command) {
     t_queue **work = mx_works_queue(line);
     t_queue *p = NULL;
 
@@ -31,11 +31,11 @@ static void execLoop(char *line, int status, t_builtin_command *my_command) {
             p = work[i];
             for (; p; p = (*p).next) {
                 (*p).command = mx_expandParameter((*p).command, my_command->var,
-                                                    status);
+                                                    (*status));
                 (*p).command = mx_substitute((*p).command, my_command);
-                status = mx_redirection((*p).command, my_command);
-                if (((*p).op == '&' && status == 1)
-                    || ((*p).op == '|' && status == 0))
+                (*status)= mx_redirection((*p).command, my_command);
+                if (((*p).op == '&' && (*status) == 1)
+                    || ((*p).op == '|' && (*status) == 0))
                     {
                         p = (*p).next;
                     }
@@ -84,7 +84,7 @@ int mx_ush_loop(void) {
     while (my_command.trig == false) {
         line = mx_read_line(&my_command);
         if (line && line[0] != '\0' && !contral_d(&line, &my_command))
-            execLoop((char *)line, status, &my_command);
+            execLoop((char *)line, &status, &my_command);
         exit_code = my_command.exit_code;
         free(line);
     }
