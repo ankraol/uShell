@@ -53,7 +53,7 @@ int mx_ush_execute_env(char *com, t_builtin_command *my_com,
                        char **new_env, char *path_env) {
     pid_t pid;
     char **argv = mx_tokenSplit(com);
-    int val_ret = 0;
+    int val_ret = 999;
 
     // print_arr(argv);
 

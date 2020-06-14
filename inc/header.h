@@ -305,7 +305,7 @@ int mx_ush_execute_env(char *command, t_builtin_command *my_command,
                        char **new_env, char *path);
 void mx_env_two(char **arg, int ac, t_builtin_command *command, int *err);
 void mx_env_one();
-void mx_execute_command(t_builtin_command *command, t_env **env_list,
+int mx_execute_command(t_builtin_command *command, t_env **env_list,
                         t_env_flag *env_flag, char **program);
 bool mx_flag_command(char *var, int j, t_env_flag *env_flag, 
                     t_env **env_list);

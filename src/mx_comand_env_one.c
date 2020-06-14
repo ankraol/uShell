@@ -80,5 +80,5 @@ void mx_env_two(char **arg, int ac, t_builtin_command *command, int *err) {
         }
     }
     env_flag->index = i - 1;
-    mx_execute_command(command, &env_list, env_flag, arg);
+    *err = mx_execute_command(command, &env_list, env_flag, arg);
 }
