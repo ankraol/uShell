@@ -22,5 +22,8 @@ int mx_strcmp(const char *s1, unsigned const char *s2);
 void mx_printchar(char c);
 char *mx_strcpy(char *dst, const char *src);
 char *mx_strdup(const char *s1);
+int mx_strncmp(const char *s1, const char *s2, int n);
+char *mx_strstr(const char *haystack, const char *needle);
+bool mx_isdigit(int c);
 
 #endif

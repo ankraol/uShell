@@ -47,9 +47,17 @@ static void execLoop(char *line, int *status, t_builtin_command *my_command) {
 
 static bool contral_d(unsigned char **str, t_builtin_command *my_command) {
     if (*str[0] == 4) {
-        my_command->trig = true;
-        mx_strdel((char **) str);
-        return true;
+        if (my_command->pid_ar != NULL) {
+            mx_printerr("ush: you have suspended jobs.\n");
+            mx_strdel((char **) str);
+            my_command->trig = false;
+            return true;
+        }
+        else {
+            my_command->trig = true;
+            mx_strdel((char **) str);
+            return true;
+        }
     }
     return false;
 }

@@ -17,6 +17,9 @@ FILES = mx_count_words \
 	mx_printchar \
 	mx_strcpy \
 	mx_strdup \
+	mx_strncmp \
+	mx_strstr \
+	mx_isdigit \
 
 INC_H = $(addprefix "inc/", $(HEADER))
 

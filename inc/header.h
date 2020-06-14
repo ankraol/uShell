@@ -288,7 +288,7 @@ char **mx_tokenSplit(char *command);
 void mx_varList(char *command, t_var **varList);
 int mx_get_pid_num(t_pid_name **pid_list);
 void mx_for_fg_command(t_builtin_command *com, char **arg, int ac, int *err);
-void mx_wait_cont(t_pid_name **pid_ar, int n_pid);
+void mx_wait_cont(t_pid_name **pid_ar, int n_pid, int *err);
 int mx_get_peid_name(char *name, t_pid_name *pid_arr);
 int mx_get_peid(int n, t_pid_name *pid_arr);
 void mx_push_back_export(t_export **export_list, char *name, char *val);

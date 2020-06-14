@@ -1,5 +1,11 @@
 #include "header.h"
 
+static void exit_code(int status, int *val_ret) {
+    if (status == 0)
+        *val_ret = 0;
+    else
+        *val_ret = 1;
+}
 
 static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
                     char **argv) {
@@ -11,7 +17,7 @@ static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
     tcsetpgrp(1, pid);
     wpid = waitpid(pid, &status, WUNTRACED);
     if (WIFEXITED(status))
-        *val_ret = 0;
+        exit_code(status, val_ret);
     else if (WIFSTOPPED(status)) {//ctrl+Z
         number = mx_get_pid_num(&my_command->pid_ar);
         mx_push_back_pid(&my_command->pid_ar, wpid, argv[0], number);
@@ -21,8 +27,6 @@ static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
         *val_ret = 130;
         mx_printstr("\n");
     }
-    else if (status != 0)
-        *val_ret = 1;
 }
 
 
