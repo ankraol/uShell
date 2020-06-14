@@ -96,6 +96,7 @@ FILES = main \
 	mx_job_deleteExtra \
 	mx_create_file_echo \
 	mx_struct_flag_echo \
+	mx_checkSame \
 
 ROOT_C = $(addsuffix ".c", $(FILES))
 
