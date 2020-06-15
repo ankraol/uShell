@@ -32,7 +32,6 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
         fd = mx_subExec(my_command, line);
         subFill(fd, index, &mainCommand, command);
         mainCommand = mx_substitute(mainCommand, my_command);
-        mx_strdel(&line);
         mx_strdel(&command);
         return mainCommand;
     }
