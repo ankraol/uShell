@@ -1,11 +1,11 @@
 NAME = ush
 
-ROOT_A = libmx.a \
+ROOT_A = libmx.a
 
-LIB_A = ./libmx/libmx.a \
+LIB_A = ./libmx/libmx.a
 
 HEADER = -I inc \
-	-I libmx/inc \
+	-I libmx/inc
 
 FILES = main \
 	mx_read_env \
@@ -96,37 +96,40 @@ FILES = main \
 	mx_job_deleteExtra \
 	mx_create_file_echo \
 	mx_struct_flag_echo \
-	mx_checkSame \
+	mx_checkSame
 
-ROOT_C = $(addsuffix ".c", $(FILES))
 
-SRC = $(addprefix "src/", $(ROOT_C))
 
-ROOT_O = $(addsuffix ".o", $(FILES))
+CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic -ltermcap
 
-CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic #-g3 -glldb -fno-omit-frame-pointer -fsanitize=address -fsanitize=undefined
+OBJ_DIR = obj/
 
-all: install clean
+SRC_DIR = src/
 
-install:
-	@make -sC libmx $@
-	@cp $(SRC) .
-	@cp $(LIB_A) .
-	@clang $(CFLAGS) -c $(ROOT_C) $(HEADER)
-	@clang $(CFLAGS) -ltermcap $(ROOT_O) $(ROOT_A) -o $(NAME) $(HEADER)
-	@mkdir -p obj
-	@cp $(ROOT_O) obj/
-	@rm -rf $(ROOT_O)
+OBJ = $(FILES:%=$(OBJ_DIR)%.o)
 
-uninstall: clean
-	@make -C libmx uninstall
-	@rm -rf $(NAME)
+SRC = $(FILES:%=$(SRC_DIR)%.c)
+
+all: $(ROOT_A) $(NAME)
+
+$(ROOT_A):
+	@make -sf Makefile -C libmx
+
+$(OBJ_DIR):
+	@mkdir -p $@
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+	@clang $(CFLAGS) $(HEADER) -o $@ -c $<
+
+$(NAME): $(OBJ_DIR) $(OBJ)
+	@clang $(CFLAGS) $(HEADER) $(OBJ) $(LIB_A) -o $@
 
 clean:
-	@make -C libmx clean
-	@rm -rf $(ROOT_O)
-	@rm -rf $(ROOT_C)
-	@rm -rf $(ROOT_A)
-	@rm -rf obj
+	@make -sf Makefile -C libmx clean
+	@rm -rf $(OBJ_DIR)
 
-reinstall: uninstall install
+uninstall: clean
+	@make -sf Makefile -C libmx uninstall
+	@rm -rf $(NAME)
+
+reinstall: uninstall all
