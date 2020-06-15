@@ -20,9 +20,8 @@ static void first(t_builtin_command *command, char **arg, int i, int *err) {
 
     printf("DIGIT == %d, num = %d, num2 == %d\n", isdigit(*((int *)(&(arg[i][1])))-48), isdigit('l'), isdigit((int) 5));
     printf("DIGIT == %d, num = %d, num2 == %d\n", mx_isdigit(*((int *)(&(arg[i][1])))-48), mx_isdigit('l'), mx_isdigit((int) 5));
-    printf("MY_NUM = %d\n", *((int *)(&(arg[i][1])))-48);
+    printf("MY_NUM = %d\n", *((int *)(&(arg[i][1])))- 48);
     printf("ATOI -- %d\n", atoi(&(arg[i][1])));
-    //mx_isdigit(*((int *)(&(arg[i][1])))-48);
 
     if (atoi(&(arg[i][1])) != 0) {
         printf("IN NUM \n");

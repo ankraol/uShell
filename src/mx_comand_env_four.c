@@ -1,7 +1,5 @@
 #include "header.h"
 
-
-
 static void flag_u(t_env_flag *env_flag, t_env **env_list, char *var) {
     if (env_flag->i_access == true)
         mx_variable_out(var, env_list);
