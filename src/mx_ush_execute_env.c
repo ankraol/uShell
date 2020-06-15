@@ -32,9 +32,9 @@ static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
 
 
 
-static bool path_check(char **path, char *command, char ***argv, bool flag) {
+static bool path_check(char **path, char ***argv, bool flag) {
     if (*path == NULL) {
-        mx_mistake(command, argv, path, flag);
+        mx_mistake(*argv[0], argv, path, flag);
         return true;
     }
     return false;
@@ -66,7 +66,7 @@ int mx_ush_execute_env(char *com, t_builtin_command *my_com,
     if (val_ret == 999) {
         my_com->path_for_ex = mx_read_env(argv[0], path_env, my_com);
         val_ret = 0;
-        if (path_check(&(my_com->path_for_ex), com, &argv, my_com->execute))
+        if (path_check(&(my_com->path_for_ex), &argv, my_com->execute))
             return 1;
         pid = fork();
         if (pid == 0) {
