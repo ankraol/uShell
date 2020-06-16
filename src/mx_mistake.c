@@ -3,7 +3,7 @@
 void mx_del_all(char ***argv, char **path) {
     if (*argv != NULL)
         mx_del_strarr(argv);
-    if (*path != NULL)
+    if (*path != NULL && malloc_size(*path))
         mx_strdel(path);
 }
 

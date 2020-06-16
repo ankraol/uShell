@@ -40,4 +40,5 @@ void mx_set_builstuct(t_builtin_command *my_command) {
     my_command->export_ar = NULL;
     my_command->file = fopen("/dev/tty", "w");
     build_export(&(my_command->export_ar));
+    (isatty(0)) ? (my_command->is_inp = true) : (my_command->is_inp = false);
 }

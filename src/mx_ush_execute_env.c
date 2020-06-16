@@ -1,10 +1,7 @@
 #include "header.h"
 
 static void exit_code(int status, int *val_ret) {
-    if (status == 0)
-        *val_ret = 0;
-    else
-        *val_ret = 1;
+    *val_ret = WEXITSTATUS(status);
 }
 
 static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,

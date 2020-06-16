@@ -100,7 +100,7 @@ FILES = main \
 
 
 
-CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
+CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic #-fsanitize=address
 
 OBJ_DIR = obj/
 

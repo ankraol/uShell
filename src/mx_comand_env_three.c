@@ -4,19 +4,16 @@ static bool be_find_comad(char *var, int j, t_env_flag *env_flag,
                         t_env **env_list) {
     if (!(env_flag->flag_priority) && var[j] == '=') {
         mx_push_back_env(env_list, var);
-        env_flag->be_command = true;
-        printf("BE_COMMAND--%d\n", j);
+        env_flag->be_command = true;        
         return true;
     }
     if (!(env_flag->flag_priority) && var[j+1] == '\0') {
         env_flag->find_program = true;
-        printf("FIND_COMMAND--%d\n", j);
         return true;
     }
     if (var[j+1] == '\0' && !(env_flag->flag_u)
         && !(env_flag->flag_p) && env_flag->flag_priority) {
             env_flag->flag_priority = false;
-            printf("Flag_priority\n");
             return false;
     }
     return false;

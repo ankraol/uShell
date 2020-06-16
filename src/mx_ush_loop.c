@@ -32,6 +32,7 @@ static void execLoop(char *line, int *status, t_builtin_command *my_command) {
             for (; p; p = (*p).next) {
                 (*p).command = mx_expandParameter((*p).command, my_command->var,
                                                     (*status));
+                                                    
                 (*p).command = mx_substitute((*p).command, my_command);
                 (*status)= mx_redirection((*p).command, my_command);
                 if (((*p).op == '&' && (*status) == 1)
@@ -42,6 +43,7 @@ static void execLoop(char *line, int *status, t_builtin_command *my_command) {
             }
         }
         del_work(&work);
+
     }
 }
 

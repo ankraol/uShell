@@ -86,6 +86,14 @@ static void general(t_builtin_command *command, char **arr_val) {
     mx_del_export_var(&command->var);
 }
 
+bool mx_rovno(char *str) {
+    for (int i = 0; str[i]; i++) {
+        if (str[i] == '=')
+            return true;
+    }
+    return false;
+}
+
 void mx_command_export(t_builtin_command *com, char **arg, int ac, int *err) {
     char **arr_val;
 
@@ -96,13 +104,15 @@ void mx_command_export(t_builtin_command *com, char **arg, int ac, int *err) {
     else {
         for (int i = 1; i < ac; i++)
         {
-            arr_val = mx_strsplit(arg[i], '='); 
-            if (check_str(arr_val[0]) == 0) {
-                   general(com, arr_val);
+            if (mx_rovno(arg[i])) {
+                arr_val = mx_strsplit(arg[i], '='); 
+                if (check_str(arr_val[0]) == 0) {
+                       general(com, arr_val);
+                }
+                else
+                    *err = 1;
+                mx_del_strarr(&arr_val);
             }
-            else
-                *err = 1;
-         mx_del_strarr(&arr_val);
         }
     }
 }
