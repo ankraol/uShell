@@ -100,7 +100,7 @@ FILES = main \
 
 
 
-CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic -ltermcap
+CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
 
 OBJ_DIR = obj/
 
@@ -122,7 +122,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@clang $(CFLAGS) $(HEADER) -o $@ -c $<
 
 $(NAME): $(OBJ_DIR) $(OBJ)
-	@clang $(CFLAGS) $(HEADER) $(OBJ) $(LIB_A) -o $@
+	@clang $(CFLAGS) -ltermcap $(HEADER) $(OBJ) $(LIB_A) -o $@
 
 clean:
 	@make -sf Makefile -C libmx clean
