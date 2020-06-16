@@ -13,7 +13,7 @@ static bool removal(char *str, int i) {
 static bool isExp(char *line, char symb) {
     bool sQ = false;
 
-    for (int i = 0; line[i] != '\0';) {
+    for (int i = 0; line && line[i] != '\0';) {
         if (line[i] == 39) {
             if (sQ)
                 sQ = false;
@@ -21,8 +21,8 @@ static bool isExp(char *line, char symb) {
                 sQ = true;
             i++;
         }
-        else if (line[i] == symb && (line[i + 1] == '{' || line[i + 1] != '(')
-                && !sQ)
+        else if (line[i + 1] != '\0' && line[i] == symb && (line[i + 1] == '{' || line[i + 1] != '(')
+                && !sQ && i != 0)
             {
                 if (line[i - 1] != 92)
                     return true;
@@ -33,8 +33,8 @@ static bool isExp(char *line, char symb) {
                     return false;
                 }
             }
-            else
-                i++;
+        else
+            i++;
     }
     return false;
 }
