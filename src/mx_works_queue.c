@@ -37,7 +37,7 @@ static int worksCount(char *line) {
 
     for (int i = 0; line[i] != '\0'; i++) {
         muteChar(&sQ, &dQ, &iSs, line, i);
-        if (line[i] == ';' && sQ == false && dQ == false && iSs == false) {
+        if (line[i] == ';' && !sQ && !dQ && !iSs) {
             if(extraCommand(line, i) == false && line[i + 1] != '\0')
                 count += 1;
         }

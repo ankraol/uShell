@@ -18,7 +18,6 @@ static char *strCopy(char *str) {
     char *copy = NULL;
 
     if (!Extra(str)) {
-        // printf("NO EXTRA\n");
         copy = mx_strdup(str);
     }
     else

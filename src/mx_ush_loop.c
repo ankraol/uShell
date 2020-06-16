@@ -91,10 +91,12 @@ int mx_ush_loop(void) {
     mysetenv();
     while (my_command.trig == false) {
         line = mx_read_line(&my_command);
-        if (line && line[0] != '\0' && !contral_d(&line, &my_command))
-            execLoop((char *)line, &status, &my_command);
-        exit_code = my_command.exit_code;
-        free(line);
+        if (line && line[0] != '\0' && !contral_d(&line, &my_command)) {
+            if (mx_checkLine((char *)line))
+                execLoop((char *)line, &status, &my_command);
+            exit_code = my_command.exit_code;
+            free(line);
+        }
     }
     mx_exit_func(&my_command);
     return exit_code;

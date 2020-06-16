@@ -321,8 +321,7 @@ void mx_del_all(char ***argv, char **path);
 char *mx_nameCut(char *command, int *start);
 char *mx_tokenCut(char *command, int start, int end);
 int mx_subExec(t_builtin_command *my_command, char *line);
-char *mx_subLine(char **mainCommand, char *command,
-                 t_builtin_command *my_command, t_inc *index);
+char *mx_subLine(char **mainCommand, char *command, t_inc *index);
 char *mx_expandParameter(char *line, t_var *varList, int status);
 char *mx_expandedLine(char *line, t_var *varList, int status);
 char *mx_findParameter(char *parameter, t_var *varList, int status);
@@ -363,5 +362,6 @@ char *mx_job_deleteExtra(char *str);
 char **mx_create_file_echo(char **av, int ac, int count_files, char **file);
 void mx_struct_flag_echo(char *av, t_builtin_command *command, char *flag);
 char *mx_checkSame(char *meaning, char *tilda);
+bool mx_checkLine(char *line);
 
 #endif

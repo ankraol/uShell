@@ -26,16 +26,20 @@ char *mx_substitute(char *command, t_builtin_command *my_command) {
     char *mainCommand = (char *)malloc(sizeof(char) * strlen(command) * 50);
     char *line = NULL;
 
+    command = mx_aliasSearch(command, my_command->alias_list);
     memset(&index, 0, sizeof(t_inc));
-    line = mx_subLine(&mainCommand, command, my_command, &index);
-    if (index.a > 0) {
+    line = mx_subLine(&mainCommand, command, &index);
+    if (index.a > 0 && mx_checkLine(line)) {
         fd = mx_subExec(my_command, line);
         subFill(fd, index, &mainCommand, command);
         mainCommand = mx_substitute(mainCommand, my_command);
-        mx_strdel(&command);
+        if (malloc_size(command))
+            mx_strdel(&command);
         return mainCommand;
     }
-    mx_strdel(&line);
-    mx_strdel(&mainCommand);
+    if (malloc_size(line))
+        mx_strdel(&line);
+    if(malloc_size(mainCommand))
+        mx_strdel(&mainCommand);
     return command;
 }

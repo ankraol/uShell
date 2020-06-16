@@ -2,8 +2,6 @@ NAME = ush
 
 ROOT_A = libmx.a
 
-LIB_A = ./libmx/libmx.a
-
 HEADER = -I inc \
 	-I libmx/inc
 
@@ -96,19 +94,24 @@ FILES = main \
 	mx_job_deleteExtra \
 	mx_create_file_echo \
 	mx_struct_flag_echo \
-	mx_checkSame
+	mx_checkSame \
+	mx_checkLine
 
 
 
-CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
+CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic #-fsanitize=address
 
 OBJ_DIR = obj/
 
 SRC_DIR = src/
 
+LIB_DIR = libmx/
+
 OBJ = $(FILES:%=$(OBJ_DIR)%.o)
 
 SRC = $(FILES:%=$(SRC_DIR)%.c)
+
+LIBMX = $(LIB_DIR)$(ROOT_A)
 
 all: $(ROOT_A) $(NAME)
 
@@ -121,8 +124,8 @@ $(OBJ_DIR):
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@clang $(CFLAGS) $(HEADER) -o $@ -c $<
 
-$(NAME): $(OBJ_DIR) $(OBJ)
-	@clang $(CFLAGS) -ltermcap $(HEADER) $(OBJ) $(LIB_A) -o $@
+$(NAME): $(OBJ_DIR) $(ROOT_A) $(OBJ)
+	@clang $(CFLAGS) -ltermcap $(HEADER) $(OBJ) $(LIBMX) -o $@
 
 clean:
 	@make -sf Makefile -C libmx clean

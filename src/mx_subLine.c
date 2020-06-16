@@ -19,12 +19,10 @@ static int cycleTwo(t_inc *index, t_muteChar *trig, char *command,
     return 0;
 }
 
-static void closeString(char **line, t_inc *index, char **mainCommand,
-                        t_builtin_command *my_command) {
+static void closeString(char **line, t_inc *index, char **mainCommand) {
     (*line)[(*index).a] = '\0';
     (*mainCommand)[(*index).b] = ' ';
     (*line) = realloc((*line), strlen(*line) + 1);
-    (*line) = mx_aliasSearch(*line, my_command->alias_list);
 }
 
 static void innerCycle(t_muteChar trig, t_inc *index, t_subCom commands) {
@@ -48,8 +46,7 @@ static void innerCycle(t_muteChar trig, t_inc *index, t_subCom commands) {
     }
 }
 
-char *mx_subLine(char **mainCommand, char *command,
-                t_builtin_command *my_command, t_inc *index) {
+char *mx_subLine(char **mainCommand, char *command, t_inc *index) {
     t_muteChar trig;
     char *line = (char *)malloc(sizeof(char) * strlen(command));
     t_subCom commands;
@@ -59,6 +56,6 @@ char *mx_subLine(char **mainCommand, char *command,
     commands.line = line;
     commands.origin = mainCommand;
     innerCycle(trig, index, commands);
-    closeString(&line, index, mainCommand, my_command);
+    closeString(&line, index, mainCommand);
     return line;
 }

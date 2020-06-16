@@ -35,6 +35,7 @@ int mx_subExec(t_builtin_command *my_command, char *line) {
     }
     else
         close(fd[1]);
-    mx_strdel(&line);
+    if (malloc_size(line))
+        mx_strdel(&line);
     return fd[0];
 }
