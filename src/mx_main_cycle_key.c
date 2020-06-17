@@ -40,7 +40,7 @@ void mx_main_cycle_key(t_builtin_command *my_command, unsigned char **mystr,
                 break;
             }
             else if (len->ch[0] >= 32)
-                mx_add_to_str(mystr, &len);
+                mx_add_to_str(mystr, &len, my_command);
             mx_three_cycle(mystr, len, my_command->file, my_command);
         }
         mx_four_cycle(mystr, len, &buf_first, my_command);

@@ -46,7 +46,6 @@ static void execLoop(char *line, int *status, t_builtin_command *my_command) {
             }
         }
         del_work(&work);
-
     }
 }
 

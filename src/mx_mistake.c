@@ -1,7 +1,7 @@
 #include "header.h"
 
 void mx_del_all(char ***argv, char **path) {
-    if (*argv != NULL)
+    if (*argv != NULL && malloc_size(*argv))
         mx_del_strarr(argv);
     if (*path != NULL && malloc_size(*path))
         mx_strdel(path);

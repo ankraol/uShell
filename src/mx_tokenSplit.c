@@ -15,6 +15,14 @@ static void quotesCheck(bool *iSsq, bool *iSdq, char *command, int i) {
     }
 }
 
+static bool onlySpaces(char *line, int i) {
+    for (int j = i; line[j] != '\0'; j++) {
+        if (line[j] != ' ')
+            return false;
+    }
+    return true;
+}
+
 static int tokensCount(char *command) {
     int count = 0;
     bool iSsq = false;
@@ -25,7 +33,7 @@ static int tokensCount(char *command) {
             quotesCheck(&iSsq, &iSdq, command, i);
         if (iSsq == false && iSdq == false
         && command[i] == ' ' && command[i + 1] != '\0'
-        && command[i - 1] != 92)
+        && command[i - 1] != 92 && !onlySpaces(command, i))
             {
                 count++;
             }
@@ -44,7 +52,7 @@ char **mx_tokenSplit(char *command) {
         if (command[arr[2]] == 34 || command[arr[2]] == 39)
             quotesCheck(&iSsq, &iSdq, command, arr[2]);
         else if (command[arr[2]] == ' ' && iSsq == false && iSdq == false
-                && command[arr[2] - 1] != 92)
+                && command[arr[2] - 1] != 92 && !onlySpaces(command, arr[2]))
                 {
                     tokens[arr[0]] = mx_tokenCut(command, arr[1], arr[2]);
                     arr[1] = arr[2] + 1;

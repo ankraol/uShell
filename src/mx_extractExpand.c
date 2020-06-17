@@ -87,6 +87,7 @@ char *mx_extractExpand(char *quoteLess, t_var *varList, int status) {
         before_extr = strndup((const char *)quoteLess, d_l);
     if ((d_l + size) < mx_strlen(quoteLess))
         after_extr = mx_strdup((quoteLess + (d_l + size + 1)));
+    if (meaning)
     newLine = combineParts(before_extr, meaning, after_extr);
     return newLine;
 }
