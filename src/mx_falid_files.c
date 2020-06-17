@@ -24,23 +24,28 @@ static void mx_home(t_builtin_command *command) {
     chdir(pw->pw_dir);
 }
 
-static void mx_print_min(char *pwd) {
-    struct passwd *pw = getpwuid(getuid());
+static void mx_print_min(char *pwd, t_builtin_command *command) {
+    if (command->is_inp) {
+        struct passwd *pw = getpwuid(getuid());
 
-    if (strstr(pwd, pw->pw_dir) != NULL) {
-        int len = strlen(pw->pw_dir);
+        if (strstr(pwd, pw->pw_dir) != NULL) {
+            int len = strlen(pw->pw_dir);
 
-        printf("~");
-        printf("%s\n", pwd + len);
+            mx_printstr("~");
+            mx_printstr(pwd + len);
+            mx_printchar('\n');
+        }
+        else {
+            mx_printstr(pwd);
+            mx_printchar('\n');
+        }
     }
-    else
-        printf("%s\n", pwd);
 }
 
 static void mx_cd_flag_min(t_builtin_command *command) {
     chdir(command->path->oldpwd);
 
-    mx_print_min(command->path->oldpwd);
+    mx_print_min(command->path->oldpwd, command);
 
     if (command->cd->flag_P) {
         mx_swap_str(&command->path->oldpwd, &command->path->pwdP);

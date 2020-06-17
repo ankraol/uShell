@@ -23,7 +23,10 @@ static void sort_list(t_export **lst) {
 static void print_list(t_export *export_list) {
  
     while (export_list) {
-        printf("%s=%s\n", export_list->name, export_list->value);
+        mx_printstr(export_list->name);
+        mx_printchar('=');
+        mx_printstr(export_list->value);
+        mx_printchar('\n');
         export_list = export_list->next;
     }
 }
