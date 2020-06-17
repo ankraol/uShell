@@ -3,7 +3,9 @@
 static void print_list(t_env *export_list) {
  
     while (export_list) {
-        printf("%s\n", export_list->name);
+        mx_printstr(export_list->name);
+        mx_printchar('\n');
+
         export_list = export_list->next;
     }
 }

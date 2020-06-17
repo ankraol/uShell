@@ -20,9 +20,9 @@ int print_e(char *str, int *i) {
 
 void mx_print_E(char **file) {
     for (int i = 0; file[i]; i++) {
-        printf("%s", file[i]);
+        mx_printstr(file[i]);
         if (file[i + 1] != NULL)
-            printf(" ");
+            mx_printstr(" ");
     }
 }
 
@@ -57,7 +57,7 @@ void mx_echo(char **file, t_builtin_command *command) {
     else
         mx_print_e(file, &err);
     if (!(command->echo->flag_n) && (err == 1))
-        printf("\n");
+        write(1, "\n", 1);
 }
 
 void mx_valid_flag_echo(t_builtin_command *command, char **arg, int ac) {

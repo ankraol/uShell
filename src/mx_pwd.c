@@ -39,8 +39,12 @@ void mx_valid_flag_pwd(t_builtin_command *command, char **arg, int ac, int *err)
         fprintf(stderr, "pwd: too many arguments\n");
         *err = 1;
     }
-	else if (command->pwd->flag_P || command->cd->flag_P)
-		printf("%s\n", command->path->pwdP);
-	else
-		printf("%s\n", command->path->pwdL);
+	else if (command->pwd->flag_P || command->cd->flag_P) {
+		mx_printstr(command->path->pwdP);
+        mx_printchar('\n');
+    }
+	else {
+		mx_printstr(command->path->pwdL);
+        mx_printchar('\n');
+    }
 }
