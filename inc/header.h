@@ -125,6 +125,7 @@ struct s_builtin_command {
     char *path_for_ex;
     bool trig;
     int exit_code;
+    bool is_inp;
 };
 
 struct s_env {
@@ -259,9 +260,11 @@ void mx_main_cycle_key(t_builtin_command *my_command, unsigned char **mystr,
                         t_len_name *len, char *buf_first);
 void mx_get_width(int *col);
 void mx_one_cycle(unsigned char **mystr, t_len_name *len, unsigned char *buf,
-                 FILE *file);
-void mx_two_cycle(unsigned char **mystr, t_len_name *len, FILE *file);
-void mx_three_cycle(unsigned char **mystr, t_len_name *len, FILE *file);
+                 t_builtin_command *my_command);
+void mx_two_cycle(unsigned char **mystr, t_len_name *len, FILE *file,
+                    t_builtin_command *my_command);
+void mx_three_cycle(unsigned char **mystr, t_len_name *len, FILE *file, 
+                    t_builtin_command *my_command);
 void mx_four_cycle(unsigned char **mystr, t_len_name *len, char **buf_first,
                    t_builtin_command *my_co);
 void mx_byte_check_add(unsigned char *ch, int *delte_len, int *delta_byte,
