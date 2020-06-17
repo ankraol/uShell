@@ -1,12 +1,18 @@
 #include "header.h"
 
 static void QuotesCheck(const char *str, int i, t_muteChar *quotes) {
-    if ((str[i] == 34 || str[i] == 39) && str[i - 1] != 92) {
+    if ((str[i] == 34 || str[i] == 39 || str[i] == 96) && str[i - 1] != 92) {
         if (str[i] == 34) {
             if (quotes->dQ == false)
                 quotes->dQ = true;
             else
                 quotes->dQ = false;
+        }
+        else if (str[i] == 96) {
+            if (quotes->iSs == false)
+                quotes->iSs = true;
+            else
+                quotes->iSs = false;
         }
         else {
             if (quotes->sQ == false)
@@ -39,7 +45,7 @@ static int get_char_index(const char *str, char c) {
         return - 2;
     for (int i = 0; str[i]; i++) {
         QuotesCheck(str, i, &quotes);
-        if (str[i] == c && quotes.sQ == false && quotes.dQ == false)
+        if (str[i] == c && !quotes.sQ && !quotes.dQ && !quotes.iSs)
             return i;
     }
     return - 1;
