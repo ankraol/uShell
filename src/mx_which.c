@@ -49,10 +49,12 @@ static int get_flags(int *i, char **argv) {
 static int check_buildin(char *command, int flags, bool *finded) {
     if (mx_is_buildin(command)) {
         if ((flags & 2) == 2) {
-            printf("%s: shell built-in command\n", command);
+            mx_printstr(command);
+            mx_printstr(": shell built-in command\n");
             return 1;
         }
-        printf("%s: shell built-in command\n", command);
+        mx_printstr(command);
+        mx_printstr(": shell built-in command\n");
         *finded = true;
         if ((flags & 1) == 0)
             return 1;

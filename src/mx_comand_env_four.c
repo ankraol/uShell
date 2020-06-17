@@ -35,10 +35,16 @@ void mx_env_one() {
     if (environ != NULL) {
         for (int i = 0; environ[i] != NULL; i++) {
             full_val = mx_strsplit(environ[i], '=');
-            if (full_val[1])
-                printf("%s=%s\n", full_val[0], full_val[1]);
-            else
-                printf("%s=\n", full_val[0]);
+            if (full_val[1]) {
+                mx_printstr(full_val[0]);
+                mx_printchar('=');
+                mx_printstr(full_val[1]);
+                mx_printchar('\n');
+            }
+            else {
+                mx_printstr(full_val[0]);
+                mx_printchar('\n');
+            }
             mx_del_strarr(&full_val);
         }
     }

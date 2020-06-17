@@ -42,7 +42,9 @@ char **my_strsplit(const char *s, char c) {
 }
 
 void mx_change_path(char **tmp2) {
-	for (int i = 0; tmp2[i]; i++) { 
+	for (int i = 0; tmp2[i]; i++) {
+        if (strcmp(tmp2[i], ".") == 0)
+            memset(tmp2[i], '\0', strlen(tmp2[i]));
 		if (strcmp(tmp2[i], "..") == 0) {
 			memset(tmp2[i], '\0', strlen(tmp2[i]));
 			for (int j = i; j >= 0 ; j--) {
