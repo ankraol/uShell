@@ -23,7 +23,7 @@ static char *deleteBrackets(char *line) {
         newLine[j] = line[i];
         j++;
     }
-    newLine[j + 1] = '\0';
+    newLine[j] = '\0';
     return newLine;
 }
 

@@ -17,15 +17,15 @@ static char *joinParts(char *first, char *second) {
 static char *tildaMeaning(char *tilda, t_var *varList, int status) {
     char *meaning = NULL;
 
-    if (tilda[0] == '~') {
+    if (tilda[1] == '+')
+        meaning = mx_findParameter("PWD", varList, status);
+    else if (tilda[1] == '-')
+        meaning = mx_findParameter("OLDPWD", varList, status);
+    else if (tilda[0] == '~') {
         meaning = mx_findParameter("HOME", varList, status);
         if (tilda[1] != '\0')
             meaning = mx_checkSame(meaning, tilda);
     }
-    else if (tilda[0] == '+')
-        meaning = mx_findParameter("PWD", varList, status);
-    else if (tilda[0] == '-')
-        meaning = mx_findParameter("OLDPWD", varList, status);
     return meaning;
 }
 

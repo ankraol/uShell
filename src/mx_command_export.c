@@ -29,7 +29,7 @@ static void print_list(t_export *export_list) {
 }
 
 static int check_str(char *str) {
-    for (int i = 0; str[i] != '\0'; i++) {
+    for (int i = 0; str && str[i] != '\0'; i++) {
         if (str[i] == '?' || str[i] == '*') {
             mx_printerr("ush: no matches found: ");
             mx_printerr(str);
@@ -94,15 +94,17 @@ void mx_command_export(t_builtin_command *com, char **arg, int ac, int *err) {
         print_list(com->export_ar);
     }
     else {
-        for (int i = 1; i < ac; i++)
-        {
-            arr_val = mx_strsplit(arg[i], '='); 
-            if (check_str(arr_val[0]) == 0) {
-                   general(com, arr_val);
+        for (int i = 1; i < ac; i++) {
+            if (arg[i][0] != '=') {
+                arr_val = mx_strsplit(arg[i], '=');
+                if (arr_val[0] != NULL) {
+                    if (arr_val && check_str(arr_val[0]) == 0)
+                        general(com, arr_val);
+                }
+                else
+                    *err = 1;
+                mx_del_strarr(&arr_val);
             }
-            else
-                *err = 1;
-         mx_del_strarr(&arr_val);
         }
     }
 }

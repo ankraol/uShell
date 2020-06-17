@@ -12,6 +12,7 @@ int main(void) {
     signal(SIGTTIN, SIG_IGN);
     signal(SIGTTOU, SIG_IGN);
     exit = mx_ush_loop();
+    system("leaks -q ush");
     return exit;
 }
 

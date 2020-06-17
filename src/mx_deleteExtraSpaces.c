@@ -53,7 +53,8 @@ char *mx_deleteExtraSpaces(char *line) {
 
     for (int i = 0; line[i] != '\0'; i++, j++) {
         isQuote(&dQ, &sQ, &ap, line, i);
-        i = omitSpaces(line, i);
+        if (!dQ && !sQ && !ap)
+            i = omitSpaces(line, i);
         if (i == -1)
             break;
         newLine[j] = line[i];

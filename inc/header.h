@@ -363,5 +363,6 @@ char **mx_create_file_echo(char **av, int ac, int count_files, char **file);
 void mx_struct_flag_echo(char *av, t_builtin_command *command, char *flag);
 char *mx_checkSame(char *meaning, char *tilda);
 bool mx_checkLine(char *line);
+char *mx_insideQuotes(char *line, t_var *varList, int status);
 
 #endif

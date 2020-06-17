@@ -95,7 +95,8 @@ FILES = main \
 	mx_create_file_echo \
 	mx_struct_flag_echo \
 	mx_checkSame \
-	mx_checkLine
+	mx_checkLine \
+	mx_insideQuotes
 
 
 

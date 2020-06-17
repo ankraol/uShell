@@ -39,13 +39,33 @@ static bool isExp(char *line, char symb) {
     return false;
 }
 
+// static bool doubleQoutes(char *line) {
+    // for (int i = 0; line[i] != '\0'; i++) {
+        // if (line[i] == 34)
+            // return true;
+    // }
+    // return false;
+// }
+
 char *mx_expandParameter(char *line, t_var *varList, int status) {
     char *newLine = NULL;
     char *tilda = NULL;
+    printf("WHAT WE  HAVE HERE - %s\n", line);
 
     if (isExp(line, '$') == true) {
-        newLine = mx_expandedLine(line, varList, status);
-        mx_strdel(&line);
+        printf("LINE = %s\n", line);
+        // if (doubleQoutes(line)) {
+        newLine = mx_insideQuotes(line, varList, status);
+        // mx_strdel(&line);
+        if (isExp(newLine, '$') == true) {
+            newLine = mx_expandParameter(newLine, varList, status);
+            // mx_strdel(&line);
+        }
+            // printf("AFTER QOUTES = %s\n", newLine);
+        // }
+        // else
+            // newLine = mx_expandedLine(line, varList, status);
+        // mx_strdel(&line);
     }
     else {
         newLine = mx_strdup(line);
@@ -56,5 +76,6 @@ char *mx_expandParameter(char *line, t_var *varList, int status) {
         mx_strdel(&newLine);
         return tilda;
     }
+    printf("NEW LINE AFTER PARAMETER EXPANSION = %s\n", newLine);
     return newLine;
 }
