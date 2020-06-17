@@ -96,7 +96,9 @@ FILES = main \
 	mx_struct_flag_echo \
 	mx_checkSame \
 	mx_checkLine \
-	mx_insideQuotes
+	mx_insideQuotes \
+	mx_expandLine \
+	mx_extractExpand 
 
 
 

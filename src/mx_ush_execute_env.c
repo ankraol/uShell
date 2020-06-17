@@ -47,15 +47,6 @@ int mx_ush_execute_env(char *com, t_builtin_command *my_com,
     pid_t pid;
     char **argv = mx_tokenSplit(com);
     int val_ret = 999;
-
-    printf("START EXECUTE\n");
-    int i = 0;
-
-        while (argv[i])
-    {
-        printf("ar = %s\n", argv[i]);
-        i++;
-    }
     
     if (my_com->execute == true)
         val_ret = mx_valid_command(argv, mx_count_elem(argv), my_com);

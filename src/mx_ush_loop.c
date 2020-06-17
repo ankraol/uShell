@@ -30,11 +30,14 @@ static void execLoop(char *line, int *status, t_builtin_command *my_command) {
         for (int i = 0; work[i]; i++) {
             p = work[i];
             for (; p; p = (*p).next) {
+                fprintf(stderr, "COMMAND IN - %s\n", (*p).command);
                 (*p).command = mx_expandParameter((*p).command, my_command->var,
                                                     (*status));
-                                                    
+                fprintf(stderr, "AFTER EXPANSION - %s\n", (*p).command);
                 (*p).command = mx_substitute((*p).command, my_command);
+                fprintf(stderr, "AFTER SUBSTITUTE - %s\n", (*p).command);
                 (*status)= mx_redirection((*p).command, my_command);
+                fprintf(stderr, "REDIRECTION - %s\n", (*p).command);
                 if (((*p).op == '&' && (*status) == 1)
                     || ((*p).op == '|' && (*status) == 0))
                     {

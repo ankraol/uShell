@@ -368,4 +368,8 @@ char *mx_checkSame(char *meaning, char *tilda);
 bool mx_checkLine(char *line);
 char *mx_insideQuotes(char *line, t_var *varList, int status);
 
+
+char *mx_expandLine(char *parameterLine, t_var *varList, int status);
+char *mx_extractExpand(char *quoteLess, t_var *varList, int status);
+
 #endif

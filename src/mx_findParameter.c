@@ -30,12 +30,9 @@ static char *parExp(char *parameter) {
 char *mx_findParameter(char *parameter, t_var *varList, int status) {
     char *expansion = parExp(parameter);
 
-    printf("PARAMETER = %s\n", parameter);
-
     if (parameter[0] == '?')
         expansion = mx_itoa(status);
     if (!expansion)
         expansion = varSearch(parameter, varList);
-    printf("EXPANSION = %s\n", expansion);
     return expansion;
 }

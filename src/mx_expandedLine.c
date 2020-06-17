@@ -33,11 +33,9 @@ static char *commandDup(char *command) {
     char *newCommand = NULL;
 
     for (int i = 0; arr[i]; i++) {
-        printf("arr - %s\n", arr[i]);
         newCommand = joinParts(newCommand, arr[i]);
     }
     mx_del_strarr(&arr);
-    printf("newCommand - %s\n", newCommand);
     return newCommand;
 }
 
