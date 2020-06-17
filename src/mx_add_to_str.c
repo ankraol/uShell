@@ -52,26 +52,38 @@ static void forth(t_len_name **le, int *plus, int *len) {
 }
 
 
-void mx_add_to_str(unsigned char **str, t_len_name **le) {
+void mx_add_to_str(unsigned char **str, t_len_name **le, t_builtin_command *my_command) {
     int plus = 0;
     int len = 1;
     int buf_plus = 0;
     unsigned char *buf_str = NULL;
 
-    if ((*le)->ch[0] == 4 && *str[0] != 0)
-        return;
-    mx_byte_check_add((*le)->ch, &len, &plus, 0);
-    forth(le, &plus, &len);
-    if ((*le)->n_cursor_b == (*le)->n_bute) {
-        first(le, str, plus, len);
-        buf_plus = plus;
-        for (int i = 0; i < plus; i++) {
-            (*str)[((*le)->n_bute)-1-buf_plus] = (*le)->ch[i];
-            buf_plus--;
-        }
+    if (my_command->is_inp != true) {
+        plus = 1;
+                    first(le, str, plus, len);
+            buf_plus = plus;
+            for (int i = 0; i < plus; i++) {
+                (*str)[((*le)->n_bute)-1-buf_plus] = (*le)->ch[i];
+                buf_plus--;
+    }
     }
     else {
-        second(le, &buf_str, str, plus);
-        third(le, plus, len);
+
+        if ((*le)->ch[0] == 4 && *str[0] != 0)
+            return;
+        mx_byte_check_add((*le)->ch, &len, &plus, 0);
+        forth(le, &plus, &len);
+        if ((*le)->n_cursor_b == (*le)->n_bute) {
+            first(le, str, plus, len);
+            buf_plus = plus;
+            for (int i = 0; i < plus; i++) {
+                (*str)[((*le)->n_bute)-1-buf_plus] = (*le)->ch[i];
+                buf_plus--;
+            }
+        }
+        else {
+            second(le, &buf_str, str, plus);
+            third(le, plus, len);
+        }
     }
 }

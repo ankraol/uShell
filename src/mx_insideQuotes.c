@@ -85,6 +85,7 @@ static char *exp_parameter(char *line, t_var *varList, int status) {
     meaning = mx_findParameter(bracketless, varList, status);
     mx_strdel(&par);
     mx_strdel(&bracketless);
+    
     return meaning;
 }
 
@@ -116,7 +117,8 @@ static char *extractExpand(char *quoteLess, t_var *varList, int status) {
         before_extr = strndup((const char *)quoteLess, d_l);
     if ((d_l + size) < mx_strlen(quoteLess))
         after_extr = mx_strdup((quoteLess + (d_l + size + 1)));
-    newLine = combineParts(before_extr, meaning, after_extr);
+    if (meaning)
+        newLine = combineParts(before_extr, meaning, after_extr);
     return newLine;
 }
 
@@ -176,7 +178,8 @@ char *mx_insideQuotes(char *line, t_var *varList, int status) {
     for (; spaceSplited[i]; i++) {
         if (isExp(spaceSplited[i])) {
             expand = expandLine(spaceSplited[i], varList, status);
-            newLine = joinParts(newLine, expand);
+            if (expand)
+                newLine = joinParts(newLine, expand);
             mx_strdel(&expand);
         }
         else

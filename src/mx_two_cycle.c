@@ -5,8 +5,6 @@ void mx_two_cycle(unsigned char **mystr, t_len_name *len, FILE *file,
     if (len->ch[0] != '\n' || len->ch[0] == 4)
         len->trig = true;
 
-        //     fprintf(file, "%s\n", *mystr);
-        // fflush(file);
     if (my_command->is_inp == true) {
         fprintf(file, "%s\n", *mystr);
         fflush(file);
@@ -20,8 +18,6 @@ void mx_two_cycle(unsigned char **mystr, t_len_name *len, FILE *file,
 
 void mx_three_cycle(unsigned char **mystr, t_len_name *len, FILE *file,
                     t_builtin_command *my_command) {
-        //                 fprintf(file, "%s", *mystr);
-        // fflush(file);
     if (my_command->is_inp == true) {
         fprintf(file, "%s", *mystr);
         fflush(file);

@@ -276,7 +276,7 @@ void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
                 t_builtin_command *my_co);
 void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
                    t_builtin_command *my_co);
-void mx_add_to_str(unsigned char **str, t_len_name **le);
+void mx_add_to_str(unsigned char **str, t_len_name **le, t_builtin_command *my_command);
 void mx_aliasList(char *command, t_alias **aliasList);
 char *mx_aliasSearch(char *command, t_alias *list);
 void mx_back_to_str(unsigned char **str,  t_len_name **le);
