@@ -43,8 +43,11 @@ bool mx_checkLine(char *line) {
     if (nothing_in_line(line))
         return false;
     for (int i = 0; line[i] != '\0'; i++) {
-        if (line[i] == 34 || line[i] == 39 || line[i] == 96)
-            muteCheck(line[i], &mute);
+        if ((line[i] == 34 || line[i] == 39 || line[i] == 96)
+            && line[i - 1] != 92)
+            {
+                muteCheck(line[i], &mute);
+            }
     }
     if (mute.sQ || mute.dQ || mute.iSs) {
         fprintf(stderr, "ush: parse error\n");

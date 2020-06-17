@@ -30,7 +30,7 @@ char *mx_insideQuotes(char *line, t_var *varList, int status) {
 
     for (; spaceSplited[i]; i++) {
         if (isExp(spaceSplited[i])) {
-            expand = expandLine(spaceSplited[i], varList, status);
+            expand = mx_expandLine(spaceSplited[i], varList, status);
             if (expand)
                 newLine = joinParts(newLine, expand);
             mx_strdel(&expand);

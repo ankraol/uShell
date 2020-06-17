@@ -21,7 +21,7 @@ static bool isExp(char *line, char symb) {
                 sQ = true;
             i++;
         }
-        else if (line[i + 1] != '\0' && line[i] == symb && (line[i + 1] == '{' || line[i + 1] != '(')
+        else if (line[i] == symb && (line[i + 1] == '{' || line[i + 1] != '(')
                 && !sQ && i != 0)
             {
                 if (line[i - 1] != 92)
