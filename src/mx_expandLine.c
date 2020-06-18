@@ -58,7 +58,8 @@ char *mx_expandLine(char *parameterLine, t_var *varList, int status) {
     if (doubleQuotes(parameterLine, &mute)) {
         quoteLess = deleteQuotes(parameterLine);
         expand = mx_extractExpand(quoteLess, varList, status);
-        expand = returnQuotes(expand, mute);
+        if (expand)
+            expand = returnQuotes(expand, mute);
     }
     else {
         quoteLess = mx_strdup(parameterLine);
