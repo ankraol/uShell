@@ -126,6 +126,7 @@ struct s_builtin_command {
     bool trig;
     int exit_code;
     bool is_inp;
+    bool is_comand;
 };
 
 struct s_env {

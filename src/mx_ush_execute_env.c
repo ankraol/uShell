@@ -27,14 +27,36 @@ static void parent(pid_t pid, int *val_ret, t_builtin_command *my_command,
 }
 
 
+static bool isUpper(char *str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] < 65 || str[i] > 97)
+            return false;
+    }
+    return true;
+}
 
-
-static bool path_check(char **path, char ***argv, bool flag) {
-    if (*path == NULL) {
-        mx_mistake(*argv[0], argv, path, flag);
+static bool path_check(char **path, char ***argv, t_builtin_command *my_com) {
+    if (my_com->is_comand) {
+        mx_del_all(argv, path);
+        return true;
+    }
+    else if (*path == NULL) {
+        mx_mistake(*argv[0], argv, path, my_com->execute);
         return true;
     }
     return false;
+}
+
+static void lowwerCase(char **str) {
+    char *newLine = (char *)malloc(sizeof(char) * (strlen(str[0]) + 1));
+    int i = 0;
+
+    for (; str[0][i] != '\0'; i++) {
+        newLine[i] = str[0][i] + 32;
+    }
+    newLine[i] = '\0';
+    mx_strdel(&str[0]);
+    str[0] = newLine;
 }
 
 void last_func(char ***argv, char **str) {
@@ -47,13 +69,17 @@ int mx_ush_execute_env(char *com, t_builtin_command *my_com,
     pid_t pid;
     char **argv = mx_tokenSplit(com);
     int val_ret = 999;
+    my_com->is_comand = false;
     
-    if (my_com->execute == true)
+    if (my_com->execute == true) {
+        if (isUpper(argv[0]))
+            lowwerCase(argv);
         val_ret = mx_valid_command(argv, mx_count_elem(argv), my_com);
+    }
     if (val_ret == 999) {
         my_com->path_for_ex = mx_read_env(argv[0], path_env, my_com);
         val_ret = 0;
-        if (path_check(&(my_com->path_for_ex), &argv, my_com->execute))
+        if (path_check(&(my_com->path_for_ex), &argv, my_com))
             return 1;
         pid = fork();
         if (pid == 0) {

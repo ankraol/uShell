@@ -98,7 +98,7 @@ FILES = main \
 	mx_checkLine \
 	mx_insideQuotes \
 	mx_expandLine \
-	mx_extractExpand 
+	mx_extractExpand
 
 
 

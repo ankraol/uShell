@@ -1,6 +1,6 @@
 #include "header.h"
 
-char *if_program(char *file, struct stat sb) {
+char *if_program(char *file, struct stat sb, t_builtin_command *my_command) {
 
     if ((sb.st_mode & S_IFREG) == S_IFREG)
         return strdup(file);
@@ -8,6 +8,7 @@ char *if_program(char *file, struct stat sb) {
         mx_printerr("ush: permission denied:");
         mx_printerr(file);
         mx_printerr("\n");
+        my_command->is_comand = true;
         return NULL;
     }
 }
@@ -30,7 +31,7 @@ char *mx_read_env(char *file, char *path, t_builtin_command *my_command) {
     struct stat sb;
 
     if (lstat(file, &sb) >= 0)
-        last_path = if_program(file, sb);
+        last_path = if_program(file, sb, my_command);
     else {
         if (path != NULL) {
             last_path = is_path(path, file);
