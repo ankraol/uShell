@@ -17,14 +17,14 @@ unsigned char *mx_read_line(t_builtin_command *my_command) {
     savetty = tty;
     tty.c_lflag &= ~(ICANON | ECHO | ISIG);
     tty.c_cc[VMIN] = 1;
-    tcsetattr(0, TCSAFLUSH, &tty);
+    tcsetattr(0, TCSANOW , &tty);
     mx_get_width(&(len->col));
     if (my_command->is_inp) {
         fprintf(my_command->file, "u$h> ");
         fflush(my_command->file);
     }
     mx_main_cycle_key(my_command, &mystr, len, buf_first);
-    tcsetattr (0, TCSAFLUSH, &savetty);
+    tcsetattr (0, TCSANOW, &savetty);
     my_command->trig = len->trig;
     delete(len, buf_first);
     return mystr;

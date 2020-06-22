@@ -63,9 +63,7 @@ FILES = main \
 	mx_cycleOne \
 	mx_mistake \
 	mx_expandParameter \
-	mx_expandedLine \
 	mx_findParameter \
-	mx_expand_parts \
 	mx_exit_commnad \
 	mx_findTilda \
 	mx_pipeCreate \
