@@ -19,12 +19,8 @@ unsigned char *mx_read_line(t_builtin_command *my_command) {
     tty.c_cc[VMIN] = 1;
     tcsetattr(0, TCSANOW , &tty);
     mx_get_width(&(len->col));
-    //mx_printerr("HERE\n");
-    if (my_command->is_inp) {
+    if (my_command->is_inp)
         mx_printstr_fd("u$h> ", my_command->term_fg);
-        //fprintf(my_command->file, "u$h> ");
-        //fflush(my_command->file);
-    }
     mx_main_cycle_key(my_command, &mystr, len, buf_first);
     tcsetattr (0, TCSANOW, &savetty);
     my_command->trig = len->trig;

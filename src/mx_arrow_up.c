@@ -23,19 +23,13 @@ static void first_line_use(unsigned char **mystr, t_len_name *len,
 static void print_line(t_len_name *len, t_history_name **his, int term_fg) {
     mx_printstr_fd("\033[0J", term_fg);
     mx_printstr_fd("u$h> ", term_fg);
-    //fprintf(file, "\033[0J");
-    //fprintf(file, "u$h> ");
     len->n_cursor = (*his)->n_len;
     len->n_cursor_b = (*his)->n_byte;
     len->n_len = len->n_cursor;
     len->n_bute = len->n_cursor_b;
     len->buf = (*his)->name;
     len->trig_copy = true;
-
     mx_printstr_fd((char *)(*his)->name, term_fg);
-
-    //fprintf(file, "%s", (*his)->name);
-    //fflush(file);
     if ((*his)->next)
         (*his) = (*his)->next;
 }
@@ -49,16 +43,10 @@ void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
                 mx_printstr_fd("\033[", my_com->term_fg);
                 mx_printint_fg((len->n_cursor + 4)/len->col, my_com->term_fg);
                 mx_printstr_fd("F", my_com->term_fg);
-
-                //fprintf(my_com->file, "\033[%dF", (len->n_cursor + 4)/len->col);
-
             }
             else {
                 mx_printstr_fd("\033[1G", my_com->term_fg);
-                //fprintf(my_com->file, "\033[1G");
-
             }
-            //fflush(my_com->file);
             print_line(len, &(my_com->his), my_com->term_fg);
         }
     }

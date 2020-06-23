@@ -38,11 +38,7 @@ void mx_set_builstuct(t_builtin_command *my_command) {
     my_command->history = NULL;
     my_command->his = NULL;
     my_command->export_ar = NULL;
-    //my_command->file = fopen("/dev/tty", "w");
-    //my_command->file = NULL;
-    //my_command->term_fg = open("/dev/tty", O_WRONLY);
     my_command->term_fg = open("/dev/tty", O_WRONLY);
-    
     build_export(&(my_command->export_ar));
     (isatty(0)) ? (my_command->is_inp = true) : (my_command->is_inp = false);
     my_command->is_comand = false;
