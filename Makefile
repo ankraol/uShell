@@ -96,7 +96,10 @@ FILES = main \
 	mx_checkLine \
 	mx_insideQuotes \
 	mx_expandLine \
-	mx_extractExpand
+	mx_extractExpand \
+	mx_printint_fd \
+	mx_printchar_fd \
+	mx_printstr_fd \
 
 
 

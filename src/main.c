@@ -6,7 +6,7 @@ static void hdl(int sig) {
 
 int main(void) {
     int exit = 0;
-
+    
     signal(SIGINT, hdl);
     signal(SIGTSTP, hdl);
     signal(SIGTTIN, SIG_IGN);

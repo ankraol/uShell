@@ -86,8 +86,9 @@ int mx_ush_loop(void) {
     int status = 0;
     int exit_code = 0;
     t_builtin_command my_command;
-
+    //mx_printerr("HERE1\n");
     mx_set_builstuct(&my_command);
+    //mx_printerr("HERE2\n");
     mysetenv();
     while (my_command.trig == false) {
         line = mx_read_line(&my_command);

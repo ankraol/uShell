@@ -1,13 +1,15 @@
  #include "header.h"
 
-void mx_two_cycle(unsigned char **mystr, t_len_name *len, FILE *file,
+void mx_two_cycle(unsigned char **mystr, t_len_name *len,
                     t_builtin_command *my_command) {
     if (len->ch[0] != '\n' || len->ch[0] == 4)
         len->trig = true;
 
     if (my_command->is_inp == true) {
-        fprintf(file, "%s\n", *mystr);
-        fflush(file);
+        mx_printstr_fd((char *)*mystr, my_command->term_fg);
+        mx_printstr_fd("\n", my_command->term_fg);
+        //fprintf(file, "%s\n", *mystr);
+        //fflush(file);
    }
 
     if (len->ch[0] == 4) {
@@ -16,23 +18,37 @@ void mx_two_cycle(unsigned char **mystr, t_len_name *len, FILE *file,
     }
 }
 
-void mx_three_cycle(unsigned char **mystr, t_len_name *len, FILE *file,
+void mx_three_cycle(unsigned char **mystr, t_len_name *len, 
                     t_builtin_command *my_command) {
     if (my_command->is_inp == true) {
-        fprintf(file, "%s", *mystr);
-        fflush(file);
+        mx_printstr_fd((char *)*mystr, my_command->term_fg);
+        //fprintf(file, "%s", *mystr);
+        //fflush(file);
     
         len->cur_pos_x = len->col - ((((len->n_cursor + 4)/len->col + 1) 
                         * len->col) - (len->n_cursor + 5)) + 1;
         if ((((len->n_len + 4)/len->col - (len->n_cursor + 4)/len->col)) > 0) {
-            fprintf(file, "\033[%dF", 
-                    ((len->n_len + 4)/len->col - (len->n_cursor + 4)/len->col));
-            fprintf(file, "\033[%dG", len->cur_pos_x);
-            fflush(file);
+
+            mx_printstr_fd("\033[", my_command->term_fg);
+            mx_printint_fg(((len->n_len + 4)/len->col - (len->n_cursor + 4)/len->col), my_command->term_fg);
+            mx_printstr_fd("F", my_command->term_fg);
+
+            mx_printstr_fd("\033[", my_command->term_fg);
+            mx_printint_fg(len->cur_pos_x, my_command->term_fg);
+            mx_printstr_fd("G", my_command->term_fg);
+
+            //fprintf(file, "\033[%dF", 
+            //        ((len->n_len + 4)/len->col - (len->n_cursor + 4)/len->col));
+            //fprintf(file, "\033[%dG", len->cur_pos_x);
+            //fflush(file);
         }
         else {
-            fprintf(file, "\033[%dG", len->cur_pos_x);
-            fflush(file);
+            mx_printstr_fd("\033[", my_command->term_fg);
+            mx_printint_fg(len->cur_pos_x, my_command->term_fg);
+            mx_printstr_fd("G", my_command->term_fg);
+
+            //fprintf(file, "\033[%dG", len->cur_pos_x);
+            //fflush(file);
         }
     }
 }

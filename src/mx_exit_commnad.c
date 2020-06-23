@@ -11,6 +11,7 @@ void mx_del_export_var(t_var **var_list) {
 
 
 void mx_command_exit(t_builtin_command *com, int *err, char **argv, int ac) {
+    //mx_printerr("HERE\n");
     if (com->pid_ar != NULL) {
         mx_printerr("ush: you have suspended jobs.\n");
         *err = 1;

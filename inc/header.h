@@ -118,7 +118,6 @@ struct s_builtin_command {
     t_export *export_ar;
     t_alias *alias_list;
     bool unset_path;
-    FILE *file;
     t_history_name *history;
     t_history_name *his;
     bool execute;
@@ -127,6 +126,7 @@ struct s_builtin_command {
     int exit_code;
     bool is_inp;
     bool is_comand;
+    int term_fg;
 };
 
 struct s_env {
@@ -262,17 +262,17 @@ void mx_main_cycle_key(t_builtin_command *my_command, unsigned char **mystr,
 void mx_get_width(int *col);
 void mx_one_cycle(unsigned char **mystr, t_len_name *len, unsigned char *buf,
                  t_builtin_command *my_command);
-void mx_two_cycle(unsigned char **mystr, t_len_name *len, FILE *file,
+void mx_two_cycle(unsigned char **mystr, t_len_name *len, 
                     t_builtin_command *my_command);
-void mx_three_cycle(unsigned char **mystr, t_len_name *len, FILE *file, 
+void mx_three_cycle(unsigned char **mystr, t_len_name *len, 
                     t_builtin_command *my_command);
 void mx_four_cycle(unsigned char **mystr, t_len_name *len, char **buf_first,
                    t_builtin_command *my_co);
 void mx_byte_check_add(unsigned char *ch, int *delte_len, int *delta_byte,
                        int start);
 void mx_byte_check_back(unsigned char *str, int *len, int *minus, int n);
-void mx_arrow_left(unsigned char **mystr, t_len_name *len, FILE *file);
-void mx_arrow_right(unsigned char **mystr, t_len_name *len, FILE *file);
+void mx_arrow_left(unsigned char **mystr, t_len_name *len, int fd);
+void mx_arrow_right(unsigned char **mystr, t_len_name *len, int fd);
 void mx_arrow_up(unsigned char **mystr, t_len_name *len, char **buf_first,
                 t_builtin_command *my_co);
 void mx_arrow_down(unsigned char **mystr, t_len_name *len, char **buf_first,
@@ -370,5 +370,8 @@ char *mx_insideQuotes(char *line, t_var *varList, int status);
 
 char *mx_expandLine(char *parameterLine, t_var *varList, int status);
 char *mx_extractExpand(char *quoteLess, t_var *varList, int status);
+void mx_printstr_fd(const char *s, int fd);
+void mx_printchar_fd(char c, int fd);
+void mx_printint_fg(int n, int fd);
 
 #endif

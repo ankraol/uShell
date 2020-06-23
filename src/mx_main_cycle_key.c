@@ -36,12 +36,12 @@ void mx_main_cycle_key(t_builtin_command *my_command, unsigned char **mystr,
                 mx_back_to_str(mystr, &len);
             else if ((len->ch[0] ==  10 || len->ch[0] == '\0') ||
                     (len->ch[0] == 4 && *mystr[0] == 0)) {
-                mx_two_cycle(mystr, len, my_command->file, my_command);
+                mx_two_cycle(mystr, len, my_command);
                 break;
             }
             else if (len->ch[0] >= 32)
                 mx_add_to_str(mystr, &len, my_command);
-            mx_three_cycle(mystr, len, my_command->file, my_command);
+            mx_three_cycle(mystr, len, my_command);
         }
         mx_four_cycle(mystr, len, &buf_first, my_command);
     }
