@@ -4,19 +4,21 @@ That is our group project to answer an essential question, that computer science
 
 # what we have implemented:
 
+
 Builtin commands:
-  cd with -i, -P, -u flags
-  pwd with -L, -P flags
-  export
-  unset
-  fg with %n and %str arguments
-  env with -i, -P, -u flags
-  which with -a, -s flags
-  echo with -n, -e, -E flags
-  exit
-  history
-  Managing CTRL+D, CTRL+C and CTRL+Z signals
-  
+<ul>
+  <li>cd with -i, -P, -u flags</li>
+  <li>pwd with -L, -P flags</li>
+  <li>export</li>
+  <li>unset</li>
+  <li>fg with %n and %str arguments</li>
+  <li>env with -i, -P, -u flags</li>
+  <li>which with -a, -s flags</li>
+  <li>echo with -n, -e, -E flags</li>
+  <li>exit</li>
+  <li>history</li>
+  <li>Managing CTRL+D, CTRL+C and CTRL+Z signals</li>
+ </ul> 
 Work with terminal:
   Managing ArrowUp and ArrowDown buttons to watch history
   Command line editing
