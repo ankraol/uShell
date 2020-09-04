@@ -23,6 +23,7 @@ Work with terminal:
   Working with any Unicode symbols
   Supporting text insertion
   
+  
 Work with processes:
   Support of pipes "|"
   Support of redirection output to file ">" and ">>"
